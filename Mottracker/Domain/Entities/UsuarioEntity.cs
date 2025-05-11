@@ -17,6 +17,9 @@ namespace Mottracker.Domain.Entities
         public string CPFUsuario { get; set; }
         
         [Required]
+        public string SenhaUsuario { get; set; }
+        
+        [Required]
         public string CNHUsuario { get; set; }
         
         [Required]
@@ -28,7 +31,7 @@ namespace Mottracker.Domain.Entities
 
         public string TokenUsuario { get; set; }
 
-        public string DataNascimentoUsuario { get; set; }
+        public DateTime DataNascimentoUsuario { get; set; }
         
         public DateTime CriadoEmUsuario { get; set; }
         

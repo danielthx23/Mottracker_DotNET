@@ -31,7 +31,7 @@ namespace Mottracker.Domain.Entities
         public bool AtivoContrato { get; set; }
         
         [Required]
-        public double ValorToralContrato { get; set; }
+        public decimal ValorToralContrato { get; set; }
         
         [Required]
         public int QuantidadeParcelas  { get; set; }
