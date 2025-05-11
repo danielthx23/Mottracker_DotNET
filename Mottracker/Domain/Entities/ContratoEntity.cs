@@ -37,5 +37,7 @@ namespace Mottracker.Domain.Entities
         public int QuantidadeParcelas  { get; set; }
         
         public virtual UsuarioEntity? UsuarioContrato { get; set; }
+        
+        public virtual MotoEntity? MotoContrato { get; set; }
     }
 }
