@@ -16,8 +16,20 @@ namespace Mottracker.Domain.Entities
         [Required]
         public string CPFUsuario { get; set; }
         
+        [Required]
+        public string CNHUsuario { get; set; }
+        
+        [Required]
+        [EmailAddress]
         public string EmailUsuario { get; set; }
+        
+        [Required]
+        public string TelefoneUsuario { get; set; }
 
         public string DataNascimentoUsuario { get; set; }
+        
+        public DateTime CriadoEmUsuario { get; set; }
+        
+        public virtual ICollection<ContratoEntity>? ContratosUsuario { get; set; }
     }   
 }
