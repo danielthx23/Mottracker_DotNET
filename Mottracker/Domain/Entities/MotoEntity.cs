@@ -19,6 +19,8 @@ namespace Mottracker.Domain.Entities
     
         [Required]
         public int AnoMoto { get; set; }
+        
+        public string IdentificadorMoto { get; set; }
     
         public int QuilometragemMoto { get; set; }
     

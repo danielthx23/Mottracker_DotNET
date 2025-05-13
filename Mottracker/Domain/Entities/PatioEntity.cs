@@ -21,6 +21,8 @@ namespace Mottracker.Domain.Entities
         
         public virtual ICollection<MotoEntity>? MotosPatio { get; set; }
         
-        // TODO: Localização e Layout
+        public virtual LayoutPatioEntity? LayoutPatio { get; set; }
+        
+        public virtual EnderecoEntity? EnderecoPatio { get; set; }
     }   
 }

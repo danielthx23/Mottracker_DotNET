@@ -1,0 +1,20 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Mottracker.Domain.Entities
+{
+    public class LayoutPatioEntity
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int IdLayoutPatio { get; set; }
+        
+        public string Descricao { get; set; }
+
+        public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
+        
+        public virtual PatioEntity PatioLayoutPatio { get; set; }
+        
+        public virtual ICollection<QrCodePontoEntity> QrCodesLayoutPatio { get; set; }
+    }   
+}
