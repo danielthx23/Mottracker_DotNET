@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mottracker.Domain.Entities
 {
+    [Table("MT_TELEFONE")]
     public class TelefoneEntity
     {
         [Key]

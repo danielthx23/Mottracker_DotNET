@@ -4,6 +4,7 @@ using Mottracker.Domain.Enums;
 
 namespace Mottracker.Domain.Entities
 {
+    [Table("MT_CAMERA")]
     public class CameraEntity
     {
         [Key]

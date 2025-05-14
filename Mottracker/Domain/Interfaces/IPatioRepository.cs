@@ -1,6 +1,13 @@
-namespace CP2.API.Domain.Interfaces;
+using Mottracker.Domain.Entities;
 
-public interface IPatioRepository
-{
-    
+namespace Mottracker.Domain.Interfaces
+{   
+    public interface IPatioRepository
+    {
+        IEnumerable<PatioEntity> ObterTodos();
+        PatioEntity? ObterPorId(int id);
+        PatioEntity? Salvar(PatioEntity entity);
+        PatioEntity? Atualizar(PatioEntity entity);
+        PatioEntity? Deletar(int id);
+    }
 }

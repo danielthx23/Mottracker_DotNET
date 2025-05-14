@@ -1,6 +1,13 @@
-namespace CP2.API.Domain.Interfaces;
+using Mottracker.Domain.Entities;
 
-public interface IContratoRepository
-{
-    
+namespace Mottracker.Domain.Interfaces
+{   
+    public interface IContratoRepository
+    {
+        IEnumerable<ContratoEntity> ObterTodos();
+        ContratoEntity? ObterPorId(int id);
+        ContratoEntity? Salvar(ContratoEntity entity);
+        ContratoEntity? Atualizar(ContratoEntity entity);
+        ContratoEntity? Deletar(int id);
+    }
 }

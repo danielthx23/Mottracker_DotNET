@@ -17,13 +17,4 @@
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.1.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Application\Dtos\" />
-      <Folder Include="Application\Interfaces\" />
-      <Folder Include="Application\Services\" />
-      <Folder Include="Infrastructure\AppData\" />
-      <Folder Include="Infrastructure\Data\" />
-      <Folder Include="Presentation\" />
-    </ItemGroup>
-
 </Project>

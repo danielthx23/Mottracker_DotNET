@@ -1,6 +1,13 @@
-namespace CP2.API.Domain.Interfaces;
+using Mottracker.Domain.Entities;
 
-public interface IMotoRepository
-{
-    
+namespace Mottracker.Domain.Interfaces
+{   
+    public interface IMotoRepository
+    {
+        IEnumerable<MotoEntity> ObterTodos();
+        MotoEntity? ObterPorId(int id);
+        MotoEntity? Salvar(MotoEntity entity);
+        MotoEntity? Atualizar(MotoEntity entity);
+        MotoEntity? Deletar(int id);
+    }
 }

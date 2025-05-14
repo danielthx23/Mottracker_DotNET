@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mottracker.Domain.Entities
 {
+    [Table("MT_PERMISSAO")]
     public class PermissaoEntity
     {
         [Key]

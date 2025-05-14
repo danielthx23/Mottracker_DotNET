@@ -1,8 +1,8 @@
 using Mottracker.Domain.Entities;
 
-namespace CP2.API.Domain.Interfaces
-{
-    public interface IFornecedorRepository
+namespace Mottracker.Domain.Interfaces
+{   
+    public interface IUsuarioRepository
     {
         IEnumerable<UsuarioEntity> ObterTodos();
         UsuarioEntity? ObterPorId(int id);

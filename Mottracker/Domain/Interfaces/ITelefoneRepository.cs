@@ -1,6 +1,13 @@
-namespace CP2.API.Domain.Interfaces;
+using Mottracker.Domain.Entities;
 
-public interface ITelefoneRepository
-{
-    
+namespace Mottracker.Domain.Interfaces
+{   
+    public interface ITelefoneRepository
+    {
+        IEnumerable<TelefoneEntity> ObterTodos();
+        TelefoneEntity? ObterPorId(int id);
+        TelefoneEntity? Salvar(TelefoneEntity entity);
+        TelefoneEntity? Atualizar(TelefoneEntity entity);
+        TelefoneEntity? Deletar(int id);
+    }
 }

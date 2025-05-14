@@ -1,6 +1,13 @@
-namespace CP2.API.Domain.Interfaces;
+using Mottracker.Domain.Entities;
 
-public class IPermissaoRepository
-{
-    
+namespace Mottracker.Domain.Interfaces
+{   
+    public interface IPermissaoRepository
+    {
+        IEnumerable<PermissaoEntity> ObterTodos();
+        PermissaoEntity? ObterPorId(int id);
+        PermissaoEntity? Salvar(PermissaoEntity entity);
+        PermissaoEntity? Atualizar(PermissaoEntity entity);
+        PermissaoEntity? Deletar(int id);
+    }
 }

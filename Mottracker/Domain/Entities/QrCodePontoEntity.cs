@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mottracker.Domain.Entities
 {
+    [Table("MT_QRCODE_PONTO")]
     public class QrCodePontoEntity
     {
         [Key]
