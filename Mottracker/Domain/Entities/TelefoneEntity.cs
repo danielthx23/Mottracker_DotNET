@@ -15,6 +15,8 @@ namespace Mottracker.Domain.Entities
         
         public string Tipo { get; set; }  // Ex: "Celular", "Comercial", "Residencial", etc.
         
+        public int? UsuarioId { get; set; }
+        
         public virtual UsuarioEntity? Usuario { get; set; }
     }
 }

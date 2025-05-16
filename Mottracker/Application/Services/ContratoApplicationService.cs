@@ -1,40 +1,67 @@
+using Mottracker.Application.Dtos.Contrato;
 using Mottracker.Application.Interfaces;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using Mottracker.Application.Dtos.Moto;
+using Mottracker.Application.Dtos.Usuario;
 
 namespace Mottracker.Application.Services
-{   
+{
     public class ContratoApplicationService : IContratoApplicationService
     {
         private readonly IContratoRepository _repository;
-      
+
         public ContratoApplicationService(IContratoRepository repository)
         {
             _repository = repository;
         }
-      
-        public ContratoEntity? ObterContratoPorId(int id)
+
+        public ContratoResponseDto? ObterContratoPorId(int id)
         {
-            return _repository.ObterPorId(id);
+            var contrato = _repository.ObterPorId(id);
+
+            if (contrato == null) return null;
+
+            return MapToResponseDto(contrato);
         }
-      
-        public IEnumerable<ContratoEntity> ObterTodosContratos() 
+
+        public IEnumerable<ContratoResponseDto> ObterTodosContratos()
         {
-            return _repository.ObterTodos();
+            var contratos = _repository.ObterTodos();
+
+            return contratos.Select(MapToResponseDto);
         }
-              
-        public ContratoEntity? SalvarDadosContrato(ContratoEntity entity)
+
+        public ContratoResponseDto? SalvarDadosContrato(ContratoRequestDto entity)
         {
-            return _repository.Salvar(entity);
+            var contratoEntity = new ContratoEntity
+            {
+                ClausulasContrato = entity.ClausulasContrato,
+                DataDeEntradaContrato = entity.DataDeEntradaContrato,
+                HorarioDeDevolucaoContrato = entity.HorarioDeDevolucaoContrato,
+                DataDeExpiracaoContrato = entity.DataDeExpiracaoContrato,
+                RenovacaoAutomaticaContrato = entity.RenovacaoAutomaticaContrato,
+                DataUltimaRenovacaoContrato = entity.DataUltimaRenovacaoContrato,
+                NumeroRenovacoesContrato = entity.NumeroRenovacoesContrato,
+                AtivoContrato = entity.AtivoContrato,
+                ValorToralContrato = entity.ValorToralContrato,
+                QuantidadeParcelas = entity.QuantidadeParcelas,
+                UsuarioContratoId = entity.UsuarioContratoId,
+            };
+
+            var saved = _repository.Salvar(contratoEntity);
+            if (saved == null) return null;
+
+            return MapToResponseDto(saved);
         }
-              
-        public ContratoEntity? EditarDadosContrato(int id, ContratoEntity entity)
+
+        public ContratoResponseDto? EditarDadosContrato(int id, ContratoRequestDto entity)
         {
             var contratoExistente = _repository.ObterPorId(id);
-      
-            if (contratoExistente == null)
-                return null;
-                  
+            if (contratoExistente == null) return null;
+
             contratoExistente.ClausulasContrato = entity.ClausulasContrato;
             contratoExistente.DataDeEntradaContrato = entity.DataDeEntradaContrato;
             contratoExistente.HorarioDeDevolucaoContrato = entity.HorarioDeDevolucaoContrato;
@@ -45,15 +72,65 @@ namespace Mottracker.Application.Services
             contratoExistente.AtivoContrato = entity.AtivoContrato;
             contratoExistente.ValorToralContrato = entity.ValorToralContrato;
             contratoExistente.QuantidadeParcelas = entity.QuantidadeParcelas;
-            contratoExistente.UsuarioContrato = entity.UsuarioContrato;
-            contratoExistente.MotoContrato = entity.MotoContrato;
-      
-            return _repository.Atualizar(contratoExistente);
+            contratoExistente.UsuarioContratoId = entity.UsuarioContratoId;
+
+            var updated = _repository.Atualizar(contratoExistente);
+            if (updated == null) return null;
+            
+            return MapToResponseDto(updated);
         }
-              
-        public ContratoEntity? DeletarDadosContrato(int id)
+
+        public ContratoResponseDto? DeletarDadosContrato(int id)
         {
-            return _repository.Deletar(id);
+            var deleted = _repository.Deletar(id);
+            if (deleted == null) return null;
+
+            return MapToResponseDto(deleted);
         }
+
+        private ContratoResponseDto MapToResponseDto(ContratoEntity contrato)
+{
+    return new ContratoResponseDto
+    {
+        IdContrato = contrato.IdContrato,
+        ClausulasContrato = contrato.ClausulasContrato,
+        DataDeEntradaContrato = contrato.DataDeEntradaContrato,
+        HorarioDeDevolucaoContrato = contrato.HorarioDeDevolucaoContrato,
+        DataDeExpiracaoContrato = contrato.DataDeExpiracaoContrato,
+        RenovacaoAutomaticaContrato = contrato.RenovacaoAutomaticaContrato,
+        DataUltimaRenovacaoContrato = contrato.DataUltimaRenovacaoContrato,
+        NumeroRenovacoesContrato = contrato.NumeroRenovacoesContrato,
+        AtivoContrato = contrato.AtivoContrato,
+        ValorToralContrato = contrato.ValorToralContrato,
+        QuantidadeParcelas = contrato.QuantidadeParcelas,
+
+        UsuarioContrato = contrato.UsuarioContrato != null ? new UsuarioDto
+        {
+            IdUsuario = contrato.UsuarioContrato.IdUsuario,
+            NomeUsuario = contrato.UsuarioContrato.NomeUsuario,
+            CPFUsuario = contrato.UsuarioContrato.CPFUsuario,
+            SenhaUsuario = contrato.UsuarioContrato.SenhaUsuario,
+            CNHUsuario = contrato.UsuarioContrato.CNHUsuario,
+            EmailUsuario = contrato.UsuarioContrato.EmailUsuario,
+            TokenUsuario = contrato.UsuarioContrato.TokenUsuario,
+            DataNascimentoUsuario = contrato.UsuarioContrato.DataNascimentoUsuario,
+            CriadoEmUsuario = contrato.UsuarioContrato.CriadoEmUsuario,
+        } : null,
+
+        MotoContrato = contrato.MotoContrato != null ? new MotoDto
+        {
+            IdMoto = contrato.MotoContrato.IdMoto,
+            PlacaMoto = contrato.MotoContrato.PlacaMoto,
+            ModeloMoto = contrato.MotoContrato.ModeloMoto,
+            AnoMoto = contrato.MotoContrato.AnoMoto,
+            IdentificadorMoto = contrato.MotoContrato.IdentificadorMoto,
+            QuilometragemMoto = contrato.MotoContrato.QuilometragemMoto,
+            EstadoMoto = contrato.MotoContrato.EstadoMoto,
+            CondicoesMoto = contrato.MotoContrato.CondicoesMoto,
+            MotoPatioOrigemId = contrato.MotoContrato.MotoPatioOrigemId
+        } : null
+    };
+}
+
     }
 }

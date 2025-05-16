@@ -8,13 +8,21 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0-preview.3.25171.6">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Oracle.EntityFrameworkCore" Version="9.23.80" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
-        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="8.1.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.8.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Infrastructure\Data\obj\Debug\net8.0\Mottracker.sourcelink.json" />
+      <_ContentIncludedByDefault Remove="Infrastructure\Data\obj\Debug\net8.0\staticwebassets.build.json" />
+      <_ContentIncludedByDefault Remove="Infrastructure\Data\obj\Mottracker.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="Infrastructure\Data\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="Infrastructure\Data\obj\project.packagespec.json" />
     </ItemGroup>
 
 </Project>

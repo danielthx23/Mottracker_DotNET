@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
 using Mottracker.Infrastructure.AppData;
@@ -15,16 +16,27 @@ namespace Mottracker.Infrastructure.Data.Repositories
             
             public IEnumerable<EnderecoEntity> ObterTodos()
             {
-                var Endereco = _context.Endereco.ToList();
+                var Endereco = _context.Endereco
+                    .Include(e => e.PatioEndereco)
+                    .ToList();
     
                 return Endereco;
             }
     
             public EnderecoEntity? ObterPorId(int id)
             {
-                var Endereco = _context.Endereco.Find(id);
+                var Endereco = _context.Endereco
+                    .Include(e => e.PatioEndereco)
+                    .FirstOrDefault(e => e.IdEndereco == id);
     
                 return Endereco;
+            }
+            
+            public List<EnderecoEntity> ObterPorIds(List<int> ids)
+            {
+                return _context.Endereco
+                    .Where(e => ids.Contains(e.IdEndereco))
+                    .ToList();
             }
     
             public EnderecoEntity? Salvar(EnderecoEntity entity)

@@ -3,6 +3,8 @@ using Mottracker.Application.Interfaces;
 using Mottracker.Domain.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using Mottracker.Application.Dtos;
+using Mottracker.Application.Dtos.QrCodePonto;
 
 namespace Mottracker.Presentation.Controllers
 {   
@@ -19,7 +21,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todos os QR Codes de ponto", Description = "Retorna todos os registros de QR Code de ponto cadastrados.")]
-        [SwaggerResponse(200, "Lista retornada com sucesso", typeof(IEnumerable<QrCodePontoEntity>))]
+        [SwaggerResponse(200, "Lista retornada com sucesso", typeof(IEnumerable<QrCodePontoResponseDto>))]
         [SwaggerResponse(400, "Erro ao obter os dados")]
         public IActionResult Get()
         {
@@ -32,7 +34,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém QR Code de ponto por ID", Description = "Retorna os dados de um QR Code de ponto específico.")]
-        [SwaggerResponse(200, "QR Code retornado com sucesso", typeof(QrCodePontoEntity))]
+        [SwaggerResponse(200, "QR Code retornado com sucesso", typeof(QrCodePontoResponseDto))]
         [SwaggerResponse(400, "Erro ao obter o dado")]
         public IActionResult GetById(int id)
         {
@@ -45,9 +47,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPost]
         [SwaggerOperation(Summary = "Cria um novo QR Code de ponto", Description = "Salva um novo registro de QR Code de ponto.")]
-        [SwaggerResponse(201, "QR Code salvo com sucesso", typeof(QrCodePontoEntity))]
+        [SwaggerResponse(201, "QR Code salvo com sucesso", typeof(QrCodePontoResponseDto))]
         [SwaggerResponse(400, "Erro ao salvar o dado")]
-        public IActionResult Post([FromBody] QrCodePontoEntity entity)
+        public IActionResult Post([FromBody] QrCodePontoRequestDto entity)
         {
             try
             {
@@ -69,9 +71,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza um QR Code de ponto", Description = "Edita os dados de um QR Code de ponto existente.")]
-        [SwaggerResponse(200, "QR Code atualizado com sucesso", typeof(QrCodePontoEntity))]
+        [SwaggerResponse(200, "QR Code atualizado com sucesso", typeof(QrCodePontoResponseDto))]
         [SwaggerResponse(400, "Erro ao atualizar o dado")]
-        public IActionResult Put(int id, [FromBody] QrCodePontoEntity entity)
+        public IActionResult Put(int id, [FromBody] QrCodePontoRequestDto entity)
         {
             try
             {
@@ -93,7 +95,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Deleta um QR Code de ponto", Description = "Remove um QR Code de ponto do sistema com base no ID.")]
-        [SwaggerResponse(200, "QR Code deletado com sucesso", typeof(QrCodePontoEntity))]
+        [SwaggerResponse(200, "QR Code deletado com sucesso", typeof(QrCodePontoResponseDto))]
         [SwaggerResponse(400, "Erro ao deletar o dado")]
         public IActionResult Delete(int id)
         {

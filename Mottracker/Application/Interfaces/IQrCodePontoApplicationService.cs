@@ -1,13 +1,14 @@
+using Mottracker.Application.Dtos.QrCodePonto;
 using Mottracker.Domain.Entities;
 
 namespace Mottracker.Application.Interfaces
 {   
     public interface IQrCodePontoApplicationService
     {
-        IEnumerable<QrCodePontoEntity> ObterTodosQrCodePontos();
-        QrCodePontoEntity? ObterQrCodePontoPorId(int id);
-        QrCodePontoEntity? SalvarDadosQrCodePonto(QrCodePontoEntity entity);
-        QrCodePontoEntity? EditarDadosQrCodePonto(int id, QrCodePontoEntity entity);
-        QrCodePontoEntity? DeletarDadosQrCodePonto(int id);
+        IEnumerable<QrCodePontoResponseDto> ObterTodosQrCodePontos();
+        QrCodePontoResponseDto? ObterQrCodePontoPorId(int id);
+        QrCodePontoResponseDto? SalvarDadosQrCodePonto(QrCodePontoRequestDto entity);
+        QrCodePontoResponseDto? EditarDadosQrCodePonto(int id, QrCodePontoRequestDto entity);
+        QrCodePontoResponseDto? DeletarDadosQrCodePonto(int id);
     }
 }

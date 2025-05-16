@@ -6,6 +6,7 @@ namespace Mottracker.Domain.Interfaces
     {
         IEnumerable<MotoEntity> ObterTodos();
         MotoEntity? ObterPorId(int id);
+        List<MotoEntity>? ObterPorIds(List<int> id);
         MotoEntity? Salvar(MotoEntity entity);
         MotoEntity? Atualizar(MotoEntity entity);
         MotoEntity? Deletar(int id);

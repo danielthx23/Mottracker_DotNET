@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
 using Mottracker.Infrastructure.AppData;
@@ -15,16 +16,23 @@ namespace Mottracker.Infrastructure.Data.Repositories
             
             public IEnumerable<PermissaoEntity> ObterTodos()
             {
-                var Permissao = _context.Permissao.ToList();
-    
-                return Permissao;
+                return _context.Permissao
+                    .Include(p => p.UsuarioPermissoes)
+                    .ToList();
             }
-    
+            
             public PermissaoEntity? ObterPorId(int id)
             {
-                var Permissao = _context.Permissao.Find(id);
-    
-                return Permissao;
+                return _context.Permissao
+                    .Include(p => p.UsuarioPermissoes)
+                    .FirstOrDefault(p => p.IdPermissao == id);
+            }
+
+            public List<PermissaoEntity> ObterPorIds(List<int> ids)
+            {
+                return _context.Permissao
+                    .Where(p => ids.Contains(p.IdPermissao))
+                    .ToList();
             }
     
             public PermissaoEntity? Salvar(PermissaoEntity entity)

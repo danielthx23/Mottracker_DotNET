@@ -3,6 +3,8 @@ using Mottracker.Application.Interfaces;
 using Mottracker.Domain.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using Mottracker.Application.Dtos;
+using Mottracker.Application.Dtos.Permissao;
 
 namespace Mottracker.Presentation.Controllers
 {
@@ -19,7 +21,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todas as permissões", Description = "Retorna todas as permissões cadastradas.")]
-        [SwaggerResponse(200, "Permissões retornadas com sucesso", typeof(IEnumerable<PermissaoEntity>))]
+        [SwaggerResponse(200, "Permissões retornadas com sucesso", typeof(IEnumerable<PermissaoResponseDto>))]
         [SwaggerResponse(400, "Erro ao obter as permissões")]
         public IActionResult Get()
         {
@@ -32,7 +34,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém permissão por ID", Description = "Retorna os dados de uma permissão específica.")]
-        [SwaggerResponse(200, "Permissão retornada com sucesso", typeof(PermissaoEntity))]
+        [SwaggerResponse(200, "Permissão retornada com sucesso", typeof(PermissaoResponseDto))]
         [SwaggerResponse(400, "Erro ao obter a permissão")]
         public IActionResult GetById(int id)
         {
@@ -45,9 +47,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPost]
         [SwaggerOperation(Summary = "Cria uma nova permissão", Description = "Salva uma nova permissão no sistema.")]
-        [SwaggerResponse(201, "Permissão criada com sucesso", typeof(PermissaoEntity))]
+        [SwaggerResponse(201, "Permissão criada com sucesso", typeof(PermissaoResponseDto))]
         [SwaggerResponse(400, "Erro ao salvar a permissão")]
-        public IActionResult Post([FromBody] PermissaoEntity entity)
+        public IActionResult Post([FromBody] PermissaoRequestDto entity)
         {
             try
             {
@@ -69,9 +71,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza uma permissão", Description = "Edita os dados de uma permissão existente.")]
-        [SwaggerResponse(200, "Permissão atualizada com sucesso", typeof(PermissaoEntity))]
+        [SwaggerResponse(200, "Permissão atualizada com sucesso", typeof(PermissaoResponseDto))]
         [SwaggerResponse(400, "Erro ao atualizar a permissão")]
-        public IActionResult Put(int id, [FromBody] PermissaoEntity entity)
+        public IActionResult Put(int id, [FromBody] PermissaoRequestDto entity)
         {
             try
             {
@@ -93,7 +95,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Deleta uma permissão", Description = "Remove uma permissão com base no ID fornecido.")]
-        [SwaggerResponse(200, "Permissão deletada com sucesso", typeof(PermissaoEntity))]
+        [SwaggerResponse(200, "Permissão deletada com sucesso", typeof(PermissaoResponseDto))]
         [SwaggerResponse(400, "Erro ao deletar a permissão")]
         public IActionResult Delete(int id)
         {

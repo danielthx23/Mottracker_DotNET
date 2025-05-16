@@ -1,51 +1,86 @@
+using Mottracker.Application.Dtos.Telefone;
+using Mottracker.Application.Dtos.Usuario;
 using Mottracker.Application.Interfaces;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
 
 namespace Mottracker.Application.Services
-{   
+{
     public class TelefoneApplicationService : ITelefoneApplicationService
     {
         private readonly ITelefoneRepository _repository;
-      
+
         public TelefoneApplicationService(ITelefoneRepository repository)
         {
             _repository = repository;
         }
-      
-        public TelefoneEntity? ObterTelefonePorId(int id)
+
+        public TelefoneResponseDto? ObterTelefonePorId(int id)
         {
-            return _repository.ObterPorId(id);
+            var telefone = _repository.ObterPorId(id);
+            if (telefone == null) return null;
+
+            return MapToResponseDto(telefone);
         }
-      
-        public IEnumerable<TelefoneEntity> ObterTodosTelefones()
+
+        public IEnumerable<TelefoneResponseDto> ObterTodosTelefones()
         {
-            return _repository.ObterTodos();
+            var telefones = _repository.ObterTodos();
+            return telefones.Select(MapToResponseDto);
         }
-              
-        public TelefoneEntity? SalvarDadosTelefone(TelefoneEntity entity)
+
+        public TelefoneResponseDto? SalvarDadosTelefone(TelefoneRequestDto entity)
         {
-            return _repository.Salvar(entity);
+            var telefoneEntity = new TelefoneEntity
+            {
+                Numero = entity.Numero,
+                Tipo = entity.Tipo,
+                UsuarioId = entity.UsuarioId
+            };
+
+            var salvo = _repository.Salvar(telefoneEntity);
+            return salvo == null ? null : MapToResponseDto(salvo);
         }
-              
-        public TelefoneEntity? EditarDadosTelefone(int id, TelefoneEntity entity)
+
+        public TelefoneResponseDto? EditarDadosTelefone(int id, TelefoneRequestDto entity)
         {
             var telefoneExistente = _repository.ObterPorId(id);
+            if (telefoneExistente == null) return null;
 
-            if (telefoneExistente == null)
-                return null;
-            
             telefoneExistente.Numero = entity.Numero;
             telefoneExistente.Tipo = entity.Tipo;
-            telefoneExistente.Usuario = entity.Usuario;
+            telefoneExistente.UsuarioId = entity.UsuarioId;
 
-            return _repository.Atualizar(telefoneExistente);
+            var atualizado = _repository.Atualizar(telefoneExistente);
+            return atualizado == null ? null : MapToResponseDto(atualizado);
         }
 
-              
-        public TelefoneEntity? DeletarDadosTelefone(int id)
+        public TelefoneResponseDto? DeletarDadosTelefone(int id)
         {
-            return _repository.Deletar(id);
+            var deletado = _repository.Deletar(id);
+            return deletado == null ? null : MapToResponseDto(deletado);
+        }
+
+        private TelefoneResponseDto MapToResponseDto(TelefoneEntity telefone)
+        {
+            return new TelefoneResponseDto
+            {
+                IdTelefone = telefone.IdTelefone,
+                Numero = telefone.Numero,
+                Tipo = telefone.Tipo,
+                Usuario = telefone.Usuario != null ? new UsuarioDto
+                {
+                    IdUsuario = telefone.Usuario.IdUsuario,
+                    NomeUsuario = telefone.Usuario.NomeUsuario,
+                    CPFUsuario = telefone.Usuario.CPFUsuario,
+                    SenhaUsuario = telefone.Usuario.SenhaUsuario,
+                    CNHUsuario = telefone.Usuario.CNHUsuario,
+                    EmailUsuario = telefone.Usuario.EmailUsuario,
+                    TokenUsuario = telefone.Usuario.TokenUsuario,
+                    DataNascimentoUsuario = telefone.Usuario.DataNascimentoUsuario,
+                    CriadoEmUsuario = telefone.Usuario.CriadoEmUsuario
+                } : null
+            };
         }
     }
 }

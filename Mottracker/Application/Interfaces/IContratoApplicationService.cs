@@ -1,13 +1,14 @@
+using Mottracker.Application.Dtos.Contrato;
 using Mottracker.Domain.Entities;
 
 namespace Mottracker.Application.Interfaces
 {   
     public interface IContratoApplicationService
     {
-        IEnumerable<ContratoEntity> ObterTodosContratos();
-        ContratoEntity? ObterContratoPorId(int id);
-        ContratoEntity? SalvarDadosContrato(ContratoEntity entity);
-        ContratoEntity? EditarDadosContrato(int id, ContratoEntity entity);
-        ContratoEntity? DeletarDadosContrato(int id);
+        IEnumerable<ContratoResponseDto> ObterTodosContratos();
+        ContratoResponseDto? ObterContratoPorId(int id);
+        ContratoResponseDto? SalvarDadosContrato(ContratoRequestDto entity);
+        ContratoResponseDto? EditarDadosContrato(int id, ContratoRequestDto entity);
+        ContratoResponseDto? DeletarDadosContrato(int id);
     }
 }

@@ -1,13 +1,14 @@
+using Mottracker.Application.Dtos.Telefone;
 using Mottracker.Domain.Entities;
 
 namespace Mottracker.Application.Interfaces
 {   
     public interface ITelefoneApplicationService
     {
-        IEnumerable<TelefoneEntity> ObterTodosTelefones();
-        TelefoneEntity? ObterTelefonePorId(int id);
-        TelefoneEntity? SalvarDadosTelefone(TelefoneEntity entity);
-        TelefoneEntity? EditarDadosTelefone(int id, TelefoneEntity entity);
-        TelefoneEntity? DeletarDadosTelefone(int id);
+        IEnumerable<TelefoneResponseDto> ObterTodosTelefones();
+        TelefoneResponseDto? ObterTelefonePorId(int id);
+        TelefoneResponseDto? SalvarDadosTelefone(TelefoneRequestDto entity);
+        TelefoneResponseDto? EditarDadosTelefone(int id, TelefoneRequestDto entity);
+        TelefoneResponseDto? DeletarDadosTelefone(int id);
     }
 }

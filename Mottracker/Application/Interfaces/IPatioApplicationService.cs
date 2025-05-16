@@ -1,13 +1,14 @@
+using Mottracker.Application.Dtos.Patio;
 using Mottracker.Domain.Entities;
 
 namespace Mottracker.Application.Interfaces
 {   
     public interface IPatioApplicationService
     {
-        IEnumerable<PatioEntity> ObterTodosPatios();
-        PatioEntity? ObterPatioPorId(int id);
-        PatioEntity? SalvarDadosPatio(PatioEntity entity);
-        PatioEntity? EditarDadosPatio(int id, PatioEntity entity);
-        PatioEntity? DeletarDadosPatio(int id);
+        IEnumerable<PatioResponseDto> ObterTodosPatios();
+        PatioResponseDto? ObterPatioPorId(int id);
+        PatioResponseDto? SalvarDadosPatio(PatioRequestDto entity);
+        PatioResponseDto? EditarDadosPatio(int id, PatioRequestDto entity);
+        PatioResponseDto? DeletarDadosPatio(int id);
     }
 }

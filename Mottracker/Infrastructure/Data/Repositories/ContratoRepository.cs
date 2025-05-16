@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
 using Mottracker.Infrastructure.AppData;
@@ -15,16 +16,29 @@ namespace Mottracker.Infrastructure.Data.Repositories
             
             public IEnumerable<ContratoEntity> ObterTodos()
             {
-                var Contrato = _context.Contrato.ToList();
+                var Contratos = _context.Contrato
+                    .Include(c => c.UsuarioContrato)
+                    .Include(c => c.MotoContrato)
+                    .ToList();
     
-                return Contrato;
+                return Contratos;
             }
     
             public ContratoEntity? ObterPorId(int id)
             {
-                var Contrato = _context.Contrato.Find(id);
+                var Contratos = _context.Contrato
+                    .Include(c => c.UsuarioContrato)
+                    .Include(c => c.MotoContrato)
+                    .FirstOrDefault(c => c.IdContrato == id);;
     
-                return Contrato;
+                return Contratos;
+            }
+            
+            public List<ContratoEntity> ObterPorIds(List<int> ids)
+            {
+                return _context.Contrato
+                    .Where(c => ids.Contains(c.IdContrato))
+                    .ToList();
             }
     
             public ContratoEntity? Salvar(ContratoEntity entity)

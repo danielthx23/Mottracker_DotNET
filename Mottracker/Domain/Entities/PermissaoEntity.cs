@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,6 +16,6 @@ namespace Mottracker.Domain.Entities
 
         public string Descricao { get; set; }
         
-        public virtual UsuarioPermissaoEntity? UsuariosPermissoes { get; set; }
+        public virtual ICollection<UsuarioPermissaoEntity>? UsuarioPermissoes { get; set; } = new List<UsuarioPermissaoEntity>();
     }
 }

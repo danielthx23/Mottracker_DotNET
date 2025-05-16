@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Mottracker.Application.Interfaces;
 using Mottracker.Domain.Entities;
 using System.Net;
+using Mottracker.Application.Dtos;
+using Mottracker.Application.Dtos.Camera;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Mottracker.Presentation.Controllers
@@ -19,9 +21,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todas as câmeras", Description = "Retorna todas as câmeras cadastradas no sistema.")]
-        [SwaggerResponse(200, "Lista de câmeras retornada com sucesso", typeof(List<CameraEntity>))]
+        [SwaggerResponse(200, "Lista de câmeras retornada com sucesso", typeof(List<CameraResponseDto>))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao obter as câmeras")]
-        [ProducesResponseType(typeof(IEnumerable<CameraEntity>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<CameraResponseDto>), 200)]
         public IActionResult Get()
         {
             var result = _applicationService.ObterTodasCameras();
@@ -34,9 +36,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém câmera por ID", Description = "Retorna os dados de uma câmera específica.")]
-        [SwaggerResponse(200, "Câmera retornada com sucesso", typeof(CameraEntity))]
+        [SwaggerResponse(200, "Câmera retornada com sucesso", typeof(CameraResponseDto))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao obter a câmera")]
-        [ProducesResponseType(typeof(CameraEntity), 200)]
+        [ProducesResponseType(typeof(CameraResponseDto), 200)]
         public IActionResult GetById(int id)
         {
             var result = _applicationService.ObterCameraPorId(id);
@@ -49,10 +51,10 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPost]
         [SwaggerOperation(Summary = "Salva uma nova câmera", Description = "Cria uma nova câmera no sistema.")]
-        [SwaggerResponse(201, "Câmera criada com sucesso", typeof(CameraEntity))]
+        [SwaggerResponse(201, "Câmera criada com sucesso", typeof(CameraResponseDto))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao salvar a câmera")]
-        [ProducesResponseType(typeof(CameraEntity), 201)]
-        public IActionResult Post([FromBody] CameraEntity entity)
+        [ProducesResponseType(typeof(CameraResponseDto), 201)]
+        public IActionResult Post([FromBody] CameraRequestDto entity)
         {
             try
             {
@@ -75,10 +77,10 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza uma câmera", Description = "Atualiza os dados de uma câmera existente.")]
-        [SwaggerResponse(200, "Câmera atualizada com sucesso", typeof(CameraEntity))]
+        [SwaggerResponse(200, "Câmera atualizada com sucesso", typeof(CameraResponseDto))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao atualizar a câmera")]
-        [ProducesResponseType(typeof(CameraEntity), 200)]
-        public IActionResult Put(int id, [FromBody] CameraEntity entity)
+        [ProducesResponseType(typeof(CameraResponseDto), 200)]
+        public IActionResult Put(int id, [FromBody] CameraRequestDto entity)
         {
             try
             {
@@ -101,9 +103,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Deleta uma câmera", Description = "Remove uma câmera do sistema com base no ID.")]
-        [SwaggerResponse(200, "Câmera deletada com sucesso", typeof(CameraEntity))]
+        [SwaggerResponse(200, "Câmera deletada com sucesso", typeof(CameraResponseDto))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao deletar a câmera")]
-        [ProducesResponseType(typeof(CameraEntity), 200)]
+        [ProducesResponseType(typeof(CameraResponseDto), 200)]
         public IActionResult Delete(int id)
         {
             var result = _applicationService.DeletarDadosCamera(id);

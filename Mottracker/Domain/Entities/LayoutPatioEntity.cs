@@ -14,8 +14,19 @@ namespace Mottracker.Domain.Entities
 
         public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
         
-        public virtual PatioEntity PatioLayoutPatio { get; set; }
+        [Required]
+        public decimal Largura { get; set; }
         
-        public virtual ICollection<QrCodePontoEntity> QrCodesLayoutPatio { get; set; }
+        [Required]
+        public decimal Comprimento { get; set; }
+        
+        public decimal Altura { get; set; }
+        
+        public int? PatioLayoutPatioId { get; set; }
+        
+        public virtual PatioEntity? PatioLayoutPatio { get; set; }
+
+        public virtual ICollection<QrCodePontoEntity>? QrCodesLayoutPatio { get; set; } = new List<QrCodePontoEntity>();
+
     }   
 }

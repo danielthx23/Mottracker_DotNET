@@ -27,11 +27,15 @@ namespace Mottracker.Domain.Entities
         public Estados EstadoMoto { get; set; } // Retirada, no pátio, no pátio errado ou não devolvida.
     
         public string CondicoesMoto { get; set; } // QR Code danificado, IoT danificado, estado extraido com o IoT da Moto da Mottu (Não sabemos como funciona)
-    
+        
+        public int? ContratoMotoId { get; set; }
+        
         public virtual ContratoEntity? ContratoMoto { get; set; }
     
+        public int? MotoPatioAtualId { get; set; }
+
         public virtual PatioEntity? MotoPatioAtual { get; set; }
-        
-        public virtual PatioEntity? MotoPatioOrigem { get; set; }
+
+        public int? MotoPatioOrigemId { get; set; }
     }   
 }

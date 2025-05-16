@@ -21,14 +21,15 @@ namespace Mottracker.Domain.Entities
         [Required]
         public DateTime DataDeExpiracaoContrato { get; set; }
         
-        [Required]
-        public bool RenovacaoAutomaticaContrato { get; set; }
+        [Column(TypeName = "NUMBER(1)")]
+        public int RenovacaoAutomaticaContrato { get; set; }
 
         public DateTime? DataUltimaRenovacaoContrato { get; set; }
         
         public int NumeroRenovacoesContrato { get; set; } 
         
-        public bool AtivoContrato { get; set; }
+        [Column(TypeName = "NUMBER(1)")]
+        public int AtivoContrato { get; set; }
         
         [Required]
         public decimal ValorToralContrato { get; set; }
@@ -36,8 +37,17 @@ namespace Mottracker.Domain.Entities
         [Required]
         public int QuantidadeParcelas  { get; set; }
         
+        public int? UsuarioContratoId { get; set; }
+        
         public virtual UsuarioEntity? UsuarioContrato { get; set; }
         
         public virtual MotoEntity? MotoContrato { get; set; }
+        
+        [NotMapped]
+        public bool IsRenovacaoAutomatica
+        {
+            get => RenovacaoAutomaticaContrato == 1;
+            set => RenovacaoAutomaticaContrato = value ? 1 : 0;
+        }
     }
 }

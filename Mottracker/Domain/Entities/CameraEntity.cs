@@ -24,6 +24,9 @@ namespace Mottracker.Domain.Entities
         
         public float? PosY { get; set; }
         
+        public int? PatioId { get; set; }
+        
         public virtual PatioEntity? Patio { get; set; }
+
     }
 }

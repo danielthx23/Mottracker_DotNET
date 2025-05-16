@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
 using Mottracker.Infrastructure.AppData;
@@ -15,16 +16,29 @@ namespace Mottracker.Infrastructure.Data.Repositories
             
             public IEnumerable<LayoutPatioEntity> ObterTodos()
             {
-                var LayoutPatio = _context.LayoutPatio.ToList();
+                var LayoutPatio = _context.LayoutPatio
+                    .Include(lp => lp.PatioLayoutPatio)
+                    .Include(lp => lp.QrCodesLayoutPatio)
+                    .ToList();
     
                 return LayoutPatio;
             }
     
             public LayoutPatioEntity? ObterPorId(int id)
             {
-                var LayoutPatio = _context.LayoutPatio.Find(id);
+                var LayoutPatio = _context.LayoutPatio
+                    .Include(lp => lp.PatioLayoutPatio)
+                    .Include(lp => lp.QrCodesLayoutPatio)
+                    .FirstOrDefault(lp => lp.IdLayoutPatio == id);
     
                 return LayoutPatio;
+            }
+            
+            public List<LayoutPatioEntity> ObterPorIds(List<int> ids)
+            {
+                return _context.LayoutPatio
+                    .Where(lp => ids.Contains(lp.IdLayoutPatio))
+                    .ToList();
             }
     
             public LayoutPatioEntity? Salvar(LayoutPatioEntity entity)

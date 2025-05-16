@@ -3,6 +3,8 @@ using Mottracker.Application.Interfaces;
 using Mottracker.Domain.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using Mottracker.Application.Dtos;
+using Mottracker.Application.Dtos.Endereco;
 
 namespace Mottracker.Presentation.Controllers
 {
@@ -19,7 +21,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todos os endereços", Description = "Retorna todos os endereços cadastrados.")]
-        [SwaggerResponse(200, "Endereços retornados com sucesso", typeof(IEnumerable<EnderecoEntity>))]
+        [SwaggerResponse(200, "Endereços retornados com sucesso", typeof(IEnumerable<EnderecoResponseDto>))]
         [SwaggerResponse(400, "Erro ao obter os endereços")]
         public IActionResult Get()
         {
@@ -32,7 +34,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém endereço por ID", Description = "Retorna os dados de um endereço específico.")]
-        [SwaggerResponse(200, "Endereço retornado com sucesso", typeof(EnderecoEntity))]
+        [SwaggerResponse(200, "Endereço retornado com sucesso", typeof(EnderecoResponseDto))]
         [SwaggerResponse(400, "Erro ao obter o endereço")]
         public IActionResult GetById(int id)
         {
@@ -45,9 +47,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPost]
         [SwaggerOperation(Summary = "Cria um novo endereço", Description = "Salva um novo endereço no sistema.")]
-        [SwaggerResponse(201, "Endereço criado com sucesso", typeof(EnderecoEntity))]
+        [SwaggerResponse(201, "Endereço criado com sucesso", typeof(EnderecoResponseDto))]
         [SwaggerResponse(400, "Erro ao salvar o endereço")]
-        public IActionResult Post([FromBody] EnderecoEntity entity)
+        public IActionResult Post([FromBody] EnderecoRequestDto entity)
         {
             try
             {
@@ -69,9 +71,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza endereço existente", Description = "Edita os dados de um endereço já existente.")]
-        [SwaggerResponse(200, "Endereço atualizado com sucesso", typeof(EnderecoEntity))]
+        [SwaggerResponse(200, "Endereço atualizado com sucesso", typeof(EnderecoResponseDto))]
         [SwaggerResponse(400, "Erro ao atualizar o endereço")]
-        public IActionResult Put(int id, [FromBody] EnderecoEntity entity)
+        public IActionResult Put(int id, [FromBody] EnderecoRequestDto entity)
         {
             try
             {

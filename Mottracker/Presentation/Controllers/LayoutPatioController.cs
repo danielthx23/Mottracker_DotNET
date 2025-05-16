@@ -3,6 +3,8 @@ using Mottracker.Application.Interfaces;
 using Mottracker.Domain.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using Mottracker.Application.Dtos;
+using Mottracker.Application.Dtos.LayoutPatio;
 
 namespace Mottracker.Presentation.Controllers
 {
@@ -19,7 +21,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todos os layouts de pátio", Description = "Retorna todos os layouts de pátio cadastrados.")]
-        [SwaggerResponse(200, "Layouts retornados com sucesso", typeof(IEnumerable<LayoutPatioEntity>))]
+        [SwaggerResponse(200, "Layouts retornados com sucesso", typeof(IEnumerable<LayoutPatioResponseDto>))]
         [SwaggerResponse(400, "Erro ao obter os layouts")]
         public IActionResult Get()
         {
@@ -32,7 +34,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém layout de pátio por ID", Description = "Retorna os dados de um layout de pátio específico.")]
-        [SwaggerResponse(200, "Layout retornado com sucesso", typeof(LayoutPatioEntity))]
+        [SwaggerResponse(200, "Layout retornado com sucesso", typeof(LayoutPatioResponseDto))]
         [SwaggerResponse(400, "Erro ao obter o layout")]
         public IActionResult GetById(int id)
         {
@@ -45,9 +47,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPost]
         [SwaggerOperation(Summary = "Cria um novo layout de pátio", Description = "Salva um novo layout de pátio no sistema.")]
-        [SwaggerResponse(201, "Layout criado com sucesso", typeof(LayoutPatioEntity))]
+        [SwaggerResponse(201, "Layout criado com sucesso", typeof(LayoutPatioResponseDto))]
         [SwaggerResponse(400, "Erro ao salvar o layout")]
-        public IActionResult Post([FromBody] LayoutPatioEntity entity)
+        public IActionResult Post([FromBody] LayoutPatioRequestDto entity)
         {
             try
             {
@@ -69,9 +71,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza um layout de pátio", Description = "Edita os dados de um layout de pátio já existente.")]
-        [SwaggerResponse(200, "Layout atualizado com sucesso", typeof(LayoutPatioEntity))]
+        [SwaggerResponse(200, "Layout atualizado com sucesso", typeof(LayoutPatioResponseDto))]
         [SwaggerResponse(400, "Erro ao atualizar o layout")]
-        public IActionResult Put(int id, [FromBody] LayoutPatioEntity entity)
+        public IActionResult Put(int id, [FromBody] LayoutPatioRequestDto entity)
         {
             try
             {
@@ -93,7 +95,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Remove um layout de pátio", Description = "Deleta um layout de pátio pelo ID fornecido.")]
-        [SwaggerResponse(200, "Layout deletado com sucesso", typeof(LayoutPatioEntity))]
+        [SwaggerResponse(200, "Layout deletado com sucesso", typeof(LayoutPatioResponseDto))]
         [SwaggerResponse(400, "Erro ao deletar o layout")]
         public IActionResult Delete(int id)
         {

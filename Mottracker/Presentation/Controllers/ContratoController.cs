@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Mottracker.Application.Interfaces;
 using Mottracker.Domain.Entities;
 using System.Net;
+using Mottracker.Application.Dtos;
+using Mottracker.Application.Dtos.Contrato;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Mottracker.Presentation.Controllers
@@ -19,7 +21,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todos os contratos", Description = "Retorna todos os contratos cadastrados.")]
-        [SwaggerResponse(200, "Lista de contratos retornada com sucesso", typeof(IEnumerable<ContratoEntity>))]
+        [SwaggerResponse(200, "Lista de contratos retornada com sucesso", typeof(IEnumerable<ContratoResponseDto>))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao obter os contratos")]
         public IActionResult Get()
         {
@@ -32,7 +34,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém contrato por ID", Description = "Retorna os dados de um contrato específico.")]
-        [SwaggerResponse(200, "Contrato retornado com sucesso", typeof(ContratoEntity))]
+        [SwaggerResponse(200, "Contrato retornado com sucesso", typeof(ContratoResponseDto))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao obter o contrato")]
         public IActionResult GetById(int id)
         {
@@ -45,9 +47,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPost]
         [SwaggerOperation(Summary = "Cria um novo contrato", Description = "Salva um novo contrato no sistema.")]
-        [SwaggerResponse(201, "Contrato criado com sucesso", typeof(ContratoEntity))]
+        [SwaggerResponse(201, "Contrato criado com sucesso", typeof(ContratoResponseDto))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao salvar o contrato")]
-        public IActionResult Post([FromBody] ContratoEntity entity)
+        public IActionResult Post([FromBody] ContratoRequestDto entity)
         {
             try
             {
@@ -69,9 +71,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza contrato existente", Description = "Edita os dados de um contrato já existente.")]
-        [SwaggerResponse(200, "Contrato atualizado com sucesso", typeof(ContratoEntity))]
+        [SwaggerResponse(200, "Contrato atualizado com sucesso", typeof(ContratoResponseDto))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao atualizar o contrato")]
-        public IActionResult Put(int id, [FromBody] ContratoEntity entity)
+        public IActionResult Put(int id, [FromBody] ContratoRequestDto entity)
         {
             try
             {
@@ -93,7 +95,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Remove um contrato", Description = "Deleta um contrato pelo ID fornecido.")]
-        [SwaggerResponse(200, "Contrato deletado com sucesso", typeof(ContratoEntity))]
+        [SwaggerResponse(200, "Contrato deletado com sucesso", typeof(ContratoResponseDto))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao deletar o contrato")]
         public IActionResult Delete(int id)
         {

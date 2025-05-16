@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
 using Mottracker.Infrastructure.AppData;
@@ -15,16 +16,27 @@ namespace Mottracker.Infrastructure.Data.Repositories
             
             public IEnumerable<CameraEntity> ObterTodos()
             {
-                var Camera = _context.Camera.ToList();
-    
-                return Camera;
+                var cameras = _context.Camera
+                        .Include(c => c.Patio) 
+                        .ToList();
+
+                return cameras;
             }
     
             public CameraEntity? ObterPorId(int id)
             {
-                var Camera = _context.Camera.Find(id);
+                var camera = _context.Camera
+                    .Include(c => c.Patio)
+                    .FirstOrDefault(c => c.IdCamera == id);
     
-                return Camera;
+                return camera;
+            }
+            
+            public List<CameraEntity> ObterPorIds(List<int> ids)
+            {
+                return _context.Camera
+                    .Where(c => ids.Contains(c.IdCamera))
+                    .ToList();
             }
     
             public CameraEntity? Salvar(CameraEntity entity)

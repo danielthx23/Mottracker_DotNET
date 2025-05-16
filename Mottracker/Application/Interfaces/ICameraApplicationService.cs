@@ -1,13 +1,14 @@
+using Mottracker.Application.Dtos.Camera;
 using Mottracker.Domain.Entities;
 
 namespace Mottracker.Application.Interfaces
 {   
     public interface ICameraApplicationService
     {
-        IEnumerable<CameraEntity> ObterTodasCameras();
-        CameraEntity? ObterCameraPorId(int id);
-        CameraEntity? SalvarDadosCamera(CameraEntity entity);
-        CameraEntity? EditarDadosCamera(int id, CameraEntity entity);
-        CameraEntity? DeletarDadosCamera(int id);
+        IEnumerable<CameraResponseDto> ObterTodasCameras();
+         CameraResponseDto? ObterCameraPorId(int id);
+         CameraResponseDto? SalvarDadosCamera(CameraRequestDto entity);
+         CameraResponseDto? EditarDadosCamera(int id, CameraRequestDto entity);
+         CameraResponseDto? DeletarDadosCamera(int id);
     }
 }

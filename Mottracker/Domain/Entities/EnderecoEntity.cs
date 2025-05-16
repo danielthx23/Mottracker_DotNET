@@ -40,6 +40,9 @@ namespace Mottracker.Domain.Entities
         [MaxLength(100)]
         public string Referencia { get; set; }  // Ponto de referência (opcional)
         
+        public int? PatioEnderecoId { get; set; }
+        
         public virtual PatioEntity? PatioEndereco { get; set; }
+
     }
 }

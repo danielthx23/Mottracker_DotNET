@@ -3,6 +3,8 @@ using Mottracker.Application.Interfaces;
 using Mottracker.Domain.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using Mottracker.Application.Dtos;
+using Mottracker.Application.Dtos.Moto;
 
 namespace Mottracker.Presentation.Controllers
 {
@@ -19,7 +21,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todas as motos", Description = "Retorna todas as motos cadastradas.")]
-        [SwaggerResponse(200, "Motos retornadas com sucesso", typeof(IEnumerable<MotoEntity>))]
+        [SwaggerResponse(200, "Motos retornadas com sucesso", typeof(IEnumerable<MotoResponseDto>))]
         [SwaggerResponse(400, "Erro ao obter as motos")]
         public IActionResult Get()
         {
@@ -32,7 +34,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém moto por ID", Description = "Retorna os dados de uma moto específica.")]
-        [SwaggerResponse(200, "Moto retornada com sucesso", typeof(MotoEntity))]
+        [SwaggerResponse(200, "Moto retornada com sucesso", typeof(MotoResponseDto))]
         [SwaggerResponse(400, "Erro ao obter a moto")]
         public IActionResult GetById(int id)
         {
@@ -45,9 +47,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPost]
         [SwaggerOperation(Summary = "Cria uma nova moto", Description = "Salva uma nova moto no sistema.")]
-        [SwaggerResponse(201, "Moto criada com sucesso", typeof(MotoEntity))]
+        [SwaggerResponse(201, "Moto criada com sucesso", typeof(MotoResponseDto))]
         [SwaggerResponse(400, "Erro ao salvar a moto")]
-        public IActionResult Post([FromBody] MotoEntity entity)
+        public IActionResult Post([FromBody] MotoRequestDto entity)
         {
             try
             {
@@ -69,9 +71,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza uma moto", Description = "Edita os dados de uma moto já existente.")]
-        [SwaggerResponse(200, "Moto atualizada com sucesso", typeof(MotoEntity))]
+        [SwaggerResponse(200, "Moto atualizada com sucesso", typeof(MotoResponseDto))]
         [SwaggerResponse(400, "Erro ao atualizar a moto")]
-        public IActionResult Put(int id, [FromBody] MotoEntity entity)
+        public IActionResult Put(int id, [FromBody] MotoRequestDto entity)
         {
             try
             {
@@ -93,7 +95,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Remove uma moto", Description = "Deleta uma moto pelo ID fornecido.")]
-        [SwaggerResponse(200, "Moto deletada com sucesso", typeof(MotoEntity))]
+        [SwaggerResponse(200, "Moto deletada com sucesso", typeof(MotoResponseDto))]
         [SwaggerResponse(400, "Erro ao deletar a moto")]
         public IActionResult Delete(int id)
         {

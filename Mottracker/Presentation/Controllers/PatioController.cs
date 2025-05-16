@@ -3,6 +3,8 @@ using Mottracker.Application.Interfaces;
 using Mottracker.Domain.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using Mottracker.Application.Dtos;
+using Mottracker.Application.Dtos.Patio;
 
 namespace Mottracker.Presentation.Controllers
 {
@@ -19,7 +21,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todos os pátios", Description = "Retorna todos os pátios cadastrados.")]
-        [SwaggerResponse(200, "Pátios retornados com sucesso", typeof(IEnumerable<PatioEntity>))]
+        [SwaggerResponse(200, "Pátios retornados com sucesso", typeof(IEnumerable<PatioResponseDto>))]
         [SwaggerResponse(400, "Erro ao obter os pátios")]
         public IActionResult Get()
         {
@@ -32,7 +34,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém pátio por ID", Description = "Retorna os dados de um pátio específico.")]
-        [SwaggerResponse(200, "Pátio retornado com sucesso", typeof(PatioEntity))]
+        [SwaggerResponse(200, "Pátio retornado com sucesso", typeof(PatioResponseDto))]
         [SwaggerResponse(400, "Erro ao obter o pátio")]
         public IActionResult GetById(int id)
         {
@@ -45,9 +47,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPost]
         [SwaggerOperation(Summary = "Cria um novo pátio", Description = "Salva um novo pátio no sistema.")]
-        [SwaggerResponse(201, "Pátio criado com sucesso", typeof(PatioEntity))]
+        [SwaggerResponse(201, "Pátio criado com sucesso", typeof(PatioResponseDto))]
         [SwaggerResponse(400, "Erro ao salvar o pátio")]
-        public IActionResult Post([FromBody] PatioEntity entity)
+        public IActionResult Post([FromBody] PatioRequestDto entity)
         {
             try
             {
@@ -69,9 +71,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza um pátio", Description = "Edita os dados de um pátio existente.")]
-        [SwaggerResponse(200, "Pátio atualizado com sucesso", typeof(PatioEntity))]
+        [SwaggerResponse(200, "Pátio atualizado com sucesso", typeof(PatioResponseDto))]
         [SwaggerResponse(400, "Erro ao atualizar o pátio")]
-        public IActionResult Put(int id, [FromBody] PatioEntity entity)
+        public IActionResult Put(int id, [FromBody] PatioRequestDto entity)
         {
             try
             {
@@ -93,7 +95,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Deleta um pátio", Description = "Remove um pátio com base no ID fornecido.")]
-        [SwaggerResponse(200, "Pátio deletado com sucesso", typeof(PatioEntity))]
+        [SwaggerResponse(200, "Pátio deletado com sucesso", typeof(PatioResponseDto))]
         [SwaggerResponse(400, "Erro ao deletar o pátio")]
         public IActionResult Delete(int id)
         {

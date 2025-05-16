@@ -3,6 +3,7 @@ using Mottracker.Application.Interfaces;
 using Mottracker.Domain.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using Mottracker.Application.Dtos.Telefone;
 
 namespace Mottracker.Presentation.Controllers
 {   
@@ -19,7 +20,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todos os telefones", Description = "Retorna todos os registros de telefones cadastrados.")]
-        [SwaggerResponse(200, "Lista retornada com sucesso", typeof(IEnumerable<TelefoneEntity>))]
+        [SwaggerResponse(200, "Lista retornada com sucesso", typeof(IEnumerable<TelefoneResponseDto>))]
         [SwaggerResponse(400, "Erro ao obter os dados")]
         public IActionResult Get()
         {
@@ -32,7 +33,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém telefone por ID", Description = "Retorna os dados de um telefone específico.")]
-        [SwaggerResponse(200, "Telefone retornado com sucesso", typeof(TelefoneEntity))]
+        [SwaggerResponse(200, "Telefone retornado com sucesso", typeof(TelefoneResponseDto))]
         [SwaggerResponse(400, "Erro ao obter o dado")]
         public IActionResult GetById(int id)
         {
@@ -45,9 +46,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPost]
         [SwaggerOperation(Summary = "Cria um novo telefone", Description = "Salva um novo registro de telefone.")]
-        [SwaggerResponse(201, "Telefone salvo com sucesso", typeof(TelefoneEntity))]
+        [SwaggerResponse(201, "Telefone salvo com sucesso", typeof(TelefoneResponseDto))]
         [SwaggerResponse(400, "Erro ao salvar o dado")]
-        public IActionResult Post([FromBody] TelefoneEntity entity)
+        public IActionResult Post([FromBody] TelefoneRequestDto entity)
         {
             try
             {
@@ -69,9 +70,9 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza um telefone", Description = "Edita os dados de um telefone existente.")]
-        [SwaggerResponse(200, "Telefone atualizado com sucesso", typeof(TelefoneEntity))]
+        [SwaggerResponse(200, "Telefone atualizado com sucesso", typeof(TelefoneResponseDto))]
         [SwaggerResponse(400, "Erro ao atualizar o dado")]
-        public IActionResult Put(int id, [FromBody] TelefoneEntity entity)
+        public IActionResult Put(int id, [FromBody] TelefoneRequestDto entity)
         {
             try
             {
@@ -93,7 +94,7 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Deleta um telefone", Description = "Remove um telefone do sistema com base no ID.")]
-        [SwaggerResponse(200, "Telefone deletado com sucesso", typeof(TelefoneEntity))]
+        [SwaggerResponse(200, "Telefone deletado com sucesso", typeof(TelefoneResponseDto))]
         [SwaggerResponse(400, "Erro ao deletar o dado")]
         public IActionResult Delete(int id)
         {
