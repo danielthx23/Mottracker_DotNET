@@ -11,6 +11,41 @@ Essa integração permite o acompanhamento em tempo real das motos via aplicativ
 
 Além disso, o sistema gerencia cadastro e edição de dados, no futuro vai oferecer funcionalidades para autenticação e autorização dos usuários, gestão de permissões e geração de relatórios através de dashboards customizáveis, que auxiliam a equipe da Mottu a tomar decisões baseadas em dados confiáveis e atualizados.
 
+## Instalação do Projeto
+
+### Requisitos
+- .NET SDK 7.0
+
+### Configuração
+
+1. No arquivo `appsettings.Development.json`, configure a string de conexão do Oracle DB com seu usuário e senha, por exemplo:
+
+```json
+"ConnectionStrings": {
+  "Oracle": "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=seuusuario;Password=suasenha;"
+}
+
+2. Execute as migrations para criar as tabelas no banco Oracle:
+
+```bash
+  dotnet ef database update
+```
+
+Caso não tenha a ferramenta dotnet-ef instalada, instale com:
+
+```bash
+  dotnet tool install --global dotnet-ef
+```
+
+### Rodar o projeto
+Após configurar a string de conexão e aplicar as migrations, para rodar a API localmente, utilize o Rider ou Visual Studio e clique em http run.
+
+Por padrão, a API estará disponível em:
+http://localhost:5169
+
+Você pode acessar o Swagger para testar as rotas em:
+http://localhost:5169/swagger
+
 ## Rotas da API
 
 ### Camera
