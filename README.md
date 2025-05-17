@@ -24,6 +24,7 @@ Além disso, o sistema gerencia cadastro e edição de dados, no futuro vai ofer
 "ConnectionStrings": {
   "Oracle": "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=seuusuario;Password=suasenha;"
 }
+```
 
 2. Execute as migrations para criar as tabelas no banco Oracle:
 
@@ -41,9 +42,11 @@ Caso não tenha a ferramenta dotnet-ef instalada, instale com:
 Após configurar a string de conexão e aplicar as migrations, para rodar a API localmente, utilize o Rider ou Visual Studio e clique em http run.
 
 Por padrão, a API estará disponível em:
+
 http://localhost:5169
 
-Você pode acessar o Swagger para testar as rotas em:
+Agora você pode acessar o Swagger para testar as rotas em:
+
 http://localhost:5169/swagger
 
 ## Rotas da API
