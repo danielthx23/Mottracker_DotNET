@@ -15,6 +15,7 @@ Além disso, o sistema gerencia cadastro e edição de dados, no futuro vai ofer
 
 ### Requisitos
 - .NET SDK 7.0
+- Rider / Visual Studio
 
 ### Configuração
 
