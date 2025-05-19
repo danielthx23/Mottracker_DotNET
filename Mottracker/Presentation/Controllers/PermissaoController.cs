@@ -22,27 +22,31 @@ namespace Mottracker.Presentation.Controllers
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todas as permissões", Description = "Retorna todas as permissões cadastradas.")]
         [SwaggerResponse(200, "Permissões retornadas com sucesso", typeof(IEnumerable<PermissaoResponseDto>))]
+        [SwaggerResponse(204, "Nenhuma permissão encontrada")]
         [SwaggerResponse(400, "Erro ao obter as permissões")]
         public IActionResult Get()
         {
             var result = _applicationService.ObterTodosPermissoes();
-            if (result is not null)
+
+            if (result is not null && result.Any())
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NoContent();
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém permissão por ID", Description = "Retorna os dados de uma permissão específica.")]
         [SwaggerResponse(200, "Permissão retornada com sucesso", typeof(PermissaoResponseDto))]
+        [SwaggerResponse(404, "Permissão não encontrada")]
         [SwaggerResponse(400, "Erro ao obter a permissão")]
         public IActionResult GetById(int id)
         {
             var result = _applicationService.ObterPermissaoPorId(id);
+
             if (result is not null)
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NotFound();
         }
 
         [HttpPost]
@@ -54,8 +58,9 @@ namespace Mottracker.Presentation.Controllers
             try
             {
                 var result = _applicationService.SalvarDadosPermissao(entity);
+
                 if (result is not null)
-                    return Ok(result);
+                    return CreatedAtAction(nameof(GetById), new { id = result.IdPermissao }, result);
 
                 return BadRequest("Não foi possível salvar os dados.");
             }
@@ -72,16 +77,18 @@ namespace Mottracker.Presentation.Controllers
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza uma permissão", Description = "Edita os dados de uma permissão existente.")]
         [SwaggerResponse(200, "Permissão atualizada com sucesso", typeof(PermissaoResponseDto))]
+        [SwaggerResponse(404, "Permissão não encontrada")]
         [SwaggerResponse(400, "Erro ao atualizar a permissão")]
         public IActionResult Put(int id, [FromBody] PermissaoRequestDto entity)
         {
             try
             {
                 var result = _applicationService.EditarDadosPermissao(id, entity);
+
                 if (result is not null)
                     return Ok(result);
 
-                return BadRequest("Não foi possível atualizar os dados.");
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -95,15 +102,17 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Deleta uma permissão", Description = "Remove uma permissão com base no ID fornecido.")]
-        [SwaggerResponse(200, "Permissão deletada com sucesso", typeof(PermissaoResponseDto))]
+        [SwaggerResponse(204, "Permissão deletada com sucesso")]
+        [SwaggerResponse(404, "Permissão não encontrada")]
         [SwaggerResponse(400, "Erro ao deletar a permissão")]
         public IActionResult Delete(int id)
         {
             var result = _applicationService.DeletarDadosPermissao(id);
-            if (result is not null)
-                return Ok(result);
 
-            return BadRequest("Não foi possível deletar os dados.");
+            if (result is not null)
+                return NoContent();
+
+            return NotFound();
         }
     }
 }
