@@ -65,6 +65,22 @@ namespace Mottracker.Infrastructure.Data.Repositories
     
                 return null;
             }
-    
+
+            public IEnumerable<PermissaoEntity> ObterPorNomeContendo(string nomePermissao)
+            {
+                return _context.Permissao
+                    .Include(p => p.UsuarioPermissoes)
+                    .Where(p => EF.Functions.Like(p.NomePermissao.ToLower(), $"%{nomePermissao.ToLower()}%"))
+                    .ToList();
+            }
+
+            public IEnumerable<PermissaoEntity> ObterPorDescricaoContendo(string descricao)
+            {
+                return _context.Permissao
+                    .Include(p => p.UsuarioPermissoes)
+                    .Where(p => EF.Functions.Like(p.Descricao.ToLower(), $"%{descricao.ToLower()}%"))
+                    .ToList();
+            }
+
         }
 }

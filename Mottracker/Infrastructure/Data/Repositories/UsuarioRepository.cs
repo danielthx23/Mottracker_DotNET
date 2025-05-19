@@ -72,5 +72,15 @@ namespace Mottracker.Infrastructure.Data.Repositories
 
             return null;
         }
+
+        public UsuarioEntity? ObterPorEmail(string emailUsuario)
+        {
+            return _context.Usuario
+                .Include(u => u.ContratoUsuario)
+                .Include(u => u.Telefones)
+                .Include(u => u.UsuarioPermissoes)
+                .FirstOrDefault(u => u.EmailUsuario.ToLower() == emailUsuario.ToLower());
+        }
+
     }
 }

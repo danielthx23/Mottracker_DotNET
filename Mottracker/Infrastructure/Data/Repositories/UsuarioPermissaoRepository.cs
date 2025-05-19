@@ -70,5 +70,24 @@ namespace Mottracker.Infrastructure.Data.Repositories
 
             return null;
         }
+
+        public IEnumerable<UsuarioPermissaoEntity> ObterPorIdUsuario(long usuarioId)
+        {
+            return _context.UsuarioPermissao
+                .Include(up => up.Usuario)
+                .Include(up => up.Permissao)
+                .Where(up => up.UsuarioId == usuarioId)
+                .ToList();
+        }
+
+        public IEnumerable<UsuarioPermissaoEntity> ObterPorIdPermissao(long permissaoId)
+        {
+            return _context.UsuarioPermissao
+                .Include(up => up.Usuario)
+                .Include(up => up.Permissao)
+                .Where(up => up.PermissaoId == permissaoId)
+                .ToList();
+        }
+
     }
 }

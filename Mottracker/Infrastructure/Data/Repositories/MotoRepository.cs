@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
+using Mottracker.Domain.Enums;
 using Mottracker.Domain.Interfaces;
 using Mottracker.Infrastructure.AppData;
 
@@ -71,6 +72,32 @@ namespace Mottracker.Infrastructure.Data.Repositories
     
                 return null;
             }
-    
+
+            public MotoEntity? ObterPorPlaca(string placaMoto)
+            {
+                return _context.Moto
+                    .Include(m => m.MotoPatioAtual)
+                    .Include(m => m.ContratoMoto)
+                    .FirstOrDefault(m => m.PlacaMoto.ToLower() == placaMoto.ToLower());
+            }
+
+            public IEnumerable<MotoEntity> ObterPorEstado(Estados estadoMoto)
+            {
+                return _context.Moto
+                    .Include(m => m.MotoPatioAtual)
+                    .Include(m => m.ContratoMoto)
+                    .Where(m => m.EstadoMoto == estadoMoto)
+                    .ToList();
+            }
+
+            public IEnumerable<MotoEntity> ObterPorIdContrato(long contratoId)
+            {
+                return _context.Moto
+                    .Include(m => m.MotoPatioAtual)
+                    .Include(m => m.ContratoMoto)
+                    .Where(m => m.ContratoMoto != null && m.ContratoMoto.IdContrato == contratoId)
+                    .ToList();
+            }
+
         }
 }

@@ -71,6 +71,24 @@ namespace Mottracker.Infrastructure.Data.Repositories
     
                 return null;
             }
-    
+
+            public IEnumerable<LayoutPatioEntity> ObterPorIdPatio(long patioId)
+            {
+                return _context.LayoutPatio
+                    .Include(lp => lp.PatioLayoutPatio)
+                    .Include(lp => lp.QrCodesLayoutPatio)
+                    .Where(lp => lp.PatioLayoutPatio!.IdPatio == patioId)
+                    .ToList();
+            }
+
+            public IEnumerable<LayoutPatioEntity> ObterPorDataCriacaoEntre(DateTime dataInicio, DateTime dataFim)
+            {
+                return _context.LayoutPatio
+                    .Include(lp => lp.PatioLayoutPatio)
+                    .Include(lp => lp.QrCodesLayoutPatio)
+                    .Where(lp => lp.DataCriacao >= dataInicio && lp.DataCriacao <= dataFim)
+                    .ToList();
+            }
+
         }
 }

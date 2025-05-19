@@ -66,5 +66,27 @@ namespace Mottracker.Infrastructure.Data.Repositories
 
             return null;
         }
+
+        public IEnumerable<TelefoneEntity> ObterPorNumero(string numero)
+        {
+            return _context.Telefone
+                .Where(t => t.Numero == numero)
+                .ToList();
+        }
+
+        public IEnumerable<TelefoneEntity> ObterPorIdUsuario(long usuarioId)
+        {
+            return _context.Telefone
+                .Where(t => t.UsuarioId == usuarioId)
+                .ToList();
+        }
+
+        public IEnumerable<TelefoneEntity> ObterPorTipo(string tipo)
+        {
+            return _context.Telefone
+                .Where(t => t.Tipo == tipo)
+                .ToList();
+        }
+
     }
 }

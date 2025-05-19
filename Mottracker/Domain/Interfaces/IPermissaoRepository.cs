@@ -6,9 +6,10 @@ namespace Mottracker.Domain.Interfaces
     {
         IEnumerable<PermissaoEntity> ObterTodos();
         PermissaoEntity? ObterPorId(int id);
-        List<PermissaoEntity>? ObterPorIds(List<int> id);
         PermissaoEntity? Salvar(PermissaoEntity entity);
         PermissaoEntity? Atualizar(PermissaoEntity entity);
         PermissaoEntity? Deletar(int id);
+        IEnumerable<PermissaoEntity> ObterPorNomeContendo(string nomePermissao);
+        IEnumerable<PermissaoEntity> ObterPorDescricaoContendo(string descricao);
     }
 }

@@ -6,9 +6,9 @@ namespace Mottracker.Domain.Interfaces
     {
         IEnumerable<UsuarioEntity> ObterTodos();
         UsuarioEntity? ObterPorId(int id);
-        List<UsuarioEntity>? ObterPorIds(List<int> id);
         UsuarioEntity? Salvar(UsuarioEntity entity);
         UsuarioEntity? Atualizar(UsuarioEntity entity);
         UsuarioEntity? Deletar(int id);
+        UsuarioEntity? ObterPorEmail(string emailUsuario);
     }
 }

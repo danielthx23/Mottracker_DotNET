@@ -6,9 +6,11 @@ namespace Mottracker.Domain.Interfaces
     {
         IEnumerable<TelefoneEntity> ObterTodos();
         TelefoneEntity? ObterPorId(int id);
-        List<TelefoneEntity>? ObterPorIds(List<int> id);
         TelefoneEntity? Salvar(TelefoneEntity entity);
         TelefoneEntity? Atualizar(TelefoneEntity entity);
         TelefoneEntity? Deletar(int id);
+        IEnumerable<TelefoneEntity> ObterPorNumero(string numero);
+        IEnumerable<TelefoneEntity> ObterPorIdUsuario(long usuarioId);
+        IEnumerable<TelefoneEntity> ObterPorTipo(string tipo);
     }
 }

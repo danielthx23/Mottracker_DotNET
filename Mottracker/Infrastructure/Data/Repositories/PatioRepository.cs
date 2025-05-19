@@ -71,6 +71,49 @@ namespace Mottracker.Infrastructure.Data.Repositories
     
                 return null;
             }
-    
+
+            public IEnumerable<PatioEntity> ObterPorNomeContendo(string nomePatio)
+            {
+                return _context.Patio
+                    .Include(p => p.LayoutPatio)
+                    .Include(p => p.EnderecoPatio)
+                    .Include(p => p.MotosPatioAtual)
+                    .Include(p => p.CamerasPatio)
+                    .Where(p => EF.Functions.Like(p.NomePatio.ToLower(), $"%{nomePatio.ToLower()}%"))
+                    .ToList();
+            }
+
+            public IEnumerable<PatioEntity> ObterComMotosDisponiveisAcimaDe(int quantidade)
+            {
+                return _context.Patio
+                    .Include(p => p.LayoutPatio)
+                    .Include(p => p.EnderecoPatio)
+                    .Include(p => p.MotosPatioAtual)
+                    .Include(p => p.CamerasPatio)
+                    .Where(p => p.MotosPatioAtual.Count > quantidade)
+                    .ToList();
+            }
+
+            public IEnumerable<PatioEntity> ObterPorDataPosterior(DateTime data)
+            {
+                return _context.Patio
+                    .Include(p => p.LayoutPatio)
+                    .Include(p => p.EnderecoPatio)
+                    .Include(p => p.MotosPatioAtual)
+                    .Include(p => p.CamerasPatio)
+                    .Where(p => p.DataPatio > data)
+                    .ToList();
+            }
+
+            public IEnumerable<PatioEntity> ObterPorDataAnterior(DateTime data)
+            {
+                return _context.Patio
+                    .Include(p => p.LayoutPatio)
+                    .Include(p => p.EnderecoPatio)
+                    .Include(p => p.MotosPatioAtual)
+                    .Include(p => p.CamerasPatio)
+                    .Where(p => p.DataPatio < data)
+                    .ToList();
+            }
         }
 }
