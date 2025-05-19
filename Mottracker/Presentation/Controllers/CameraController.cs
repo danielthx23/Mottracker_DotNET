@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Mottracker.Application.Interfaces;
-using Mottracker.Domain.Entities;
-using System.Net;
-using Mottracker.Application.Dtos;
 using Mottracker.Application.Dtos.Camera;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace Mottracker.Presentation.Controllers
 {
@@ -22,21 +20,23 @@ namespace Mottracker.Presentation.Controllers
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todas as câmeras", Description = "Retorna todas as câmeras cadastradas no sistema.")]
         [SwaggerResponse(200, "Lista de câmeras retornada com sucesso", typeof(List<CameraResponseDto>))]
+        [SwaggerResponse(204, "Nenhuma câmera encontrada")]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao obter as câmeras")]
         [ProducesResponseType(typeof(IEnumerable<CameraResponseDto>), 200)]
         public IActionResult Get()
         {
             var result = _applicationService.ObterTodasCameras();
 
-            if (result is not null)
+            if (result is not null && result.Any())
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NoContent();
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém câmera por ID", Description = "Retorna os dados de uma câmera específica.")]
         [SwaggerResponse(200, "Câmera retornada com sucesso", typeof(CameraResponseDto))]
+        [SwaggerResponse(404, "Câmera não encontrada")]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao obter a câmera")]
         [ProducesResponseType(typeof(CameraResponseDto), 200)]
         public IActionResult GetById(int id)
@@ -46,7 +46,7 @@ namespace Mottracker.Presentation.Controllers
             if (result is not null)
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NotFound();
         }
 
         [HttpPost]
@@ -61,7 +61,7 @@ namespace Mottracker.Presentation.Controllers
                 var result = _applicationService.SalvarDadosCamera(entity);
 
                 if (result is not null)
-                    return Ok(result);
+                    return CreatedAtAction(nameof(GetById), new { id = result.IdCamera }, result);
 
                 return BadRequest("Não foi possível salvar os dados.");
             }
@@ -78,6 +78,7 @@ namespace Mottracker.Presentation.Controllers
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza uma câmera", Description = "Atualiza os dados de uma câmera existente.")]
         [SwaggerResponse(200, "Câmera atualizada com sucesso", typeof(CameraResponseDto))]
+        [SwaggerResponse(404, "Câmera não encontrada")]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao atualizar a câmera")]
         [ProducesResponseType(typeof(CameraResponseDto), 200)]
         public IActionResult Put(int id, [FromBody] CameraRequestDto entity)
@@ -89,7 +90,7 @@ namespace Mottracker.Presentation.Controllers
                 if (result is not null)
                     return Ok(result);
 
-                return BadRequest("Não foi possível atualizar os dados.");
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -103,17 +104,17 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Deleta uma câmera", Description = "Remove uma câmera do sistema com base no ID.")]
-        [SwaggerResponse(200, "Câmera deletada com sucesso", typeof(CameraResponseDto))]
+        [SwaggerResponse(204, "Câmera deletada com sucesso")]
+        [SwaggerResponse(404, "Câmera não encontrada")]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao deletar a câmera")]
-        [ProducesResponseType(typeof(CameraResponseDto), 200)]
         public IActionResult Delete(int id)
         {
             var result = _applicationService.DeletarDadosCamera(id);
 
             if (result is not null)
-                return Ok(result);
+                return NoContent();
 
-            return BadRequest("Não foi possível deletar os dados.");
+            return NotFound();
         }
     }
 }

@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Mottracker.Application.Interfaces;
-using Mottracker.Domain.Entities;
+using Mottracker.Application.Dtos.Patio;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
-using Mottracker.Application.Dtos;
-using Mottracker.Application.Dtos.Patio;
 
 namespace Mottracker.Presentation.Controllers
 {
@@ -22,27 +20,31 @@ namespace Mottracker.Presentation.Controllers
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todos os pátios", Description = "Retorna todos os pátios cadastrados.")]
         [SwaggerResponse(200, "Pátios retornados com sucesso", typeof(IEnumerable<PatioResponseDto>))]
+        [SwaggerResponse(204, "Nenhum pátio encontrado")]
         [SwaggerResponse(400, "Erro ao obter os pátios")]
         public IActionResult Get()
         {
             var result = _applicationService.ObterTodosPatios();
-            if (result is not null)
+
+            if (result is not null && result.Any())
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NoContent();
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém pátio por ID", Description = "Retorna os dados de um pátio específico.")]
         [SwaggerResponse(200, "Pátio retornado com sucesso", typeof(PatioResponseDto))]
+        [SwaggerResponse(404, "Pátio não encontrado")]
         [SwaggerResponse(400, "Erro ao obter o pátio")]
         public IActionResult GetById(int id)
         {
             var result = _applicationService.ObterPatioPorId(id);
+
             if (result is not null)
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NotFound();
         }
 
         [HttpPost]
@@ -54,8 +56,9 @@ namespace Mottracker.Presentation.Controllers
             try
             {
                 var result = _applicationService.SalvarDadosPatio(entity);
+
                 if (result is not null)
-                    return Ok(result);
+                    return CreatedAtAction(nameof(GetById), new { id = result.IdPatio }, result);
 
                 return BadRequest("Não foi possível salvar os dados.");
             }
@@ -72,16 +75,18 @@ namespace Mottracker.Presentation.Controllers
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza um pátio", Description = "Edita os dados de um pátio existente.")]
         [SwaggerResponse(200, "Pátio atualizado com sucesso", typeof(PatioResponseDto))]
+        [SwaggerResponse(404, "Pátio não encontrado")]
         [SwaggerResponse(400, "Erro ao atualizar o pátio")]
         public IActionResult Put(int id, [FromBody] PatioRequestDto entity)
         {
             try
             {
                 var result = _applicationService.EditarDadosPatio(id, entity);
+
                 if (result is not null)
                     return Ok(result);
 
-                return BadRequest("Não foi possível atualizar os dados.");
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -95,15 +100,17 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Deleta um pátio", Description = "Remove um pátio com base no ID fornecido.")]
-        [SwaggerResponse(200, "Pátio deletado com sucesso", typeof(PatioResponseDto))]
+        [SwaggerResponse(204, "Pátio deletado com sucesso")]
+        [SwaggerResponse(404, "Pátio não encontrado")]
         [SwaggerResponse(400, "Erro ao deletar o pátio")]
         public IActionResult Delete(int id)
         {
             var result = _applicationService.DeletarDadosPatio(id);
-            if (result is not null)
-                return Ok(result);
 
-            return BadRequest("Não foi possível deletar os dados.");
+            if (result is not null)
+                return NoContent();
+
+            return NotFound();
         }
     }
 }

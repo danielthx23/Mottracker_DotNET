@@ -20,8 +20,8 @@ namespace Mottracker.Domain.Entities
         public DateTime DataPatio { get; set; }
         
         public virtual ICollection<MotoEntity>? MotosPatioAtual { get; set; } = new List<MotoEntity>();
-        
-        public virtual ICollection<CameraEntity>? CamerasPatio { get; set; }
+
+        public virtual ICollection<CameraEntity>? CamerasPatio { get; set; } = new List<CameraEntity>();
         
         public virtual LayoutPatioEntity? LayoutPatio { get; set; }
         

@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Mottracker.Application.Interfaces;
-using Mottracker.Domain.Entities;
+using Mottracker.Application.Dtos.Usuario;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
-using Mottracker.Application.Dtos.Telefone;
-using Mottracker.Application.Dtos.Usuario;
 
 namespace Mottracker.Presentation.Controllers
-{   
+{
     [Route("api/[controller]")]
     [ApiController]
     public class UsuarioController : ControllerBase
@@ -22,27 +20,31 @@ namespace Mottracker.Presentation.Controllers
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todos os usuários", Description = "Retorna todos os registros de usuários cadastrados.")]
         [SwaggerResponse(200, "Lista retornada com sucesso", typeof(IEnumerable<UsuarioResponseDto>))]
+        [SwaggerResponse(204, "Nenhum usuário encontrado")]
         [SwaggerResponse(400, "Erro ao obter os dados")]
         public IActionResult Get()
         {
             var result = _applicationService.ObterTodosUsuarios();
-            if (result is not null)
+
+            if (result != null && result.Any())
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NoContent();
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém usuário por ID", Description = "Retorna os dados de um usuário específico.")]
         [SwaggerResponse(200, "Usuário retornado com sucesso", typeof(UsuarioResponseDto))]
+        [SwaggerResponse(404, "Usuário não encontrado")]
         [SwaggerResponse(400, "Erro ao obter o dado")]
         public IActionResult GetById(int id)
         {
             var result = _applicationService.ObterUsuarioPorId(id);
-            if (result is not null)
+
+            if (result != null)
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NotFound();
         }
 
         [HttpPost]
@@ -54,8 +56,9 @@ namespace Mottracker.Presentation.Controllers
             try
             {
                 var result = _applicationService.SalvarDadosUsuario(entity);
-                if (result is not null)
-                    return Ok(result);
+
+                if (result != null)
+                    return CreatedAtAction(nameof(GetById), new { id = result.IdUsuario }, result);
 
                 return BadRequest("Não foi possível salvar os dados.");
             }
@@ -72,16 +75,18 @@ namespace Mottracker.Presentation.Controllers
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza um usuário", Description = "Edita os dados de um usuário existente.")]
         [SwaggerResponse(200, "Usuário atualizado com sucesso", typeof(UsuarioResponseDto))]
+        [SwaggerResponse(404, "Usuário não encontrado")]
         [SwaggerResponse(400, "Erro ao atualizar o dado")]
         public IActionResult Put(int id, [FromBody] UsuarioRequestDto entity)
         {
             try
             {
                 var result = _applicationService.EditarDadosUsuario(id, entity);
-                if (result is not null)
+
+                if (result != null)
                     return Ok(result);
 
-                return BadRequest("Não foi possível atualizar os dados.");
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -95,15 +100,17 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Deleta um usuário", Description = "Remove um usuário do sistema com base no ID.")]
-        [SwaggerResponse(200, "Usuário deletado com sucesso", typeof(UsuarioResponseDto))]
+        [SwaggerResponse(204, "Usuário deletado com sucesso")]
+        [SwaggerResponse(404, "Usuário não encontrado")]
         [SwaggerResponse(400, "Erro ao deletar o dado")]
         public IActionResult Delete(int id)
         {
             var result = _applicationService.DeletarDadosUsuario(id);
-            if (result is not null)
-                return Ok(result);
 
-            return BadRequest("Não foi possível deletar os dados.");
+            if (result != null)
+                return NoContent();
+
+            return NotFound();
         }
     }
 }

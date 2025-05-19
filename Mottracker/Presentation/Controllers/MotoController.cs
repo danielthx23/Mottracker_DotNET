@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Mottracker.Application.Interfaces;
-using Mottracker.Domain.Entities;
+using Mottracker.Application.Dtos.Moto;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
-using Mottracker.Application.Dtos;
-using Mottracker.Application.Dtos.Moto;
 
 namespace Mottracker.Presentation.Controllers
 {
@@ -22,27 +20,31 @@ namespace Mottracker.Presentation.Controllers
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todas as motos", Description = "Retorna todas as motos cadastradas.")]
         [SwaggerResponse(200, "Motos retornadas com sucesso", typeof(IEnumerable<MotoResponseDto>))]
+        [SwaggerResponse(204, "Nenhuma moto encontrada")]
         [SwaggerResponse(400, "Erro ao obter as motos")]
         public IActionResult Get()
         {
             var result = _applicationService.ObterTodasMotos();
-            if (result is not null)
+
+            if (result is not null && result.Any())
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NoContent();
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém moto por ID", Description = "Retorna os dados de uma moto específica.")]
         [SwaggerResponse(200, "Moto retornada com sucesso", typeof(MotoResponseDto))]
+        [SwaggerResponse(404, "Moto não encontrada")]
         [SwaggerResponse(400, "Erro ao obter a moto")]
         public IActionResult GetById(int id)
         {
             var result = _applicationService.ObterMotoPorId(id);
+
             if (result is not null)
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NotFound();
         }
 
         [HttpPost]
@@ -54,8 +56,9 @@ namespace Mottracker.Presentation.Controllers
             try
             {
                 var result = _applicationService.SalvarDadosMoto(entity);
+
                 if (result is not null)
-                    return Ok(result);
+                    return CreatedAtAction(nameof(GetById), new { id = result.IdMoto }, result);
 
                 return BadRequest("Não foi possível salvar os dados.");
             }
@@ -72,16 +75,18 @@ namespace Mottracker.Presentation.Controllers
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza uma moto", Description = "Edita os dados de uma moto já existente.")]
         [SwaggerResponse(200, "Moto atualizada com sucesso", typeof(MotoResponseDto))]
+        [SwaggerResponse(404, "Moto não encontrada")]
         [SwaggerResponse(400, "Erro ao atualizar a moto")]
         public IActionResult Put(int id, [FromBody] MotoRequestDto entity)
         {
             try
             {
                 var result = _applicationService.EditarDadosMoto(id, entity);
+
                 if (result is not null)
                     return Ok(result);
 
-                return BadRequest("Não foi possível atualizar os dados.");
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -95,15 +100,17 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Remove uma moto", Description = "Deleta uma moto pelo ID fornecido.")]
-        [SwaggerResponse(200, "Moto deletada com sucesso", typeof(MotoResponseDto))]
+        [SwaggerResponse(204, "Moto deletada com sucesso")]
+        [SwaggerResponse(404, "Moto não encontrada")]
         [SwaggerResponse(400, "Erro ao deletar a moto")]
         public IActionResult Delete(int id)
         {
             var result = _applicationService.DeletarDadosMoto(id);
-            if (result is not null)
-                return Ok(result);
 
-            return BadRequest("Não foi possível deletar os dados.");
+            if (result is not null)
+                return NoContent();
+
+            return NotFound();
         }
     }
 }

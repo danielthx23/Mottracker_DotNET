@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Mottracker.Application.Interfaces;
-using Mottracker.Domain.Entities;
+using Mottracker.Application.Dtos.Endereco;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
-using Mottracker.Application.Dtos;
-using Mottracker.Application.Dtos.Endereco;
 
 namespace Mottracker.Presentation.Controllers
 {
@@ -22,27 +20,31 @@ namespace Mottracker.Presentation.Controllers
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todos os endereços", Description = "Retorna todos os endereços cadastrados.")]
         [SwaggerResponse(200, "Endereços retornados com sucesso", typeof(IEnumerable<EnderecoResponseDto>))]
+        [SwaggerResponse(204, "Nenhum endereço encontrado")]
         [SwaggerResponse(400, "Erro ao obter os endereços")]
         public IActionResult Get()
         {
             var result = _applicationService.ObterTodosEnderecos();
-            if (result is not null)
+
+            if (result is not null && result.Any())
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NoContent();
         }
 
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Obtém endereço por ID", Description = "Retorna os dados de um endereço específico.")]
         [SwaggerResponse(200, "Endereço retornado com sucesso", typeof(EnderecoResponseDto))]
+        [SwaggerResponse(404, "Endereço não encontrado")]
         [SwaggerResponse(400, "Erro ao obter o endereço")]
         public IActionResult GetById(int id)
         {
             var result = _applicationService.ObterEnderecoPorId(id);
+
             if (result is not null)
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NotFound();
         }
 
         [HttpPost]
@@ -54,8 +56,9 @@ namespace Mottracker.Presentation.Controllers
             try
             {
                 var result = _applicationService.SalvarDadosEndereco(entity);
+
                 if (result is not null)
-                    return Ok(result);
+                    return CreatedAtAction(nameof(GetById), new { id = result.IdEndereco }, result);
 
                 return BadRequest("Não foi possível salvar os dados.");
             }
@@ -72,16 +75,18 @@ namespace Mottracker.Presentation.Controllers
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Atualiza endereço existente", Description = "Edita os dados de um endereço já existente.")]
         [SwaggerResponse(200, "Endereço atualizado com sucesso", typeof(EnderecoResponseDto))]
+        [SwaggerResponse(404, "Endereço não encontrado")]
         [SwaggerResponse(400, "Erro ao atualizar o endereço")]
         public IActionResult Put(int id, [FromBody] EnderecoRequestDto entity)
         {
             try
             {
                 var result = _applicationService.EditarDadosEndereco(id, entity);
+
                 if (result is not null)
                     return Ok(result);
 
-                return BadRequest("Não foi possível atualizar os dados.");
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -95,15 +100,17 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("{id}")]
         [SwaggerOperation(Summary = "Remove um endereço", Description = "Deleta um endereço pelo ID fornecido.")]
-        [SwaggerResponse(200, "Endereço deletado com sucesso", typeof(EnderecoEntity))]
+        [SwaggerResponse(204, "Endereço deletado com sucesso")]
+        [SwaggerResponse(404, "Endereço não encontrado")]
         [SwaggerResponse(400, "Erro ao deletar o endereço")]
         public IActionResult Delete(int id)
         {
             var result = _applicationService.DeletarDadosEndereco(id);
-            if (result is not null)
-                return Ok(result);
 
-            return BadRequest("Não foi possível deletar os dados.");
+            if (result is not null)
+                return NoContent();
+
+            return NotFound();
         }
     }
 }

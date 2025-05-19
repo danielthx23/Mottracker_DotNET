@@ -20,24 +20,31 @@ namespace Mottracker.Presentation.Controllers
         [HttpGet]
         [SwaggerOperation(Summary = "Lista todas as permissões de usuários", Description = "Retorna todos os registros de permissões de usuários cadastrados.")]
         [SwaggerResponse(200, "Lista de permissões retornada com sucesso", typeof(IEnumerable<UsuarioPermissaoResponseDto>))]
+        [SwaggerResponse(204, "Nenhuma permissão encontrada")]
         [SwaggerResponse(400, "Erro ao obter os dados")]
         public IActionResult Get()
         {
             var result = _applicationService.ObterTodosUsuarioPermissoes();
-            return Ok(result);
+
+            if (result != null && result.Any())
+                return Ok(result);
+
+            return NoContent();
         }
 
         [HttpGet("usuario/{usuarioId}/permissao/{permissaoId}")]
         [SwaggerOperation(Summary = "Obtém permissão de usuário por ID composto", Description = "Retorna os dados de uma permissão de usuário específica.")]
         [SwaggerResponse(200, "Permissão de usuário retornada com sucesso", typeof(UsuarioPermissaoResponseDto))]
+        [SwaggerResponse(404, "Permissão de usuário não encontrada")]
         [SwaggerResponse(400, "Erro ao obter o dado")]
         public IActionResult GetById(int usuarioId, int permissaoId)
         {
             var result = _applicationService.ObterUsuarioPermissaoPorId(usuarioId, permissaoId);
-            if (result is not null)
+
+            if (result != null)
                 return Ok(result);
 
-            return BadRequest("Não foi possível obter os dados.");
+            return NotFound();
         }
 
         [HttpPost]
@@ -49,8 +56,9 @@ namespace Mottracker.Presentation.Controllers
             try
             {
                 var result = _applicationService.SalvarDadosUsuarioPermissao(entity);
-                if (result is not null)
-                    return Ok(result);
+
+                if (result != null)
+                    return CreatedAtAction(nameof(GetById), new { usuarioId = result.IdUsuario, permissaoId = result.IdPermissao }, result);
 
                 return BadRequest("Não foi possível salvar os dados.");
             }
@@ -67,16 +75,18 @@ namespace Mottracker.Presentation.Controllers
         [HttpPut("usuario/{usuarioId}/permissao/{permissaoId}")]
         [SwaggerOperation(Summary = "Atualiza uma permissão de usuário", Description = "Edita os dados de uma permissão de usuário existente.")]
         [SwaggerResponse(200, "Permissão de usuário atualizada com sucesso", typeof(UsuarioPermissaoResponseDto))]
+        [SwaggerResponse(404, "Permissão de usuário não encontrada")]
         [SwaggerResponse(400, "Erro ao atualizar a permissão de usuário")]
         public IActionResult Put(int usuarioId, int permissaoId, [FromBody] UsuarioPermissaoRequestDto entity)
         {
             try
             {
                 var result = _applicationService.EditarDadosUsuarioPermissao(usuarioId, permissaoId, entity);
-                if (result is not null)
+
+                if (result != null)
                     return Ok(result);
 
-                return BadRequest("Não foi possível atualizar os dados.");
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -90,15 +100,17 @@ namespace Mottracker.Presentation.Controllers
 
         [HttpDelete("usuario/{usuarioId}/permissao/{permissaoId}")]
         [SwaggerOperation(Summary = "Deleta uma permissão de usuário", Description = "Remove uma permissão de usuário do sistema com base no ID composto.")]
-        [SwaggerResponse(200, "Permissão de usuário deletada com sucesso", typeof(UsuarioPermissaoResponseDto))]
+        [SwaggerResponse(204, "Permissão de usuário deletada com sucesso")]
+        [SwaggerResponse(404, "Permissão de usuário não encontrada")]
         [SwaggerResponse(400, "Erro ao deletar a permissão de usuário")]
         public IActionResult Delete(int usuarioId, int permissaoId)
         {
             var result = _applicationService.DeletarDadosUsuarioPermissao(usuarioId, permissaoId);
-            if (result is not null)
-                return Ok(result);
 
-            return BadRequest("Não foi possível deletar os dados.");
+            if (result != null)
+                return NoContent();
+
+            return NotFound();
         }
     }
 }
