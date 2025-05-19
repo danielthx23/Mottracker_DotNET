@@ -138,3 +138,11 @@ http://localhost:5169/swagger
 - `GET /api/UsuarioPermissao/usuario/{usuarioId}/permissao/{permissaoId}` - Obtém permissão de usuário por ID composto  
 - `PUT /api/UsuarioPermissao/usuario/{usuarioId}/permissao/{permissaoId}` - Atualiza uma permissão de usuário  
 - `DELETE /api/UsuarioPermissao/usuario/{usuarioId}/permissao/{permissaoId}` - Deleta uma permissão de usuário  
+
+## Implementações Futuras & TODO's
+
+- Buscas por atributos das tabelas
+- Segurança e criptografia de senha
+- Implementação do NoSQL (MongoDB)
+- Lógica para alterar dados das tabelas a partir do NoSQL
+- Otimizar requisições do banco de dados
