@@ -1,15 +1,25 @@
 # Mottracker
 
 ## Descrição do Projeto
-Projeto para o Challenge da empresa Mottu, FIAP 2025.
 
-A princípio, o projeto visa resolver o problema de organização da localização das motos nos pátios da Mottu, facilitando a gestão e monitoramento em tempo real dos veículos. Nossa solução utiliza câmeras equipadas com sensores de posicionamento que capturam a localização exata das motos. Cada moto possui um QR Code exclusivo para identificação individual, enquanto os pátios também são mapeados com QR Codes para facilitar a localização dos veículos em áreas específicas.
+Projeto desenvolvido para o **Challenge da empresa Mottu**, FIAP 2025.
 
-A API desenvolvida funcionará como uma plataforma integrada que une os dados gerados pelos dispositivos IoT das câmeras com a infraestrutura de armazenamento adequada para cada tipo de dado: os dados de IoT serão armazenados em um banco NoSQL, garantindo alta performance e escalabilidade para o processamento de grandes volumes de dados em tempo real; já os dados estruturados, como informações de motos, pátios, usuários, contratos e dashboards, serão mantidos em um banco de dados relacional.
+O projeto busca resolver o problema de organização e localização das motos nos pátios da Mottu, facilitando o monitoramento em tempo real. A solução utiliza câmeras com sensores de posicionamento para capturar a localização exata de cada moto. Cada moto possui um **QR Code exclusivo**, assim como os pátios, permitindo identificação e rastreamento eficiente.
 
-Essa integração permite o acompanhamento em tempo real das motos via aplicativo, promovendo maior eficiência operacional, segurança e organização.
+A **API** integra os dados capturados pelos dispositivos IoT com uma estrutura de armazenamento adequada:
 
-Além disso, o sistema gerencia cadastro e edição de dados, no futuro vai oferecer funcionalidades para autenticação e autorização dos usuários, gestão de permissões e geração de relatórios através de dashboards customizáveis, que auxiliam a equipe da Mottu a tomar decisões baseadas em dados confiáveis e atualizados.
+* **Banco NoSQL**: dados de IoT em tempo real.
+* **Banco relacional**: dados estruturados (usuários, motos, contratos, pátios etc).
+
+Essa integração permite o acompanhamento via aplicativo, promovendo **eficiência, segurança e organização**. O sistema também gerencia cadastro/edição de dados, autenticação/autorizacão, gestão de permissões e dashboards com relatórios para tomada de decisão.
+
+## Autores
+
+### Turma 2TDSR - Análise e Desenvolvimento de Sistemas
+
+* Daniel Saburo Akiyama - RM 558263
+* Danilo Correia e Silva - RM 557540
+* João Pedro Rodrigues da Costa - RM 558199
 
 ## Instalação do Projeto
 
