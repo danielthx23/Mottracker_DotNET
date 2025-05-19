@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mottracker.Domain.Entities
 {
@@ -32,6 +33,7 @@ namespace Mottracker.Domain.Entities
         public int AtivoContrato { get; set; }
         
         [Required]
+        [Precision(10, 2)]
         public decimal ValorToralContrato { get; set; }
         
         [Required]

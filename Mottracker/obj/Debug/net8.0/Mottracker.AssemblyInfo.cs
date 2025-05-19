@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Mottracker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+91621f952cb34b92002c6c3a765e6810002a8ce4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3d5a35c153188d5e0ad9b52ea8b1cd09c2b9cf10")]
 [assembly: System.Reflection.AssemblyProductAttribute("Mottracker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Mottracker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

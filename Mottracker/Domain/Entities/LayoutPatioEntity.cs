@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mottracker.Domain.Entities
 {
@@ -15,11 +16,14 @@ namespace Mottracker.Domain.Entities
         public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
         
         [Required]
+        [Precision(10, 2)]
         public decimal Largura { get; set; }
         
         [Required]
+        [Precision(10, 2)]
         public decimal Comprimento { get; set; }
         
+        [Precision(10, 2)]
         public decimal Altura { get; set; }
         
         public int? PatioLayoutPatioId { get; set; }

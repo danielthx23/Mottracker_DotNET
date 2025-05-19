@@ -1,5 +1,16 @@
 # Mottracker
 
+## Disclaimer
+Na entrega não foi solicitado, mas decidimos criar as relações antecipadamente. Queremos adicionar a opção de que as tabelas pai possam criar as tabelas filhas diretamente a partir de um único JSON.
+
+TODOs:
+
+- Melhorar as requisições, pois estão demorando bastante.
+- Permitir a criação da tabela pai e das tabelas filhas de forma integrada.
+- Adicionar requisições mais precisas, por exemplo, buscando atributos específicos.
+- Implementar segurança e criptografia de senha (incluindo no endpoint de login).
+- Revisar os DTOs e os dados que realmente serão necessários para o Frontend.
+
 ## Descrição do Projeto
 
 Projeto desenvolvido para o **Challenge da empresa Mottu**, FIAP 2025.
