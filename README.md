@@ -34,7 +34,7 @@ Essa integração permite o acompanhamento via aplicativo, promovendo **eficiên
 
 ## Azure CLI Scripts para criar a VM que vai hospedar a API
 
-TODO -> Referenciar arquivo
+[Dockerfile Production](AzureScripts.md)
 
 ## Dockerfile
 
@@ -72,6 +72,11 @@ Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais
   danielakiyama/mottracker:development-v1.0.0
 ```
 
+Em uma linha só (recomendado):
+```bash
+  docker run -d -e ORACLE_USER=seusuario -e ORACLE_PASSWORD=suasenha -e ORACLE_HOST=oracle.fiap.com.br -e ORACLE_PORT=1521 -e ORACLE_SID=ORCL -e RUN_MIGRATIONS=true -e ASPNETCORE_ENVIRONMENT=Development -p 5169:5169 danielakiyama/mottracker:development-v1.0.0
+```
+
 OU, se não quiser rodar as migrations:
 
 ```bash
@@ -84,6 +89,11 @@ OU, se não quiser rodar as migrations:
   -e ASPNETCORE_ENVIRONMENT=Development 
   -p 5169:5169 
   danielakiyama/mottracker:production-v1.0.0
+```
+
+Em uma linha só (recomendado):
+```bash
+  docker run -d -e ORACLE_USER=seusuario -e ORACLE_PASSWORD=suasenha -e ORACLE_HOST=oracle.fiap.com.br -e ORACLE_PORT=1521 -e ORACLE_SID=ORCL -e ASPNETCORE_ENVIRONMENT=Development -p 5169:5169 danielakiyama/mottracker:production-v1.0.0
 ```
 
 Legendas:
