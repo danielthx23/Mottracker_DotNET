@@ -49,15 +49,15 @@ Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais
 
 ```bash
   docker run \
-  -e ORACLE_USER=seusuario \
-  -e ORACLE_PASSWORD=suasenha \
-  -e ORACLE_HOST=oracle.fiap.com.br \
-  -e ORACLE_PORT=1521 \
-  -e ORACLE_SID=ORCL \
-  -e RUN_MIGRATIONS=true \
-  -e ASPNETCORE_ENVIRONMENT=Development \
-  -p 5169:5169 \
-  danielthx23/mottracker
+  -e ORACLE_USER=seusuario           # Usuário do banco Oracle
+  -e ORACLE_PASSWORD=suasenha        # Senha do usuário Oracle
+  -e ORACLE_HOST=oracle.fiap.com.br  # Host do banco Oracle
+  -e ORACLE_PORT=1521                # Porta do banco Oracle (geralmente 1521)
+  -e ORACLE_SID=ORCL                 # SID da instância Oracle
+  -e RUN_MIGRATIONS=true             # Controla se as migrações serão executadas na inicialização (true/false)
+  -e ASPNETCORE_ENVIRONMENT=Development  # Define o ambiente da aplicação (Development/Production)
+  -p 5169:5169                      # Mapeia a porta 5169 do container para a mesma porta na máquina host
+  danielthx23/mottracker             # Nome da imagem Docker a ser executada
 ```
 
 ## Instalação do Projeto via Host (Entrega DotNET)
