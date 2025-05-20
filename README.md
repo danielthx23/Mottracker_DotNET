@@ -60,30 +60,29 @@ Imagem Docker Hub: [Imagem Docker Hub com as duas Tags](https://hub.docker.com/r
 Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais do Oracle DB:
 
 ```bash
-  docker run -d \
-  -e ORACLE_USER=seusuario \
-  -e ORACLE_PASSWORD=suasenha \
-  -e ORACLE_HOST=oracle.fiap.com.br \
-  -e ORACLE_PORT=1521 \
-  -e ORACLE_SID=ORCL \
-  -e RUN_MIGRATIONS=true \
-  -e ASPNETCORE_ENVIRONMENT=Development \
-  -p 5169:5169 \
+  docker run -d 
+  -e ORACLE_USER=seusuario 
+  -e ORACLE_PASSWORD=suasenha 
+  -e ORACLE_HOST=oracle.fiap.com.br 
+  -e ORACLE_PORT=1521 
+  -e ORACLE_SID=ORCL 
+  -e RUN_MIGRATIONS=true 
+  -e ASPNETCORE_ENVIRONMENT=Development 
+  -p 5169:5169 
   danielakiyama/mottracker:development-v1.0.0
 ```
 
 OU, se não quiser rodar as migrations:
 
 ```bash
-  docker run -d \
-  -e ORACLE_USER=seusuario \
-  -e ORACLE_PASSWORD=suasenha \
-  -e ORACLE_HOST=oracle.fiap.com.br \
-  -e ORACLE_PORT=1521 \
-  -e ORACLE_SID=ORCL \
-  -e RUN_MIGRATIONS=true \
-  -e ASPNETCORE_ENVIRONMENT=Development \
-  -p 5169:5169 \
+  docker run -d 
+  -e ORACLE_USER=seusuario 
+  -e ORACLE_PASSWORD=suasenha 
+  -e ORACLE_HOST=oracle.fiap.com.br 
+  -e ORACLE_PORT=1521 
+  -e ORACLE_SID=ORCL 
+  -e ASPNETCORE_ENVIRONMENT=Development 
+  -p 5169:5169 
   danielakiyama/mottracker:production-v1.0.0
 ```
 
