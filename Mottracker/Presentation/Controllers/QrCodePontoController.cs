@@ -47,6 +47,66 @@ namespace Mottracker.Presentation.Controllers
             return NotFound();
         }
 
+        [HttpGet("identificador/{identificador}")]
+        [SwaggerOperation(Summary = "Obtém QR Code de ponto por identificador", Description = "Retorna o QR Code de ponto pelo identificador.")]
+        [SwaggerResponse(200, "QR Code retornado com sucesso", typeof(QrCodePontoResponseDto))]
+        [SwaggerResponse(404, "QR Code não encontrado")]
+        [SwaggerResponse(400, "Erro ao obter o dado")]
+        public IActionResult GetByIdentificador(string identificador)
+        {
+            var result = _applicationService.ObterQrCodePontoPorIdentificador(identificador);
+
+            if (result is not null)
+                return Ok(result);
+
+            return NotFound();
+        }
+
+        [HttpGet("layoutpatio/{layoutPatioId:long}")]
+        [SwaggerOperation(Summary = "Lista QR Codes de ponto por LayoutPatioId", Description = "Retorna todos os QR Codes associados a um LayoutPatio.")]
+        [SwaggerResponse(200, "Lista retornada com sucesso", typeof(IEnumerable<QrCodePontoResponseDto>))]
+        [SwaggerResponse(204, "Nenhum QR Code encontrado")]
+        [SwaggerResponse(400, "Erro ao obter os dados")]
+        public IActionResult GetByLayoutPatioId(long layoutPatioId)
+        {
+            var result = _applicationService.ObterQrCodePontosPorLayoutPatioId(layoutPatioId);
+
+            if (result is not null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
+        [HttpGet("posx")]
+        [SwaggerOperation(Summary = "Lista QR Codes de ponto por faixa de PosX", Description = "Retorna todos os QR Codes com PosX entre os valores fornecidos.")]
+        [SwaggerResponse(200, "Lista retornada com sucesso", typeof(IEnumerable<QrCodePontoResponseDto>))]
+        [SwaggerResponse(204, "Nenhum QR Code encontrado")]
+        [SwaggerResponse(400, "Erro ao obter os dados")]
+        public IActionResult GetByPosXRange([FromQuery] float posXInicial, [FromQuery] float posXFinal)
+        {
+            var result = _applicationService.ObterQrCodePontosPorPosicaoXEntre(posXInicial, posXFinal);
+
+            if (result is not null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
+        [HttpGet("posy")]
+        [SwaggerOperation(Summary = "Lista QR Codes de ponto por faixa de PosY", Description = "Retorna todos os QR Codes com PosY entre os valores fornecidos.")]
+        [SwaggerResponse(200, "Lista retornada com sucesso", typeof(IEnumerable<QrCodePontoResponseDto>))]
+        [SwaggerResponse(204, "Nenhum QR Code encontrado")]
+        [SwaggerResponse(400, "Erro ao obter os dados")]
+        public IActionResult GetByPosYRange([FromQuery] float posYInicial, [FromQuery] float posYFinal)
+        {
+            var result = _applicationService.ObterQrCodePontosPorPosicaoYEntre(posYInicial, posYFinal);
+
+            if (result is not null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Cria um novo QR Code de ponto", Description = "Salva um novo registro de QR Code de ponto.")]
         [SwaggerResponse(201, "QR Code salvo com sucesso", typeof(QrCodePontoResponseDto))]
@@ -114,89 +174,3 @@ namespace Mottracker.Presentation.Controllers
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

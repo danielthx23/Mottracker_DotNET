@@ -25,6 +25,30 @@ namespace Mottracker.Application.Services
             return MapToResponseDto(qrCode);
         }
 
+        public QrCodePontoResponseDto? ObterQrCodePontoPorIdentificador(string identificadorQrCode)
+        {
+            var qrCode = _repository.ObterPorIdentificador(identificadorQrCode);
+            return qrCode == null ? null : MapToResponseDto(qrCode);
+        }
+
+        public IEnumerable<QrCodePontoResponseDto> ObterQrCodePontosPorLayoutPatioId(long layoutPatioId)
+        {
+            var qrCodes = _repository.ObterPorIdLayoutPatio(layoutPatioId);
+            return qrCodes.Select(MapToResponseDto);
+        }
+
+        public IEnumerable<QrCodePontoResponseDto> ObterQrCodePontosPorPosicaoXEntre(float posXInicial, float posXFinal)
+        {
+            var qrCodes = _repository.ObterPorPosicaoXEntre(posXInicial, posXFinal);
+            return qrCodes.Select(MapToResponseDto);
+        }
+
+        public IEnumerable<QrCodePontoResponseDto> ObterQrCodePontosPorPosicaoYEntre(float posYInicial, float posYFinal)
+        {
+            var qrCodes = _repository.ObterPorPosicaoYEntre(posYInicial, posYFinal);
+            return qrCodes.Select(MapToResponseDto);
+        }
+
         public IEnumerable<QrCodePontoResponseDto> ObterTodosQrCodePontos()
         {
             var qrCodes = _repository.ObterTodos();

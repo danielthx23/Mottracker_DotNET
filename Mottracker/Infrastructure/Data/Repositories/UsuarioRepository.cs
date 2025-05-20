@@ -32,16 +32,6 @@ namespace Mottracker.Infrastructure.Data.Repositories
                 .FirstOrDefault(u => u.IdUsuario == id);
         }
 
-        public List<UsuarioEntity> ObterPorIds(List<int> ids)
-        {
-            return _context.Usuario
-                .Where(u => ids.Contains(u.IdUsuario))
-                .Include(u => u.ContratoUsuario)
-                .Include(u => u.Telefones)
-                .Include(u => u.UsuarioPermissoes)
-                .ToList();
-        }
-
         public UsuarioEntity? Salvar(UsuarioEntity entity)
         {
             _context.Usuario.Add(entity);

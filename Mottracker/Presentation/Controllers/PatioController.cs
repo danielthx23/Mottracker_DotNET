@@ -47,6 +47,72 @@ namespace Mottracker.Presentation.Controllers
             return NotFound();
         }
 
+        [HttpGet("buscar-por-nome")]
+        [SwaggerOperation(Summary = "Busca pátios pelo nome contendo", Description = "Retorna pátios cujo nome contenha o texto informado.")]
+        [SwaggerResponse(200, "Pátios retornados com sucesso", typeof(IEnumerable<PatioResponseDto>))]
+        [SwaggerResponse(204, "Nenhum pátio encontrado")]
+        [SwaggerResponse(400, "Erro ao buscar pátios")]
+        public IActionResult GetByNome([FromQuery] string nome)
+        {
+            if (string.IsNullOrWhiteSpace(nome))
+                return BadRequest("Parâmetro 'nome' é obrigatório.");
+
+            var result = _applicationService.ObterPatiosPorNomeContendo(nome);
+
+            if (result != null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
+        [HttpGet("motos-disponiveis-maior-que")]
+        [SwaggerOperation(Summary = "Busca pátios com motos disponíveis acima de uma quantidade", Description = "Retorna pátios com quantidade de motos disponíveis maior que o informado.")]
+        [SwaggerResponse(200, "Pátios retornados com sucesso", typeof(IEnumerable<PatioResponseDto>))]
+        [SwaggerResponse(204, "Nenhum pátio encontrado")]
+        [SwaggerResponse(400, "Erro ao buscar pátios")]
+        public IActionResult GetByMotosDisponiveis([FromQuery] int quantidade)
+        {
+            if (quantidade < 0)
+                return BadRequest("Quantidade deve ser maior ou igual a zero.");
+
+            var result = _applicationService.ObterPatiosComMotosDisponiveisAcimaDe(quantidade);
+
+            if (result != null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
+        [HttpGet("data-posterior")]
+        [SwaggerOperation(Summary = "Busca pátios por data posterior", Description = "Retorna pátios com data posterior à data informada.")]
+        [SwaggerResponse(200, "Pátios retornados com sucesso", typeof(IEnumerable<PatioResponseDto>))]
+        [SwaggerResponse(204, "Nenhum pátio encontrado")]
+        [SwaggerResponse(400, "Erro ao buscar pátios")]
+        public IActionResult GetByDataPosterior([FromQuery] DateTime data)
+        {
+            var result = _applicationService.ObterPatiosPorDataPosterior(data);
+
+            if (result != null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
+        [HttpGet("data-anterior")]
+        [SwaggerOperation(Summary = "Busca pátios por data anterior", Description = "Retorna pátios com data anterior à data informada.")]
+        [SwaggerResponse(200, "Pátios retornados com sucesso", typeof(IEnumerable<PatioResponseDto>))]
+        [SwaggerResponse(204, "Nenhum pátio encontrado")]
+        [SwaggerResponse(400, "Erro ao buscar pátios")]
+        public IActionResult GetByDataAnterior([FromQuery] DateTime data)
+        {
+            var result = _applicationService.ObterPatiosPorDataAnterior(data);
+
+            if (result != null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Cria um novo pátio", Description = "Salva um novo pátio no sistema.")]
         [SwaggerResponse(201, "Pátio criado com sucesso", typeof(PatioResponseDto))]

@@ -27,13 +27,6 @@ namespace Mottracker.Infrastructure.Data.Repositories
                     .Include(p => p.UsuarioPermissoes)
                     .FirstOrDefault(p => p.IdPermissao == id);
             }
-
-            public List<PermissaoEntity> ObterPorIds(List<int> ids)
-            {
-                return _context.Permissao
-                    .Where(p => ids.Contains(p.IdPermissao))
-                    .ToList();
-            }
     
             public PermissaoEntity? Salvar(PermissaoEntity entity)
             {

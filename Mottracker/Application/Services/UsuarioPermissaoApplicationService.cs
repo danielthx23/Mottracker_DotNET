@@ -22,6 +22,18 @@ namespace Mottracker.Application.Services
             return entity == null ? null : MapToResponseDto(entity);
         }
 
+        public IEnumerable<UsuarioPermissaoResponseDto> ObterUsuarioPermissoesPorUsuarioId(long usuarioId)
+        {
+            var entidades = _repository.ObterPorIdUsuario(usuarioId);
+            return entidades.Select(MapToResponseDto);
+        }
+
+        public IEnumerable<UsuarioPermissaoResponseDto> ObterUsuarioPermissoesPorPermissaoId(long permissaoId)
+        {
+            var entidades = _repository.ObterPorIdPermissao(permissaoId);
+            return entidades.Select(MapToResponseDto);
+        }
+
         public IEnumerable<UsuarioPermissaoResponseDto> ObterTodosUsuarioPermissoes()
         {
             return _repository.ObterTodos().Select(MapToResponseDto);

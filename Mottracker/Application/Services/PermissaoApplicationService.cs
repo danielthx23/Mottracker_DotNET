@@ -25,6 +25,18 @@ namespace Mottracker.Application.Services
             return MapToResponseDto(permissao);
         }
 
+        public IEnumerable<PermissaoResponseDto> ObterPermissoesPorNomeContendo(string nomePermissao)
+        {
+            var permissoes = _repository.ObterPorNomeContendo(nomePermissao);
+            return permissoes.Select(MapToResponseDto);
+        }
+
+        public IEnumerable<PermissaoResponseDto> ObterPermissoesPorDescricaoContendo(string descricao)
+        {
+            var permissoes = _repository.ObterPorDescricaoContendo(descricao);
+            return permissoes.Select(MapToResponseDto);
+        }
+
         public IEnumerable<PermissaoResponseDto> ObterTodosPermissoes()
         {
             var permissoes = _repository.ObterTodos();

@@ -47,6 +47,45 @@ namespace Mottracker.Presentation.Controllers
             return NotFound();
         }
 
+        [HttpGet("porPatio")]
+        [SwaggerOperation(Summary = "Obtém layouts por ID do pátio", Description = "Retorna os layouts vinculados a um pátio específico.")]
+        [SwaggerResponse(200, "Layouts retornados com sucesso", typeof(IEnumerable<LayoutPatioResponseDto>))]
+        [SwaggerResponse(204, "Nenhum layout encontrado")]
+        [SwaggerResponse(400, "Erro ao obter os layouts")]
+        public IActionResult GetByPatioId([FromQuery] long patioId)
+        {
+            if (patioId <= 0)
+                return BadRequest("O parâmetro patioId deve ser maior que zero.");
+
+            var result = _applicationService.ObterLayoutsPorIdPatio(patioId);
+
+            if (result is not null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
+        [HttpGet("porDataCriacao")]
+        [SwaggerOperation(Summary = "Obtém layouts por intervalo de data de criação", Description = "Retorna os layouts criados entre duas datas.")]
+        [SwaggerResponse(200, "Layouts retornados com sucesso", typeof(IEnumerable<LayoutPatioResponseDto>))]
+        [SwaggerResponse(204, "Nenhum layout encontrado")]
+        [SwaggerResponse(400, "Erro ao obter os layouts")]
+        public IActionResult GetByDataCriacao([FromQuery] DateTime dataInicio, [FromQuery] DateTime dataFim)
+        {
+            if (dataInicio == default || dataFim == default)
+                return BadRequest("Os parâmetros dataInicio e dataFim são obrigatórios.");
+
+            if (dataInicio > dataFim)
+                return BadRequest("A data de início não pode ser maior que a data fim.");
+
+            var result = _applicationService.ObterLayoutsPorDataCriacaoEntre(dataInicio, dataFim);
+
+            if (result is not null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Cria um novo layout de pátio", Description = "Salva um novo layout de pátio no sistema.")]
         [SwaggerResponse(201, "Layout criado com sucesso", typeof(LayoutPatioResponseDto))]

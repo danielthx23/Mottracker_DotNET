@@ -23,6 +23,24 @@ namespace Mottracker.Application.Services
             return MapToResponseDto(telefone);
         }
 
+        public IEnumerable<TelefoneResponseDto> ObterTelefonesPorNumero(string numero)
+        {
+            var telefones = _repository.ObterPorNumero(numero);
+            return telefones.Select(MapToResponseDto);
+        }
+
+        public IEnumerable<TelefoneResponseDto> ObterTelefonesPorUsuarioId(long usuarioId)
+        {
+            var telefones = _repository.ObterPorIdUsuario(usuarioId);
+            return telefones.Select(MapToResponseDto);
+        }
+
+        public IEnumerable<TelefoneResponseDto> ObterTelefonesPorTipo(string tipo)
+        {
+            var telefones = _repository.ObterPorTipo(tipo);
+            return telefones.Select(MapToResponseDto);
+        }
+
         public IEnumerable<TelefoneResponseDto> ObterTodosTelefones()
         {
             var telefones = _repository.ObterTodos();

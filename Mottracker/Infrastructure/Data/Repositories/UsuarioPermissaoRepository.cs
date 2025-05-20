@@ -30,15 +30,6 @@ namespace Mottracker.Infrastructure.Data.Repositories
                 .FirstOrDefault(up => up.UsuarioId == usuarioId && up.PermissaoId == permissaoId);
         }
         
-        public List<UsuarioPermissaoEntity> ObterPorIds(List<(int usuarioId, int permissaoId)> chaves)
-        {
-            return _context.UsuarioPermissao
-                .Include(up => up.Usuario)
-                .Include(up => up.Permissao)
-                .Where(up => chaves.Any(c => c.usuarioId == up.UsuarioId && c.permissaoId == up.PermissaoId))
-                .ToList();
-        }
-
         public UsuarioPermissaoEntity? Salvar(UsuarioPermissaoEntity entity)
         {
             _context.UsuarioPermissao.Add(entity);

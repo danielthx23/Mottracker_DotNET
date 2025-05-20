@@ -47,6 +47,36 @@ namespace Mottracker.Presentation.Controllers
             return NotFound();
         }
 
+        [HttpGet("usuario/{usuarioId}")]
+        [SwaggerOperation(Summary = "Lista permissões por ID de usuário", Description = "Retorna todas as permissões associadas a um usuário específico.")]
+        [SwaggerResponse(200, "Permissões do usuário retornadas com sucesso", typeof(IEnumerable<UsuarioPermissaoResponseDto>))]
+        [SwaggerResponse(204, "Nenhuma permissão encontrada para o usuário")]
+        [SwaggerResponse(400, "Erro ao obter as permissões do usuário")]
+        public IActionResult GetByUsuarioId(long usuarioId)
+        {
+            var result = _applicationService.ObterUsuarioPermissoesPorUsuarioId(usuarioId);
+
+            if (result != null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
+        [HttpGet("permissao/{permissaoId}")]
+        [SwaggerOperation(Summary = "Lista usuários por ID de permissão", Description = "Retorna todos os usuários associados a uma permissão específica.")]
+        [SwaggerResponse(200, "Usuários com a permissão retornados com sucesso", typeof(IEnumerable<UsuarioPermissaoResponseDto>))]
+        [SwaggerResponse(204, "Nenhum usuário encontrado com essa permissão")]
+        [SwaggerResponse(400, "Erro ao obter os usuários da permissão")]
+        public IActionResult GetByPermissaoId(long permissaoId)
+        {
+            var result = _applicationService.ObterUsuarioPermissoesPorPermissaoId(permissaoId);
+
+            if (result != null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Cria uma nova permissão de usuário", Description = "Salva um novo registro de permissão de usuário.")]
         [SwaggerResponse(201, "Permissão de usuário salva com sucesso", typeof(UsuarioPermissaoResponseDto))]

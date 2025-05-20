@@ -10,5 +10,8 @@ namespace Mottracker.Application.Interfaces
         TelefoneResponseDto? SalvarDadosTelefone(TelefoneRequestDto entity);
         TelefoneResponseDto? EditarDadosTelefone(int id, TelefoneRequestDto entity);
         TelefoneResponseDto? DeletarDadosTelefone(int id);
+        IEnumerable<TelefoneResponseDto> ObterTelefonesPorNumero(string numero);
+        IEnumerable<TelefoneResponseDto> ObterTelefonesPorUsuarioId(long usuarioId);
+        IEnumerable<TelefoneResponseDto> ObterTelefonesPorTipo(string tipo);
     }
 }

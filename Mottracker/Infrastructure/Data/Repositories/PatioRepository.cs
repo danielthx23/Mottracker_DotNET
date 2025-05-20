@@ -33,13 +33,6 @@ namespace Mottracker.Infrastructure.Data.Repositories
                     .Include(p => p.CamerasPatio)
                     .FirstOrDefault(p => p.IdPatio == id);
             }
-
-            public List<PatioEntity> ObterPorIds(List<int> ids)
-            {
-                return _context.Patio
-                    .Where(p => ids.Contains(p.IdPatio))
-                    .ToList();
-            }
     
             public PatioEntity? Salvar(PatioEntity entity)
             {

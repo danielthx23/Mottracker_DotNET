@@ -32,13 +32,6 @@ namespace Mottracker.Infrastructure.Data.Repositories
 
             return camera;
         }
-        
-        public List<CameraEntity> ObterPorIds(List<int> ids)
-        {
-            return _context.Camera
-                .Where(c => ids.Contains(c.IdCamera))
-                .ToList();
-        }
 
         public CameraEntity? Salvar(CameraEntity entity)
         {

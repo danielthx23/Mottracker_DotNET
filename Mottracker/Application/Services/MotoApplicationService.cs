@@ -4,6 +4,7 @@ using Mottracker.Application.Interfaces;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
 using Mottracker.Application.Dtos;
+using Mottracker.Domain.Enums;
 
 namespace Mottracker.Application.Services
 {   
@@ -23,7 +24,27 @@ namespace Mottracker.Application.Services
 
             return MapToResponseDto(moto);
         }
-        
+
+        public MotoResponseDto? ObterMotoPorPlaca(string placaMoto)
+        {
+            var moto = _repository.ObterPorPlaca(placaMoto);
+            if (moto == null) return null;
+
+            return MapToResponseDto(moto);
+        }
+
+        public IEnumerable<MotoResponseDto> ObterMotosPorEstado(Estados estadoMoto)
+        {
+            var motos = _repository.ObterPorEstado(estadoMoto);
+            return motos.Select(MapToResponseDto);
+        }
+
+        public IEnumerable<MotoResponseDto> ObterMotosPorContratoId(long contratoId)
+        {
+            var motos = _repository.ObterPorIdContrato(contratoId);
+            return motos.Select(MapToResponseDto);
+        }
+
         public IEnumerable<MotoResponseDto> ObterTodasMotos()
         {
             var motos = _repository.ObterTodos();

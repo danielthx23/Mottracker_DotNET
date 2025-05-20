@@ -10,5 +10,7 @@ namespace Mottracker.Application.Interfaces
         PermissaoResponseDto? SalvarDadosPermissao(PermissaoRequestDto entity);
         PermissaoResponseDto? EditarDadosPermissao(int id, PermissaoRequestDto entity);
         PermissaoResponseDto? DeletarDadosPermissao(int id);
+        IEnumerable<PermissaoResponseDto> ObterPermissoesPorNomeContendo(string nomePermissao);
+        IEnumerable<PermissaoResponseDto> ObterPermissoesPorDescricaoContendo(string descricao);
     }
 }

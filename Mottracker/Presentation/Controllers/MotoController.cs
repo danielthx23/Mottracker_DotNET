@@ -3,6 +3,7 @@ using Mottracker.Application.Interfaces;
 using Mottracker.Application.Dtos.Moto;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using Mottracker.Domain.Enums;
 
 namespace Mottracker.Presentation.Controllers
 {
@@ -45,6 +46,54 @@ namespace Mottracker.Presentation.Controllers
                 return Ok(result);
 
             return NotFound();
+        }
+
+        [HttpGet("placa/{placa}")]
+        [SwaggerOperation(Summary = "Obtém moto por placa", Description = "Retorna os dados de uma moto específica pelo número da placa.")]
+        [SwaggerResponse(200, "Moto retornada com sucesso", typeof(MotoResponseDto))]
+        [SwaggerResponse(404, "Moto não encontrada")]
+        [SwaggerResponse(400, "Erro ao obter a moto")]
+        public IActionResult GetByPlaca(string placa)
+        {
+            var result = _applicationService.ObterMotoPorPlaca(placa);
+
+            if (result is not null)
+                return Ok(result);
+
+            return NotFound();
+        }
+
+        [HttpGet("estado/{estado}")]
+        [SwaggerOperation(Summary = "Obtém motos por estado", Description = "Retorna as motos filtradas pelo estado informado.")]
+        [SwaggerResponse(200, "Motos retornadas com sucesso", typeof(IEnumerable<MotoResponseDto>))]
+        [SwaggerResponse(204, "Nenhuma moto encontrada para o estado informado")]
+        [SwaggerResponse(400, "Erro ao obter as motos")]
+        public IActionResult GetByEstado(string estado)
+        {
+            if (!System.Enum.TryParse<Estados>(estado, true, out var estadoEnum))
+                return BadRequest("Estado inválido.");
+
+            var result = _applicationService.ObterMotosPorEstado(estadoEnum);
+
+            if (result is not null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
+        [HttpGet("contrato/{contratoId}")]
+        [SwaggerOperation(Summary = "Obtém motos por contrato", Description = "Retorna as motos associadas a um contrato específico.")]
+        [SwaggerResponse(200, "Motos retornadas com sucesso", typeof(IEnumerable<MotoResponseDto>))]
+        [SwaggerResponse(204, "Nenhuma moto encontrada para o contrato informado")]
+        [SwaggerResponse(400, "Erro ao obter as motos")]
+        public IActionResult GetByContratoId(long contratoId)
+        {
+            var result = _applicationService.ObterMotosPorContratoId(contratoId);
+
+            if (result is not null && result.Any())
+                return Ok(result);
+
+            return NoContent();
         }
 
         [HttpPost]
