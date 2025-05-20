@@ -34,13 +34,6 @@ namespace Mottracker.Infrastructure.Data.Repositories
     
                 return Moto;
             }
-            
-            public List<MotoEntity> ObterPorIds(List<int> ids)
-            {
-                return _context.Moto
-                    .Where(m => ids.Contains(m.IdMoto))
-                    .ToList();
-            }
     
             public MotoEntity? Salvar(MotoEntity entity)
             {

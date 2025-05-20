@@ -1,3 +1,3 @@
 ﻿<Project>
-  <Import Project="../buildMultiTargeting/Mottracker.props" />
+  <Import Project="..\buildMultiTargeting\Mottracker.props" />
 </Project>

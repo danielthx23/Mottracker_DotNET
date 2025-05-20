@@ -7,6 +7,7 @@ namespace Mottracker.Application.Interfaces
     {
         IEnumerable<UsuarioResponseDto> ObterTodosUsuarios();
         UsuarioResponseDto? ObterUsuarioPorId(int id);
+        UsuarioResponseDto? ObterUsuarioPorEmail(string emailUsuario);
         UsuarioResponseDto? SalvarDadosUsuario(UsuarioRequestDto entity);
         UsuarioResponseDto? EditarDadosUsuario(int id, UsuarioRequestDto entity);
         UsuarioResponseDto? DeletarDadosUsuario(int id);

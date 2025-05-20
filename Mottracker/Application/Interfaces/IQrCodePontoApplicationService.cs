@@ -10,5 +10,9 @@ namespace Mottracker.Application.Interfaces
         QrCodePontoResponseDto? SalvarDadosQrCodePonto(QrCodePontoRequestDto entity);
         QrCodePontoResponseDto? EditarDadosQrCodePonto(int id, QrCodePontoRequestDto entity);
         QrCodePontoResponseDto? DeletarDadosQrCodePonto(int id);
+        QrCodePontoResponseDto? ObterQrCodePontoPorIdentificador(string identificadorQrCode);
+        IEnumerable<QrCodePontoResponseDto> ObterQrCodePontosPorLayoutPatioId(long layoutPatioId);
+        IEnumerable<QrCodePontoResponseDto> ObterQrCodePontosPorPosicaoXEntre(float posXInicial, float posXFinal);
+        IEnumerable<QrCodePontoResponseDto> ObterQrCodePontosPorPosicaoYEntre(float posYInicial, float posYFinal);
     }
 }

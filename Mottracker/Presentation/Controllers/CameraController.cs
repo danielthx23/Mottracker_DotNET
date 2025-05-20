@@ -3,6 +3,7 @@ using Mottracker.Application.Interfaces;
 using Mottracker.Application.Dtos.Camera;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using Mottracker.Domain.Enums;
 
 namespace Mottracker.Presentation.Controllers
 {
@@ -41,12 +42,75 @@ namespace Mottracker.Presentation.Controllers
         [ProducesResponseType(typeof(CameraResponseDto), 200)]
         public IActionResult GetById(int id)
         {
-            var result = _applicationService.ObterCameraPorId(id);
+            try
+            {
+                var result = _applicationService.ObterCameraPorId(id);
+                if (result is not null)
+                    return Ok(result);
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Error = ex.Message,
+                    Status = HttpStatusCode.BadRequest
+                });
+            }
+        }
 
-            if (result is not null)
-                return Ok(result);
+        [HttpGet("por-nome")]
+        [SwaggerOperation(Summary = "Obtém câmeras por nome", Description = "Retorna todas as câmeras que correspondem ao nome informado.")]
+        [SwaggerResponse(200, "Câmeras retornadas com sucesso", typeof(IEnumerable<CameraResponseDto>))]
+        [SwaggerResponse(204, "Nenhuma câmera encontrada com o nome especificado")]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao obter as câmeras")]
+        [ProducesResponseType(typeof(IEnumerable<CameraResponseDto>), 200)]
+        public IActionResult GetByNome([FromQuery] string nome)
+        {
+            try
+            {
+                var result = _applicationService.ObterCameraPorNome(nome);
 
-            return NotFound();
+                if (result is not null && result.Any())
+                    return Ok(result);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Error = ex.Message,
+                    Status = HttpStatusCode.BadRequest
+                });
+            }
+        }
+
+        [HttpGet("por-status")]
+        [SwaggerOperation(Summary = "Obtém câmeras por status", Description = "Retorna todas as câmeras que possuem o status informado.")]
+        [SwaggerResponse(200, "Câmeras retornadas com sucesso", typeof(IEnumerable<CameraResponseDto>))]
+        [SwaggerResponse(204, "Nenhuma câmera encontrada com o status especificado")]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao obter as câmeras")]
+        [ProducesResponseType(typeof(IEnumerable<CameraResponseDto>), 200)]
+        public IActionResult GetByStatus([FromQuery] CameraStatus status)
+        {
+            try
+            {
+                var result = _applicationService.ObterCameraPorStatus(status);
+
+                if (result is not null && result.Any())
+                    return Ok(result);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Error = ex.Message,
+                    Status = HttpStatusCode.BadRequest
+                });
+            }
         }
 
         [HttpPost]

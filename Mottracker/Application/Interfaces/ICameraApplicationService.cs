@@ -1,5 +1,6 @@
 using Mottracker.Application.Dtos.Camera;
 using Mottracker.Domain.Entities;
+using Mottracker.Domain.Enums;
 
 namespace Mottracker.Application.Interfaces
 {   
@@ -10,5 +11,7 @@ namespace Mottracker.Application.Interfaces
          CameraResponseDto? SalvarDadosCamera(CameraRequestDto entity);
          CameraResponseDto? EditarDadosCamera(int id, CameraRequestDto entity);
          CameraResponseDto? DeletarDadosCamera(int id);
+        IEnumerable<CameraResponseDto>? ObterCameraPorNome(string nome);
+        IEnumerable<CameraResponseDto>? ObterCameraPorStatus(CameraStatus status); 
     }
 }

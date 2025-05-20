@@ -28,14 +28,6 @@ namespace Mottracker.Infrastructure.Data.Repositories
                 .FirstOrDefault(t => t.IdTelefone == id);
         }
 
-        public List<TelefoneEntity> ObterPorIds(List<int> ids)
-        {
-            return _context.Telefone
-                .Where(t => ids.Contains(t.IdTelefone))
-                .Include(t => t.Usuario)
-                .ToList();
-        }
-
         public TelefoneEntity? Salvar(TelefoneEntity entity)
         {
             _context.Telefone.Add(entity);

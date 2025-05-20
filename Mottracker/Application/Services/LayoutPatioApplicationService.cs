@@ -27,6 +27,18 @@ namespace Mottracker.Application.Services
             return MapToResponseDto(layout);
         }
 
+        public IEnumerable<LayoutPatioResponseDto> ObterLayoutsPorIdPatio(long patioId)
+        {
+            var layouts = _repository.ObterPorIdPatio(patioId);
+            return layouts.Select(MapToResponseDto);
+        }
+
+        public IEnumerable<LayoutPatioResponseDto> ObterLayoutsPorDataCriacaoEntre(DateTime dataInicio, DateTime dataFim)
+        {
+            var layouts = _repository.ObterPorDataCriacaoEntre(dataInicio, dataFim);
+            return layouts.Select(MapToResponseDto);
+        }
+
         public IEnumerable<LayoutPatioResponseDto> ObterTodosLayoutsPatios()
         {
             var layouts = _repository.ObterTodos();

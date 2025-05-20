@@ -1,0 +1,785 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\presentation\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\presentation\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\services\\usuarioapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\services\\usuarioapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\interfaces\\iusuarioapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\interfaces\\iusuarioapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\infrastructure\\data\\repositories\\usuariorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\infrastructure\\data\\repositories\\usuariorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\presentation\\controllers\\usuariopermissaocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\presentation\\controllers\\usuariopermissaocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\services\\usuariopermissaoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\services\\usuariopermissaoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\interfaces\\iusuariopermissaoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\interfaces\\iusuariopermissaoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\infrastructure\\data\\repositories\\usuariopermissaorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\infrastructure\\data\\repositories\\usuariopermissaorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\presentation\\controllers\\telefonecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\presentation\\controllers\\telefonecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\services\\telefoneapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\services\\telefoneapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\interfaces\\itelefoneapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\interfaces\\itelefoneapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\infrastructure\\data\\repositories\\telefonerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\infrastructure\\data\\repositories\\telefonerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\presentation\\controllers\\qrcodepontocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\presentation\\controllers\\qrcodepontocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\services\\qrcodepontoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\services\\qrcodepontoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\interfaces\\iqrcodepontoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\interfaces\\iqrcodepontoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\infrastructure\\data\\repositories\\qrcodepontorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\infrastructure\\data\\repositories\\qrcodepontorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\presentation\\controllers\\permissaocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\presentation\\controllers\\permissaocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\services\\permissaoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\services\\permissaoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\interfaces\\ipermissaoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\interfaces\\ipermissaoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\infrastructure\\data\\repositories\\permissaorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\infrastructure\\data\\repositories\\permissaorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\presentation\\controllers\\patiocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\presentation\\controllers\\patiocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\services\\patioapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\services\\patioapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\interfaces\\ipatioapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\interfaces\\ipatioapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\interfaces\\imotoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\interfaces\\imotoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\infrastructure\\data\\repositories\\patiorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\infrastructure\\data\\repositories\\patiorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\presentation\\controllers\\motocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\presentation\\controllers\\motocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\services\\motoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\services\\motoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\infrastructure\\data\\repositories\\motorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\infrastructure\\data\\repositories\\motorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\presentation\\controllers\\layoutpatiocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\presentation\\controllers\\layoutpatiocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\infrastructure\\data\\repositories\\layoutpatiorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\infrastructure\\data\\repositories\\layoutpatiorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\services\\layoutpatioapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\services\\layoutpatioapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\interfaces\\ilayoutpatioapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\interfaces\\ilayoutpatioapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\infrastructure\\data\\repositories\\camerarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\infrastructure\\data\\repositories\\camerarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\infrastructure\\data\\repositories\\contratorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\infrastructure\\data\\repositories\\contratorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\infrastructure\\data\\repositories\\enderecorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\infrastructure\\data\\repositories\\enderecorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\presentation\\controllers\\enderecocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\presentation\\controllers\\enderecocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\presentation\\controllers\\contratocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\presentation\\controllers\\contratocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\services\\enderecoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\services\\enderecoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\interfaces\\ienderecoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\interfaces\\ienderecoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\presentation\\controllers\\cameracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\presentation\\controllers\\cameracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\services\\contratoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\services\\contratoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\interfaces\\icontratoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\interfaces\\icontratoapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\services\\cameraapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\services\\cameraapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|c:\\users\\labsfiap\\desktop\\dotnet\\mottracker_dotnet\\mottracker\\application\\interfaces\\icameraapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3A51B755-0D96-48AA-8364-B16D39880296}|Mottracker\\Mottracker.csproj|solutionrelative:mottracker\\application\\interfaces\\icameraapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "Mottracker\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\appsettings.Development.json",
+              "RelativeToolTip": "Mottracker\\appsettings.Development.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-19T23:54:29.705Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsuarioController.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\UsuarioController.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Presentation\\Controllers\\UsuarioController.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\UsuarioController.cs",
+              "RelativeToolTip": "Mottracker\\Presentation\\Controllers\\UsuarioController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAEkAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:52:59.188Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UsuarioApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\UsuarioApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Services\\UsuarioApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\UsuarioApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Services\\UsuarioApplicationService.cs",
+              "ViewState": "AQIAAAQAAAAAAAAAAAAswCEAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:52:22.645Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UsuarioRepository.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\UsuarioRepository.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Infrastructure\\Data\\Repositories\\UsuarioRepository.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\UsuarioRepository.cs",
+              "RelativeToolTip": "Mottracker\\Infrastructure\\Data\\Repositories\\UsuarioRepository.cs",
+              "ViewState": "AQIAABwAAAAAAAAAAAAqwEwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:46:46.093Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UsuarioPermissaoController.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\UsuarioPermissaoController.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Presentation\\Controllers\\UsuarioPermissaoController.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\UsuarioPermissaoController.cs",
+              "RelativeToolTip": "Mottracker\\Presentation\\Controllers\\UsuarioPermissaoController.cs",
+              "ViewState": "AQIAAC0AAAAAAAAAAAAowE0AAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:39:59.645Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UsuarioPermissaoApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\UsuarioPermissaoApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Services\\UsuarioPermissaoApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\UsuarioPermissaoApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Services\\UsuarioPermissaoApplicationService.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAswBYAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:33:43.345Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IUsuarioApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IUsuarioApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Interfaces\\IUsuarioApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IUsuarioApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Interfaces\\IUsuarioApplicationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAA2AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:29:58.55Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IUsuarioPermissaoApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IUsuarioPermissaoApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Interfaces\\IUsuarioPermissaoApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IUsuarioPermissaoApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Interfaces\\IUsuarioPermissaoApplicationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:32:59.875Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "UsuarioPermissaoRepository.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\UsuarioPermissaoRepository.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Infrastructure\\Data\\Repositories\\UsuarioPermissaoRepository.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\UsuarioPermissaoRepository.cs",
+              "RelativeToolTip": "Mottracker\\Infrastructure\\Data\\Repositories\\UsuarioPermissaoRepository.cs",
+              "ViewState": "AQIAACYAAAAAAAAAAAAqwFMAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:30:47.885Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "TelefoneController.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\TelefoneController.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Presentation\\Controllers\\TelefoneController.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\TelefoneController.cs",
+              "RelativeToolTip": "Mottracker\\Presentation\\Controllers\\TelefoneController.cs",
+              "ViewState": "AQIAADgAAAAAAAAAAAAwwFoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:20:42.771Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "TelefoneRepository.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\TelefoneRepository.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Infrastructure\\Data\\Repositories\\TelefoneRepository.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\TelefoneRepository.cs",
+              "RelativeToolTip": "Mottracker\\Infrastructure\\Data\\Repositories\\TelefoneRepository.cs",
+              "ViewState": "AQIAACEAAAAAAAAAAAAiwFMAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:10:13.76Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "TelefoneApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\TelefoneApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Services\\TelefoneApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\TelefoneApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Services\\TelefoneApplicationService.cs",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAswCkAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:10:11.784Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ITelefoneApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\ITelefoneApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Interfaces\\ITelefoneApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\ITelefoneApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Interfaces\\ITelefoneApplicationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAABMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:10:03.375Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "QrCodePontoController.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\QrCodePontoController.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Presentation\\Controllers\\QrCodePontoController.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\QrCodePontoController.cs",
+              "RelativeToolTip": "Mottracker\\Presentation\\Controllers\\QrCodePontoController.cs",
+              "ViewState": "AQIAAB8AAAAAAAAAAAAQwD8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:09:04.687Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "QrCodePontoApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\QrCodePontoApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Services\\QrCodePontoApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\QrCodePontoApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Services\\QrCodePontoApplicationService.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAUwDEAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T23:00:46.552Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IQrCodePontoApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IQrCodePontoApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Interfaces\\IQrCodePontoApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IQrCodePontoApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Interfaces\\IQrCodePontoApplicationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:55:32.015Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "PermissaoController.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\PermissaoController.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Presentation\\Controllers\\PermissaoController.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\PermissaoController.cs",
+              "RelativeToolTip": "Mottracker\\Presentation\\Controllers\\PermissaoController.cs",
+              "ViewState": "AQIAADcAAAAAAAAAAAAowFUAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:59:13.156Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "PermissaoApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\PermissaoApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Services\\PermissaoApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\PermissaoApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Services\\PermissaoApplicationService.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAACUAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:55:39.202Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "QrCodePontoRepository.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\QrCodePontoRepository.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Infrastructure\\Data\\Repositories\\QrCodePontoRepository.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\QrCodePontoRepository.cs",
+              "RelativeToolTip": "Mottracker\\Infrastructure\\Data\\Repositories\\QrCodePontoRepository.cs",
+              "ViewState": "AQIAADAAAAAAAAAAAAAqwF0AAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:50:41.756Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "IPermissaoApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IPermissaoApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Interfaces\\IPermissaoApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IPermissaoApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Interfaces\\IPermissaoApplicationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:52:49.962Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "PermissaoRepository.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\PermissaoRepository.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Infrastructure\\Data\\Repositories\\PermissaoRepository.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\PermissaoRepository.cs",
+              "RelativeToolTip": "Mottracker\\Infrastructure\\Data\\Repositories\\PermissaoRepository.cs",
+              "ViewState": "AQIAACIAAAAAAAAAAAAqwE8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:50:35.362Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "PatioController.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\PatioController.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Presentation\\Controllers\\PatioController.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\PatioController.cs",
+              "RelativeToolTip": "Mottracker\\Presentation\\Controllers\\PatioController.cs",
+              "ViewState": "AQIAAFMAAAAAAAAAAAAwwHMAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:44:35.702Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "PatioApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\PatioApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Services\\PatioApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\PatioApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Services\\PatioApplicationService.cs",
+              "ViewState": "AQIAABYAAAAAAAAAAAAUwDoAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:43:16.618Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "PatioRepository.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\PatioRepository.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Infrastructure\\Data\\Repositories\\PatioRepository.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\PatioRepository.cs",
+              "RelativeToolTip": "Mottracker\\Infrastructure\\Data\\Repositories\\PatioRepository.cs",
+              "ViewState": "AQIAAEMAAAAAAAAAAAAqwHAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:42:31.256Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "IPatioApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IPatioApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Interfaces\\IPatioApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IPatioApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Interfaces\\IPatioApplicationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAABQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:42:14.703Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "MotoController.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\MotoController.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Presentation\\Controllers\\MotoController.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\MotoController.cs",
+              "RelativeToolTip": "Mottracker\\Presentation\\Controllers\\MotoController.cs",
+              "ViewState": "AQIAAIwAAAAAAAAAAAAAwGAAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:41:16.974Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "IMotoApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IMotoApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Interfaces\\IMotoApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IMotoApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Interfaces\\IMotoApplicationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAABOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:39:05.037Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "MotoApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\MotoApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Services\\MotoApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\MotoApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Services\\MotoApplicationService.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAswC0AAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:39:17.764Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "LayoutPatioController.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\LayoutPatioController.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Presentation\\Controllers\\LayoutPatioController.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\LayoutPatioController.cs",
+              "RelativeToolTip": "Mottracker\\Presentation\\Controllers\\LayoutPatioController.cs",
+              "ViewState": "AQIAABEAAAAAAAAAAAAQwEQAAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:38:02.781Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "MotoRepository.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\MotoRepository.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Infrastructure\\Data\\Repositories\\MotoRepository.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\MotoRepository.cs",
+              "RelativeToolTip": "Mottracker\\Infrastructure\\Data\\Repositories\\MotoRepository.cs",
+              "ViewState": "AQIAADMAAAAAAAAAAAAqwGAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:35:50.814Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "LayoutPatioApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\LayoutPatioApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Services\\LayoutPatioApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\LayoutPatioApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Services\\LayoutPatioApplicationService.cs",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAQwCUAAABNAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:36:40.449Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "LayoutPatioRepository.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\LayoutPatioRepository.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Infrastructure\\Data\\Repositories\\LayoutPatioRepository.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\LayoutPatioRepository.cs",
+              "RelativeToolTip": "Mottracker\\Infrastructure\\Data\\Repositories\\LayoutPatioRepository.cs",
+              "ViewState": "AQIAAC4AAAAAAAAAAAAqwDIAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:34:17.391Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "ILayoutPatioApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\ILayoutPatioApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Interfaces\\ILayoutPatioApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\ILayoutPatioApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Interfaces\\ILayoutPatioApplicationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:34:05.903Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "CameraRepository.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\CameraRepository.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Infrastructure\\Data\\Repositories\\CameraRepository.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\CameraRepository.cs",
+              "RelativeToolTip": "Mottracker\\Infrastructure\\Data\\Repositories\\CameraRepository.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAQwCEAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:11:32.891Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "ContratoRepository.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\ContratoRepository.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Infrastructure\\Data\\Repositories\\ContratoRepository.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\ContratoRepository.cs",
+              "RelativeToolTip": "Mottracker\\Infrastructure\\Data\\Repositories\\ContratoRepository.cs",
+              "ViewState": "AQIAABoAAAAAAAAAAAAzwCMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:23:07.013Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "EnderecoRepository.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\EnderecoRepository.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Infrastructure\\Data\\Repositories\\EnderecoRepository.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Infrastructure\\Data\\Repositories\\EnderecoRepository.cs",
+              "RelativeToolTip": "Mottracker\\Infrastructure\\Data\\Repositories\\EnderecoRepository.cs",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAmwBwAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:30:12.959Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "EnderecoController.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\EnderecoController.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Presentation\\Controllers\\EnderecoController.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\EnderecoController.cs",
+              "RelativeToolTip": "Mottracker\\Presentation\\Controllers\\EnderecoController.cs",
+              "ViewState": "AQIAAF0AAAAAAAAAAAAuwHEAAAA3AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:31:31.24Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "EnderecoApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\EnderecoApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Services\\EnderecoApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\EnderecoApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Services\\EnderecoApplicationService.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAkwH4AAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:30:47.425Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "IEnderecoApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IEnderecoApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Interfaces\\IEnderecoApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IEnderecoApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Interfaces\\IEnderecoApplicationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAA6AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:30:04.88Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "ContratoController.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\ContratoController.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Presentation\\Controllers\\ContratoController.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\ContratoController.cs",
+              "RelativeToolTip": "Mottracker\\Presentation\\Controllers\\ContratoController.cs",
+              "ViewState": "AQIAAIsAAAAAAAAAAAAwwJ4AAAAaAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:26:41.24Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "ContratoApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\ContratoApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Services\\ContratoApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\ContratoApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Services\\ContratoApplicationService.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAmwE8AAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:25:36.932Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "IContratoApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IContratoApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Interfaces\\IContratoApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\IContratoApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Interfaces\\IContratoApplicationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAABJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:23:00.749Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "CameraController.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\CameraController.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Presentation\\Controllers\\CameraController.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Presentation\\Controllers\\CameraController.cs",
+              "RelativeToolTip": "Mottracker\\Presentation\\Controllers\\CameraController.cs",
+              "ViewState": "AQIAAD4AAAAAAAAAAAAwwDsAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:16:47.616Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "ICameraApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\ICameraApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Interfaces\\ICameraApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Interfaces\\ICameraApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Interfaces\\ICameraApplicationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAABEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:11:46.998Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "CameraApplicationService.cs",
+              "DocumentMoniker": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\CameraApplicationService.cs",
+              "RelativeDocumentMoniker": "Mottracker\\Application\\Services\\CameraApplicationService.cs",
+              "ToolTip": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Application\\Services\\CameraApplicationService.cs",
+              "RelativeToolTip": "Mottracker\\Application\\Services\\CameraApplicationService.cs",
+              "ViewState": "AQIAAEwAAAAAAAAAAAAQwHEAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-19T22:13:51.817Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

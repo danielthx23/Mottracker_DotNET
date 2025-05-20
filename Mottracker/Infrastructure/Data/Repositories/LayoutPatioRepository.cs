@@ -33,13 +33,6 @@ namespace Mottracker.Infrastructure.Data.Repositories
     
                 return LayoutPatio;
             }
-            
-            public List<LayoutPatioEntity> ObterPorIds(List<int> ids)
-            {
-                return _context.LayoutPatio
-                    .Where(lp => ids.Contains(lp.IdLayoutPatio))
-                    .ToList();
-            }
     
             public LayoutPatioEntity? Salvar(LayoutPatioEntity entity)
             {

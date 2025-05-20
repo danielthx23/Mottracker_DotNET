@@ -28,14 +28,6 @@ namespace Mottracker.Infrastructure.Data.Repositories
                 .FirstOrDefault(q => q.IdQrCodePonto == id);
         }
 
-        public List<QrCodePontoEntity> ObterPorIds(List<int> ids)
-        {
-            return _context.QrCodePonto
-                .Where(q => ids.Contains(q.IdQrCodePonto))
-                .Include(q => q.LayoutPatio)
-                .ToList();
-        }
-
         public QrCodePontoEntity? Salvar(QrCodePontoEntity entity)
         {
             _context.QrCodePonto.Add(entity);

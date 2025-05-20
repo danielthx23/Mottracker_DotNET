@@ -3830,24 +3830,32 @@
     ]
   },
   "packageFolders": {
-    "/home/danielakiyama/.nuget/packages/": {}
+    "C:\\Softwares\\Nuget": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/danielakiyama/Desktop/dotnet/Mottracker/Mottracker/Mottracker.csproj",
+      "projectUniqueName": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Mottracker.csproj",
       "projectName": "Mottracker",
-      "projectPath": "/home/danielakiyama/Desktop/dotnet/Mottracker/Mottracker/Mottracker.csproj",
-      "packagesPath": "/home/danielakiyama/.nuget/packages/",
-      "outputPath": "/home/danielakiyama/Desktop/dotnet/Mottracker/Mottracker/obj/",
+      "projectPath": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\Mottracker.csproj",
+      "packagesPath": "C:\\Softwares\\Nuget",
+      "outputPath": "C:\\Users\\labsfiap\\Desktop\\Dotnet\\Mottracker_DotNET\\Mottracker\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/home/danielakiyama/.nuget/NuGet/NuGet.Config"
+        "c:\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3913,7 +3921,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/nix/store/9qq1hl8bdqjr1ha2lkrb21qs7i00d2f5-dotnet-sdk-8.0.403/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

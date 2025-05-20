@@ -5,6 +5,7 @@ using Mottracker.Domain.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using Mottracker.Application.Dtos.Patio;
+using Mottracker.Domain.Enums;
 
 namespace Mottracker.Application.Services
 {
@@ -29,6 +30,18 @@ namespace Mottracker.Application.Services
         public IEnumerable<CameraResponseDto> ObterTodasCameras()
         {
             var cameras = _repository.ObterTodos();
+            return cameras.Select(MapToResponseDto);
+        }
+
+        public IEnumerable<CameraResponseDto>? ObterCameraPorNome(string nome)
+        {
+            var cameras = _repository.ObterPorNome(nome);
+            return cameras.Select(MapToResponseDto);
+        }
+
+        public IEnumerable<CameraResponseDto>? ObterCameraPorStatus(CameraStatus status)
+        {
+            var cameras = _repository.ObterPorStatus(status);
             return cameras.Select(MapToResponseDto);
         }
 

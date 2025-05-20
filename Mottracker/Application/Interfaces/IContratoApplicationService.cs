@@ -10,5 +10,11 @@ namespace Mottracker.Application.Interfaces
         ContratoResponseDto? SalvarDadosContrato(ContratoRequestDto entity);
         ContratoResponseDto? EditarDadosContrato(int id, ContratoRequestDto entity);
         ContratoResponseDto? DeletarDadosContrato(int id);
+        IEnumerable<ContratoResponseDto> ObterPorAtivoContrato(int ativoContrato);
+        IEnumerable<ContratoResponseDto> ObterPorUsuarioId(long usuarioId);
+        IEnumerable<ContratoResponseDto> ObterPorMotoId(long motoId);
+        IEnumerable<ContratoResponseDto> ObterContratosNaoExpirados(DateTime dataAtual);
+        IEnumerable<ContratoResponseDto> ObterPorRenovacaoAutomatica(int renovacaoAutomatica);
+        IEnumerable<ContratoResponseDto> ObterPorDataEntradaEntre(DateTime dataInicio, DateTime dataFim);
     }
 }

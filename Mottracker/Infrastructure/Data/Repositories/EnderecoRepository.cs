@@ -28,13 +28,6 @@ namespace Mottracker.Infrastructure.Data.Repositories
                 .FirstOrDefault(e => e.IdEndereco == id);
         }
 
-        public List<EnderecoEntity> ObterPorIds(List<int> ids)
-        {
-            return _context.Endereco
-                .Where(e => ids.Contains(e.IdEndereco))
-                .ToList();
-        }
-
         public EnderecoEntity? Salvar(EnderecoEntity entity)
         {
             _context.Endereco.Add(entity);

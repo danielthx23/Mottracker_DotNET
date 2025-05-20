@@ -49,6 +49,42 @@ namespace Mottracker.Presentation.Controllers
             return NotFound();
         }
 
+        [HttpGet("buscar-por-nome")]
+        [SwaggerOperation(Summary = "Busca permissões pelo nome", Description = "Retorna permissões cujo nome contenha o texto informado.")]
+        [SwaggerResponse(200, "Permissões retornadas com sucesso", typeof(IEnumerable<PermissaoResponseDto>))]
+        [SwaggerResponse(204, "Nenhuma permissão encontrada")]
+        [SwaggerResponse(400, "Erro ao buscar permissões")]
+        public IActionResult GetByNome([FromQuery] string nome)
+        {
+            if (string.IsNullOrWhiteSpace(nome))
+                return BadRequest("O parâmetro 'nome' é obrigatório.");
+
+            var result = _applicationService.ObterPermissoesPorNomeContendo(nome);
+
+            if (result is not null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
+        [HttpGet("buscar-por-descricao")]
+        [SwaggerOperation(Summary = "Busca permissões pela descrição", Description = "Retorna permissões cuja descrição contenha o texto informado.")]
+        [SwaggerResponse(200, "Permissões retornadas com sucesso", typeof(IEnumerable<PermissaoResponseDto>))]
+        [SwaggerResponse(204, "Nenhuma permissão encontrada")]
+        [SwaggerResponse(400, "Erro ao buscar permissões")]
+        public IActionResult GetByDescricao([FromQuery] string descricao)
+        {
+            if (string.IsNullOrWhiteSpace(descricao))
+                return BadRequest("O parâmetro 'descricao' é obrigatório.");
+
+            var result = _applicationService.ObterPermissoesPorDescricaoContendo(descricao);
+
+            if (result is not null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Cria uma nova permissão", Description = "Salva uma nova permissão no sistema.")]
         [SwaggerResponse(201, "Permissão criada com sucesso", typeof(PermissaoResponseDto))]

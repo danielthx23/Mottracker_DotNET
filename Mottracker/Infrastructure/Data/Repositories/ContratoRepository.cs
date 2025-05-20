@@ -34,13 +34,6 @@ namespace Mottracker.Infrastructure.Data.Repositories
             return contrato;
         }
 
-        public List<ContratoEntity> ObterPorIds(List<int> ids)
-        {
-            return _context.Contrato
-                .Where(c => ids.Contains(c.IdContrato))
-                .ToList();
-        }
-
         public ContratoEntity? Salvar(ContratoEntity entity)
         {
             _context.Contrato.Add(entity);

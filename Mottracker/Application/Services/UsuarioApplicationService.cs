@@ -25,6 +25,14 @@ namespace Mottracker.Application.Services
             return MapToResponseDto(usuario);
         }
 
+        public UsuarioResponseDto? ObterUsuarioPorEmail(string emailUsuario)
+        {
+            var usuario = _repository.ObterPorEmail(emailUsuario);
+            if (usuario == null) return null;
+
+            return MapToResponseDto(usuario);
+        }
+
         public IEnumerable<UsuarioResponseDto> ObterTodosUsuarios()
         {
             var usuarios = _repository.ObterTodos();

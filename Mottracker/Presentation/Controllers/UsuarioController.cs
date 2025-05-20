@@ -47,6 +47,32 @@ namespace Mottracker.Presentation.Controllers
             return NotFound();
         }
 
+        [HttpGet("email/{email}")]
+        [SwaggerOperation(Summary = "Obtém usuário por e-mail", Description = "Retorna os dados de um usuário com base no e-mail.")]
+        [SwaggerResponse(200, "Usuário retornado com sucesso", typeof(UsuarioResponseDto))]
+        [SwaggerResponse(404, "Usuário não encontrado")]
+        [SwaggerResponse(400, "Erro ao obter o dado")]
+        public IActionResult GetByEmail(string email)
+        {
+            try
+            {
+                var result = _applicationService.ObterUsuarioPorEmail(email);
+
+                if (result != null)
+                    return Ok(result);
+
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Error = ex.Message,
+                    Status = HttpStatusCode.BadRequest
+                });
+            }
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "Cria um novo usuário", Description = "Salva um novo registro de usuário.")]
         [SwaggerResponse(201, "Usuário salvo com sucesso", typeof(UsuarioResponseDto))]

@@ -47,6 +47,49 @@ namespace Mottracker.Presentation.Controllers
             return NotFound();
         }
 
+        [HttpGet("por-numero/{numero}")]
+        [SwaggerOperation(Summary = "Lista telefones por número", Description = "Retorna os telefones que possuem o número informado.")]
+        [SwaggerResponse(200, "Telefones encontrados", typeof(IEnumerable<TelefoneResponseDto>))]
+        [SwaggerResponse(204, "Nenhum telefone encontrado")]
+        public IActionResult GetByNumero(string numero)
+        {
+            var result = _applicationService.ObterTelefonesPorNumero(numero);
+
+            if (result is not null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
+        [HttpGet("por-usuario/{usuarioId}")]
+        [SwaggerOperation(Summary = "Lista telefones por ID de usuário", Description = "Retorna os telefones associados ao usuário informado.")]
+        [SwaggerResponse(200, "Telefones encontrados", typeof(IEnumerable<TelefoneResponseDto>))]
+        [SwaggerResponse(204, "Nenhum telefone encontrado")]
+        public IActionResult GetByUsuarioId(long usuarioId)
+        {
+            var result = _applicationService.ObterTelefonesPorUsuarioId(usuarioId);
+
+            if (result is not null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
+        [HttpGet("por-tipo/{tipo}")]
+        [SwaggerOperation(Summary = "Lista telefones por tipo", Description = "Retorna os telefones do tipo especificado.")]
+        [SwaggerResponse(200, "Telefones encontrados", typeof(IEnumerable<TelefoneResponseDto>))]
+        [SwaggerResponse(204, "Nenhum telefone encontrado")]
+        public IActionResult GetByTipo(string tipo)
+        {
+            var result = _applicationService.ObterTelefonesPorTipo(tipo);
+
+            if (result is not null && result.Any())
+                return Ok(result);
+
+            return NoContent();
+        }
+
+
         [HttpPost]
         [SwaggerOperation(Summary = "Cria um novo telefone", Description = "Salva um novo registro de telefone.")]
         [SwaggerResponse(201, "Telefone salvo com sucesso", typeof(TelefoneResponseDto))]
