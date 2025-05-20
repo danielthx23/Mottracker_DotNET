@@ -164,7 +164,7 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 
 ## Rotas da API
 
-## 📷 Camera
+## Camera
 
 - `GET /api/Camera` - Lista todas as câmeras  
 - `POST /api/Camera` - Salva uma nova câmera  
@@ -176,7 +176,7 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 
 ---
 
-## 📄 Contrato
+## Contrato
 
 - `GET /api/Contrato` - Lista todos os contratos  
 - `POST /api/Contrato` - Cria um novo contrato  
@@ -192,7 +192,7 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 
 ---
 
-## 📍 Endereco
+## Endereco
 
 - `GET /api/Endereco` - Lista todos os endereços  
 - `POST /api/Endereco` - Cria um novo endereço  
@@ -209,7 +209,7 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 
 ---
 
-## 🧩 LayoutPatio
+## LayoutPatio
 
 - `GET /api/LayoutPatio` - Lista todos os layouts de pátio  
 - `POST /api/LayoutPatio` - Cria um novo layout de pátio  
@@ -221,7 +221,7 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 
 ---
 
-## 🛵 Moto
+## Moto
 
 - `GET /api/Moto` - Lista todas as motos  
 - `POST /api/Moto` - Cria uma nova moto  
@@ -234,7 +234,7 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 
 ---
 
-## 🏢 Patio
+## Patio
 
 - `GET /api/Patio` - Lista todos os pátios  
 - `POST /api/Patio` - Cria um novo pátio  
@@ -248,7 +248,7 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 
 ---
 
-## 🔐 Permissao
+## Permissao
 
 - `GET /api/Permissao` - Lista todas as permissões  
 - `POST /api/Permissao` - Cria uma nova permissão  
@@ -260,7 +260,7 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 
 ---
 
-## 🧾 QrCodePonto
+## QrCodePonto
 
 - `GET /api/QrCodePonto` - Lista todos os QR Codes de ponto  
 - `POST /api/QrCodePonto` - Cria um novo QR Code de ponto  
@@ -274,7 +274,7 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 
 ---
 
-## ☎️ Telefone
+## Telefone
 
 - `GET /api/Telefone` - Lista todos os telefones  
 - `POST /api/Telefone` - Cria um novo telefone  
@@ -287,7 +287,7 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 
 ---
 
-## 👤 Usuario
+## Usuario
 
 - `GET /api/Usuario` - Lista todos os usuários  
 - `POST /api/Usuario` - Cria um novo usuário  
@@ -298,7 +298,7 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 
 ---
 
-## 🧑‍🤝‍🧑 UsuarioPermissao
+## UsuarioPermissao
 
 - `GET /api/UsuarioPermissao` - Lista todas as permissões de usuários  
 - `POST /api/UsuarioPermissao` - Cria uma nova permissão de usuário  
@@ -307,11 +307,3 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 - `DELETE /api/UsuarioPermissao/usuario/{usuarioId}/permissao/{permissaoId}` - Deleta uma permissão de usuário  
 - `GET /api/UsuarioPermissao/usuario/{usuarioId}` - Lista permissões por ID de usuário  
 - `GET /api/UsuarioPermissao/permissao/{permissaoId}` - Lista usuários por ID de permissão  
-
-## Implementações Futuras & TODO's
-
-- Buscas por atributos das tabelas
-- Segurança e criptografia de senha
-- Implementação do NoSQL (MongoDB)
-- Lógica para alterar dados das tabelas a partir do NoSQL
-- Otimizar requisições do banco de dados
