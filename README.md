@@ -32,13 +32,48 @@ Essa integração permite o acompanhamento via aplicativo, promovendo **eficiên
 * Danilo Correia e Silva - RM 557540
 * João Pedro Rodrigues da Costa - RM 558199
 
-## Instalação do Projeto
+## Azure CLI Scripts para criar a VM que vai hospedar a API
+
+TODO -> Referenciar arquivo
+
+## Instalação do Projeto via Docker (Entrega DevOps)
 
 ### Requisitos
-- .NET SDK 7.0
-- Rider / Visual Studio
+- Docker instalado e com a engine ligada
 
 ### Configuração
+
+Clone o projeto utilizando git
+
+1. Buildar a imagem utilizando o Dockerfile
+
+No diretório raiz do projeto (onde está o Dockerfile), execute:
+
+´´´bash
+docker build -t mottracker .
+´´´
+
+2. Rode um container utilizando variaveis de ambiente e a imagem criada pelo build
+
+Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais do Oracle DB:
+
+´´´bash
+
+docker run \
+  -e ConnectionStrings__Oracle="Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=meuuser;Password=minhasenha;" \
+  -p 5169:5169 \
+  mottracker
+´´´
+
+## Instalação do Projeto via Host (Entrega DotNET)
+
+### Requisitos
+- .NET SDK 8.0 instalado
+- Rider / Visual Studio instalado (opcional)
+
+### Configuração
+
+Clone o projeto utilizando git
 
 1. No arquivo `appsettings.Development.json`, configure a string de conexão do Oracle DB com seu usuário e senha, por exemplo:
 
@@ -60,16 +95,46 @@ Caso não tenha a ferramenta dotnet-ef instalada, instale com:
   dotnet tool install --global dotnet-ef
 ```
 
-### Rodar o projeto
-Após configurar a string de conexão e aplicar as migrations, para rodar a API localmente, utilize o Rider ou Visual Studio e clique em http run.
+## Rodar o Projeto Localmente
 
-Por padrão, a API estará disponível em:
+Após configurar a string de conexão e aplicar as migrations, você pode rodar a API de duas maneiras:
 
-http://localhost:5169
+### 1. Com IDE (Rider ou Visual Studio)
 
-Agora você pode acessar o Swagger para testar as rotas em:
+1. Abra a solução no Rider ou Visual Studio.
+2. Selecione o projeto da API como *Startup Project*.
+3. Clique em **Run** com o perfil `http`.
 
-http://localhost:5169/swagger
+A API estará disponível em:
+
+- http://localhost:5169  
+- http://localhost:5169/swagger (Swagger UI para testar rotas)
+
+---
+
+### 2. Sem IDE (usando linha de comando)
+
+1. **Restaurar e compilar:**
+
+```bash
+dotnet restore
+dotnet build
+```
+
+4. **Rodar o projeto:**
+
+```bash
+dotnet run --project src/Mottracker --urls "http://localhost:5169"
+```
+
+---
+
+## Acesso à API
+
+- API: http://localhost:5169  
+- Swagger: http://localhost:5169/swagger
+
+---
 
 ## Rotas da API
 
