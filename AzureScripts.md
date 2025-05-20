@@ -18,7 +18,7 @@
     az vm create --resource-group rg-vmMottracker --name vmMottracker --image Ubuntu2204 --size Standard_B2s --admin-username mottrackeradmin --generate-ssh-keys
 ```
 
-### Comandos para abrir as portas da VM (5169 e o da API)
+### Comandos para abrir as portas da VM (5169 é o da API)
 
 ```bash
     az vm open-port --resource-group rg-vmMottracker --name vmMottracker --port 80

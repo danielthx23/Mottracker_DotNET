@@ -36,7 +36,7 @@ Essa integração permite o acompanhamento via aplicativo, promovendo **eficiên
 
 Scripts para criar e rodar a API na Azure
 
-[Azure CLI Scripts](AzureScripts.md)
+[Azure CLI Scripts](AzureScripts.md) <- Acesse os comandos aqui
 
 ## Dockerfile
 
