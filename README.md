@@ -43,27 +43,16 @@ TODO -> Referenciar arquivo
 
 ### Configuração
 
-Clone o projeto utilizando git
-
-1. Buildar a imagem utilizando o Dockerfile
-
-No diretório raiz do projeto (onde está o Dockerfile), execute:
-
-´´´bash
-docker build -t mottracker .
-´´´
-
-2. Rode um container utilizando variaveis de ambiente e a imagem criada pelo build
+1. Rode um container utilizando variaveis de ambiente e a imagem no Docker Hub pelo build
 
 Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais do Oracle DB:
 
-´´´bash
-
-docker run \
+```bash
+  docker run \
   -e ConnectionStrings__Oracle="Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=meuuser;Password=minhasenha;" \
   -p 5169:5169 \
-  mottracker
-´´´
+  danielthx23/mottracker
+```
 
 ## Instalação do Projeto via Host (Entrega DotNET)
 
@@ -95,24 +84,17 @@ Caso não tenha a ferramenta dotnet-ef instalada, instale com:
   dotnet tool install --global dotnet-ef
 ```
 
-## Rodar o Projeto Localmente
+### Rodar o Projeto Localmente
 
 Após configurar a string de conexão e aplicar as migrations, você pode rodar a API de duas maneiras:
 
-### 1. Com IDE (Rider ou Visual Studio)
+#### 1. Com IDE (Rider ou Visual Studio)
 
 1. Abra a solução no Rider ou Visual Studio.
 2. Selecione o projeto da API como *Startup Project*.
 3. Clique em **Run** com o perfil `http`.
 
-A API estará disponível em:
-
-- http://localhost:5169  
-- http://localhost:5169/swagger (Swagger UI para testar rotas)
-
----
-
-### 2. Sem IDE (usando linha de comando)
+#### 2. Sem IDE (usando linha de comando)
 
 1. **Restaurar e compilar:**
 
@@ -127,14 +109,10 @@ dotnet build
 dotnet run --project src/Mottracker --urls "http://localhost:5169"
 ```
 
----
-
 ## Acesso à API
 
 - API: http://localhost:5169  
 - Swagger: http://localhost:5169/swagger
-
----
 
 ## Rotas da API
 
