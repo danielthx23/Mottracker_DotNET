@@ -38,7 +38,13 @@ TODO -> Referenciar arquivo
 
 ## Dockerfile
 
-[Dockerfile](./Mottracker/Dockerfile)
+Dockerfile de produção (mais leve):
+[Dockerfile Production](./Mottracker/Dockerfile.Production)
+
+Dockerfile de desenvolvimento (mais pesada):
+[Dockerfile Development](./Mottracker/Dockerfile.Production)
+
+Imagem Docker Hub: [Imagem Docker Hub com as duas Tags](https://hub.docker.com/repository/docker/danielakiyama/mottracker/general)
 
 **Observação**: Em produção, o ideal é usar a imagem aspnet apenas para executar a aplicação, deixando as migrações para serem feitas fora do container ou em um container separado com o SDK. Isso torna a imagem final mais leve e segura. Contudo, optamos por utilizar o SDK na imagem para facilitar o desenvolvimento do projeto.
 
@@ -63,8 +69,25 @@ Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais
   -e RUN_MIGRATIONS=true \
   -e ASPNETCORE_ENVIRONMENT=Development \
   -p 5169:5169 \
-  danielthx23/mottracker
+  danielakiyama/mottracker:development-v1.0.0
 ```
+
+OU, se não quiser rodar as migrations:
+
+```bash
+  docker run -d \
+  -e ORACLE_USER=seusuario \
+  -e ORACLE_PASSWORD=suasenha \
+  -e ORACLE_HOST=oracle.fiap.com.br \
+  -e ORACLE_PORT=1521 \
+  -e ORACLE_SID=ORCL \
+  -e RUN_MIGRATIONS=true \
+  -e ASPNETCORE_ENVIRONMENT=Development \
+  -p 5169:5169 \
+  danielakiyama/mottracker:production-v1.0.0
+```
+
+Legendas:
 
 ```bash
 docker run -d \
@@ -76,7 +99,7 @@ docker run -d \
   -e RUN_MIGRATIONS=true             # Controla se as migrações serão executadas na inicialização (true/false)
   -e ASPNETCORE_ENVIRONMENT=Development  # Define o ambiente da aplicação (Development/Production)
   -p 5169:5169                      # Mapeia a porta 5169 do container para a mesma porta na máquina host
-  danielthx23/mottracker             # Nome da imagem Docker a ser executada
+  danielakiyama/mottracker:<tags diferentes>  # Nome da imagem e tag Docker a ser executada, lembrando Production (leve) não roda migrations, Development (pesada) roda.
 ```
 
 ## Instalação do Projeto via Host (Entrega DotNET)
