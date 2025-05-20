@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
-    {
+    {                   
         policy.WithOrigins("http://localhost:5173")
             .AllowAnyHeader()
             .AllowAnyMethod();
@@ -21,7 +21,7 @@ builder.Services.AddCors(options =>
 // Add DbContext and configure Oracle connection
 builder.Services.AddDbContext<ApplicationContext>(x => {
     x.UseOracle(builder.Configuration.GetConnectionString("Oracle"));
-});
+}); 
 
 // Register Repositories and Application Services
 builder.Services.AddTransient<ICameraRepository, CameraRepository>();
