@@ -50,6 +50,7 @@ Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais
 ```bash
   docker run \
   -e ConnectionStrings__Oracle="Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=meuuser;Password=minhasenha;" \
+  -e RUN_MIGRATIONS=true \
   -p 5169:5169 \
   danielthx23/mottracker
 ```
@@ -99,7 +100,7 @@ Após configurar a string de conexão e aplicar as migrations, você pode rodar 
 1. **Restaurar e compilar:**
 
 ```bash
-dotnet restore
+dotnet restore Mottracker/Mottracker.csproj
 dotnet build
 ```
 
