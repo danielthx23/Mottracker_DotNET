@@ -49,6 +49,19 @@ Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais
 
 ```bash
   docker run \
+  -e ORACLE_USER=seusuario \
+  -e ORACLE_PASSWORD=suasenha \
+  -e ORACLE_HOST=oracle.fiap.com.br \
+  -e ORACLE_PORT=1521 \
+  -e ORACLE_SID=ORCL \
+  -e RUN_MIGRATIONS=true \
+  -e ASPNETCORE_ENVIRONMENT=Development \
+  -p 5169:5169 \
+  danielthx23/mottracker
+```
+
+```bash
+docker run \
   -e ORACLE_USER=seusuario           # Usuário do banco Oracle
   -e ORACLE_PASSWORD=suasenha        # Senha do usuário Oracle
   -e ORACLE_HOST=oracle.fiap.com.br  # Host do banco Oracle
