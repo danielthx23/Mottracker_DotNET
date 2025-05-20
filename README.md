@@ -34,7 +34,9 @@ Essa integração permite o acompanhamento via aplicativo, promovendo **eficiên
 
 ## Azure CLI Scripts para criar a VM que vai hospedar a API
 
-[Dockerfile Production](AzureScripts.md)
+Scripts para criar e rodar a API na Azure
+
+[Azure CLI Scripts](AzureScripts.md)
 
 ## Dockerfile
 
@@ -57,42 +59,46 @@ Imagem Docker Hub: [Imagem Docker Hub com as duas Tags](https://hub.docker.com/r
 
 1. Rode um container utilizando variaveis de ambiente e a imagem no Docker Hub pelo build
 
-Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais do Oracle DB:
+Utilize o comando abaixo, substituindo meuusuario e minhasenha com suas credenciais do Oracle DB:
 
 ```bash
-  docker run -d 
-  -e ORACLE_USER=seusuario 
-  -e ORACLE_PASSWORD=suasenha 
-  -e ORACLE_HOST=oracle.fiap.com.br 
-  -e ORACLE_PORT=1521 
-  -e ORACLE_SID=ORCL 
-  -e RUN_MIGRATIONS=true 
-  -e ASPNETCORE_ENVIRONMENT=Development 
-  -p 5169:5169 
+  # Esse comando só funciona em bash por conta do \
+  docker run -d \
+  -e ORACLE_USER=seusuario \
+  -e ORACLE_PASSWORD=suasenha \
+  -e ORACLE_HOST=oracle.fiap.com.br \
+  -e ORACLE_PORT=1521 \
+  -e ORACLE_SID=ORCL \
+  -e RUN_MIGRATIONS=true \
+  -e ASPNETCORE_ENVIRONMENT=Development \
+  -p 5169:5169 \
   danielakiyama/mottracker:development-v1.0.0
 ```
 
 Em uma linha só (recomendado):
 ```bash
+  # Funciona no CMD e Bash (recomendado)
   docker run -d -e ORACLE_USER=seusuario -e ORACLE_PASSWORD=suasenha -e ORACLE_HOST=oracle.fiap.com.br -e ORACLE_PORT=1521 -e ORACLE_SID=ORCL -e RUN_MIGRATIONS=true -e ASPNETCORE_ENVIRONMENT=Development -p 5169:5169 danielakiyama/mottracker:development-v1.0.0
 ```
 
 OU, se não quiser rodar as migrations:
 
 ```bash
-  docker run -d 
-  -e ORACLE_USER=seusuario 
-  -e ORACLE_PASSWORD=suasenha 
-  -e ORACLE_HOST=oracle.fiap.com.br 
-  -e ORACLE_PORT=1521 
-  -e ORACLE_SID=ORCL 
-  -e ASPNETCORE_ENVIRONMENT=Development 
-  -p 5169:5169 
+  # Esse comando só funciona em bash por conta do \
+  docker run -d \
+  -e ORACLE_USER=seusuario \
+  -e ORACLE_PASSWORD=suasenha \
+  -e ORACLE_HOST=oracle.fiap.com.br \
+  -e ORACLE_PORT=1521 \
+  -e ORACLE_SID=ORCL \
+  -e ASPNETCORE_ENVIRONMENT=Development \
+  -p 5169:5169 \
   danielakiyama/mottracker:production-v1.0.0
 ```
 
 Em uma linha só (recomendado):
 ```bash
+  # Funciona no CMD e Bash (recomendado)
   docker run -d -e ORACLE_USER=seusuario -e ORACLE_PASSWORD=suasenha -e ORACLE_HOST=oracle.fiap.com.br -e ORACLE_PORT=1521 -e ORACLE_SID=ORCL -e ASPNETCORE_ENVIRONMENT=Development -p 5169:5169 danielakiyama/mottracker:production-v1.0.0
 ```
 
