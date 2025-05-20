@@ -49,8 +49,13 @@ Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais
 
 ```bash
   docker run \
-  -e ConnectionStrings__Oracle="Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=meuuser;Password=minhasenha;" \
+  -e ORACLE_USER=seusuario \
+  -e ORACLE_PASSWORD=suasenha \
+  -e ORACLE_HOST=oracle.fiap.com.br \
+  -e ORACLE_PORT=1521 \
+  -e ORACLE_SID=ORCL \
   -e RUN_MIGRATIONS=true \
+  -e ASPNETCORE_ENVIRONMENT=Development \
   -p 5169:5169 \
   danielthx23/mottracker
 ```
@@ -65,7 +70,7 @@ Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais
 
 Clone o projeto utilizando git
 
-1. No arquivo `appsettings.Development.json`, configure a string de conexão do Oracle DB com seu usuário e senha, por exemplo:
+1. No arquivo `appsettings.Development.json`, configure e adicione a string de conexão do Oracle DB com seu usuário e senha, por exemplo:
 
 ```json
 "ConnectionStrings": {
