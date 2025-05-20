@@ -106,7 +106,7 @@ dotnet build
 4. **Rodar o projeto:**
 
 ```bash
-dotnet run --project src/Mottracker --urls "http://localhost:5169"
+dotnet run --project Mottracker --urls "http://localhost:5169"
 ```
 
 ## Acesso à API
