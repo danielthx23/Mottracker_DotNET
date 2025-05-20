@@ -1,1 +1,12 @@
-/Mottracker.sln
+obj/
+
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+.vs/
+
+.idea/
+
+*.log
