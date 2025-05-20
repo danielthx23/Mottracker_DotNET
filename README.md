@@ -164,82 +164,149 @@ dotnet run --project Mottracker --urls "http://localhost:5169"
 
 ## Rotas da API
 
-### Camera
+## 📷 Camera
+
 - `GET /api/Camera` - Lista todas as câmeras  
 - `POST /api/Camera` - Salva uma nova câmera  
 - `GET /api/Camera/{id}` - Obtém câmera por ID  
 - `PUT /api/Camera/{id}` - Atualiza uma câmera  
 - `DELETE /api/Camera/{id}` - Deleta uma câmera  
+- `GET /api/Camera/por-nome` - Obtém câmeras por nome  
+- `GET /api/Camera/por-status` - Obtém câmeras por status  
 
-### Contrato
+---
+
+## 📄 Contrato
+
 - `GET /api/Contrato` - Lista todos os contratos  
 - `POST /api/Contrato` - Cria um novo contrato  
 - `GET /api/Contrato/{id}` - Obtém contrato por ID  
 - `PUT /api/Contrato/{id}` - Atualiza contrato existente  
 - `DELETE /api/Contrato/{id}` - Remove um contrato  
+- `GET /api/Contrato/ativo/{ativoContrato}` - Lista contratos por status de ativo  
+- `GET /api/Contrato/usuario/{usuarioId}` - Lista contratos por ID do usuário  
+- `GET /api/Contrato/moto/{motoId}` - Lista contratos por ID da moto  
+- `GET /api/Contrato/nao-expirados` - Lista contratos que ainda não expiraram  
+- `GET /api/Contrato/renovacao-automatica/{renovacao}` - Lista contratos com renovação automática  
+- `GET /api/Contrato/por-data-entrada` - Lista contratos entre duas datas de entrada  
 
-### Endereco
+---
+
+## 📍 Endereco
+
 - `GET /api/Endereco` - Lista todos os endereços  
 - `POST /api/Endereco` - Cria um novo endereço  
 - `GET /api/Endereco/{id}` - Obtém endereço por ID  
 - `PUT /api/Endereco/{id}` - Atualiza endereço existente  
 - `DELETE /api/Endereco/{id}` - Remove um endereço  
+- `GET /api/Endereco/cep/{cep}` - Obtém endereço por CEP  
+- `GET /api/Endereco/estado/{estado}` - Busca endereços por estado  
+- `GET /api/Endereco/cidade/{cidade}` - Busca endereços por cidade  
+- `GET /api/Endereco/cidade-estado` - Busca por cidade e estado  
+- `GET /api/Endereco/bairro/{bairro}` - Busca endereços por bairro  
+- `GET /api/Endereco/logradouro` - Busca por logradouro parcial  
+- `GET /api/Endereco/patio/{patioId}` - Busca endereço por ID de Pátio  
 
-### LayoutPatio
+---
+
+## 🧩 LayoutPatio
+
 - `GET /api/LayoutPatio` - Lista todos os layouts de pátio  
 - `POST /api/LayoutPatio` - Cria um novo layout de pátio  
 - `GET /api/LayoutPatio/{id}` - Obtém layout de pátio por ID  
 - `PUT /api/LayoutPatio/{id}` - Atualiza um layout de pátio  
 - `DELETE /api/LayoutPatio/{id}` - Remove um layout de pátio  
+- `GET /api/LayoutPatio/porPatio` - Obtém layouts por ID do pátio  
+- `GET /api/LayoutPatio/porDataCriacao` - Obtém layouts por intervalo de data de criação  
 
-### Moto
+---
+
+## 🛵 Moto
+
 - `GET /api/Moto` - Lista todas as motos  
 - `POST /api/Moto` - Cria uma nova moto  
 - `GET /api/Moto/{id}` - Obtém moto por ID  
 - `PUT /api/Moto/{id}` - Atualiza uma moto  
 - `DELETE /api/Moto/{id}` - Remove uma moto  
+- `GET /api/Moto/placa/{placa}` - Obtém moto por placa  
+- `GET /api/Moto/estado/{estado}` - Obtém motos por estado  
+- `GET /api/Moto/contrato/{contratoId}` - Obtém motos por contrato  
 
-### Patio
+---
+
+## 🏢 Patio
+
 - `GET /api/Patio` - Lista todos os pátios  
 - `POST /api/Patio` - Cria um novo pátio  
 - `GET /api/Patio/{id}` - Obtém pátio por ID  
 - `PUT /api/Patio/{id}` - Atualiza um pátio  
 - `DELETE /api/Patio/{id}` - Deleta um pátio  
+- `GET /api/Patio/buscar-por-nome` - Busca pátios pelo nome contendo  
+- `GET /api/Patio/motos-disponiveis-maior-que` - Busca pátios com motos disponíveis acima de uma quantidade  
+- `GET /api/Patio/data-posterior` - Busca pátios por data posterior  
+- `GET /api/Patio/data-anterior` - Busca pátios por data anterior  
 
-### Permissao
+---
+
+## 🔐 Permissao
+
 - `GET /api/Permissao` - Lista todas as permissões  
 - `POST /api/Permissao` - Cria uma nova permissão  
 - `GET /api/Permissao/{id}` - Obtém permissão por ID  
 - `PUT /api/Permissao/{id}` - Atualiza uma permissão  
 - `DELETE /api/Permissao/{id}` - Deleta uma permissão  
+- `GET /api/Permissao/buscar-por-nome` - Busca permissões pelo nome  
+- `GET /api/Permissao/buscar-por-descricao` - Busca permissões pela descrição  
 
-### QrCodePonto
+---
+
+## 🧾 QrCodePonto
+
 - `GET /api/QrCodePonto` - Lista todos os QR Codes de ponto  
 - `POST /api/QrCodePonto` - Cria um novo QR Code de ponto  
 - `GET /api/QrCodePonto/{id}` - Obtém QR Code de ponto por ID  
 - `PUT /api/QrCodePonto/{id}` - Atualiza um QR Code de ponto  
 - `DELETE /api/QrCodePonto/{id}` - Deleta um QR Code de ponto  
+- `GET /api/QrCodePonto/identificador/{identificador}` - Obtém QR Code por identificador  
+- `GET /api/QrCodePonto/layoutpatio/{layoutPatioId}` - Lista QR Codes por LayoutPatioId  
+- `GET /api/QrCodePonto/posx` - Lista QR Codes por faixa de PosX  
+- `GET /api/QrCodePonto/posy` - Lista QR Codes por faixa de PosY  
 
-### Telefone
+---
+
+## ☎️ Telefone
+
 - `GET /api/Telefone` - Lista todos os telefones  
 - `POST /api/Telefone` - Cria um novo telefone  
 - `GET /api/Telefone/{id}` - Obtém telefone por ID  
 - `PUT /api/Telefone/{id}` - Atualiza um telefone  
 - `DELETE /api/Telefone/{id}` - Deleta um telefone  
+- `GET /api/Telefone/por-numero/{numero}` - Lista telefones por número  
+- `GET /api/Telefone/por-usuario/{usuarioId}` - Lista telefones por ID de usuário  
+- `GET /api/Telefone/por-tipo/{tipo}` - Lista telefones por tipo  
 
-### Usuario
+---
+
+## 👤 Usuario
+
 - `GET /api/Usuario` - Lista todos os usuários  
 - `POST /api/Usuario` - Cria um novo usuário  
 - `GET /api/Usuario/{id}` - Obtém usuário por ID  
 - `PUT /api/Usuario/{id}` - Atualiza um usuário  
 - `DELETE /api/Usuario/{id}` - Deleta um usuário  
+- `GET /api/Usuario/email/{email}` - Obtém usuário por e-mail  
 
-### UsuarioPermissao
+---
+
+## 🧑‍🤝‍🧑 UsuarioPermissao
+
 - `GET /api/UsuarioPermissao` - Lista todas as permissões de usuários  
 - `POST /api/UsuarioPermissao` - Cria uma nova permissão de usuário  
-- `GET /api/UsuarioPermissao/usuario/{usuarioId}/permissao/{permissaoId}` - Obtém permissão de usuário por ID composto  
+- `GET /api/UsuarioPermissao/usuario/{usuarioId}/permissao/{permissaoId}` - Obtém permissão por ID composto  
 - `PUT /api/UsuarioPermissao/usuario/{usuarioId}/permissao/{permissaoId}` - Atualiza uma permissão de usuário  
 - `DELETE /api/UsuarioPermissao/usuario/{usuarioId}/permissao/{permissaoId}` - Deleta uma permissão de usuário  
+- `GET /api/UsuarioPermissao/usuario/{usuarioId}` - Lista permissões por ID de usuário  
+- `GET /api/UsuarioPermissao/permissao/{permissaoId}` - Lista usuários por ID de permissão  
 
 ## Implementações Futuras & TODO's
 
