@@ -36,6 +36,12 @@ Essa integração permite o acompanhamento via aplicativo, promovendo **eficiên
 
 TODO -> Referenciar arquivo
 
+## Dockerfile
+
+[Dockerfile](./Mottracker/Dockerfile)
+
+**Observação**: Em produção, o ideal é usar a imagem aspnet apenas para executar a aplicação, deixando as migrações para serem feitas fora do container ou em um container separado com o SDK. Isso torna a imagem final mais leve e segura. Contudo, optamos por utilizar o SDK na imagem para facilitar o desenvolvimento do projeto.
+
 ## Instalação do Projeto via Docker (Entrega DevOps)
 
 ### Requisitos
@@ -48,7 +54,7 @@ TODO -> Referenciar arquivo
 Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais do Oracle DB:
 
 ```bash
-  docker run \
+  docker run -d \
   -e ORACLE_USER=seusuario \
   -e ORACLE_PASSWORD=suasenha \
   -e ORACLE_HOST=oracle.fiap.com.br \
@@ -61,7 +67,7 @@ Utilize o comando abaixo, substituindo meuuser e minhasenha com suas credenciais
 ```
 
 ```bash
-docker run \
+docker run -d \
   -e ORACLE_USER=seusuario           # Usuário do banco Oracle
   -e ORACLE_PASSWORD=suasenha        # Senha do usuário Oracle
   -e ORACLE_HOST=oracle.fiap.com.br  # Host do banco Oracle
