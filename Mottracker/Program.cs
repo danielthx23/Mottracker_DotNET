@@ -19,9 +19,31 @@ builder.Services.AddCors(options =>
 });
 
 // Add DbContext and configure Oracle connection
-builder.Services.AddDbContext<ApplicationContext>(x => {
-    x.UseOracle(builder.Configuration.GetConnectionString("Oracle"));
-}); 
+string connectionString = builder.Configuration.GetConnectionString("Oracle");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    var oracleUser = Environment.GetEnvironmentVariable("ORACLE_USER");
+    var oraclePassword = Environment.GetEnvironmentVariable("ORACLE_PASSWORD");
+    var oracleHost = Environment.GetEnvironmentVariable("ORACLE_HOST");
+    var oraclePort = Environment.GetEnvironmentVariable("ORACLE_PORT");
+    var oracleSid = Environment.GetEnvironmentVariable("ORACLE_SID");
+
+    if (!string.IsNullOrEmpty(oracleUser) && !string.IsNullOrEmpty(oraclePassword))
+    {
+        connectionString = $"Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={oracleHost})(PORT={oraclePort})))(CONNECT_DATA=(SERVER=DEDICATED)(SID={oracleSid})));User Id={oracleUser};Password={oraclePassword};";
+    }
+    else
+    {
+        throw new Exception("Nenhuma string de conexão Oracle configurada e variáveis de ambiente insuficientes.");
+    }
+}
+
+builder.Services.AddDbContext<ApplicationContext>(x =>
+{
+    x.UseOracle(connectionString);
+});
+
 
 // Register Repositories and Application Services
 builder.Services.AddTransient<ICameraRepository, CameraRepository>();
