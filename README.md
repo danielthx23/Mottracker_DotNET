@@ -137,6 +137,8 @@ Clone o projeto utilizando git
 
 2. Execute as migrations para criar as tabelas no banco Oracle:
 
+   (entre no diretório do projeto primeiro)
+
 ```bash
   dotnet ef database update
 ```
@@ -160,6 +162,10 @@ Após configurar a string de conexão e aplicar as migrations, você pode rodar 
 #### 2. Sem IDE (usando linha de comando)
 
 1. **Restaurar e compilar:**
+
+- Para rodar o backend, entre no diretório `Mottracker_DotNet` antes de executar o comando.
+  
+- Caso deseje rodar o backend de dentro do diretório do projeto .net, altere o caminho e remova a flag `--project Mottracker` no comando correspondente.
 
 ```bash
 dotnet restore Mottracker/Mottracker.csproj
