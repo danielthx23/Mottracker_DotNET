@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
-using Mottracker.Infrastructure.AppData;
+using Mottracker.Infrastructure.Data.AppData;
+using Mottracker.Application.Models;
 
 namespace Mottracker.Infrastructure.Data.Repositories
 {
@@ -14,71 +15,62 @@ namespace Mottracker.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public IEnumerable<UsuarioPermissaoEntity> ObterTodos()
+        public async Task<PageResultModel<IEnumerable<UsuarioPermissaoEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3)
         {
-            return _context.UsuarioPermissao
-                .Include(up => up.Usuario)
-                .Include(up => up.Permissao)
-                .ToList();
+            var totalRegistros = await _context.UsuarioPermissao.CountAsync();
+
+            var result = await _context.UsuarioPermissao
+                .Include(up => up.UsuarioPermissaoUsuario)
+                .Include(up => up.UsuarioPermissaoPermissao)
+                .OrderBy(up => up.UsuarioPermissaoUsuarioId)
+                .Skip(Deslocamento)
+                .Take(RegistrosRetornado)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<UsuarioPermissaoEntity>>
+            {
+                Data = result,
+                Deslocamento = Deslocamento,
+                RegistrosRetornado = RegistrosRetornado,
+                TotalRegistros = totalRegistros
+            };
         }
 
-        public UsuarioPermissaoEntity? ObterPorId(int usuarioId, int permissaoId)
+        public async Task<UsuarioPermissaoEntity?> ObterPorIdAsync(int usuarioId, int permissaoId)
         {
-            return _context.UsuarioPermissao
-                .Include(up => up.Usuario)
-                .Include(up => up.Permissao)
-                .FirstOrDefault(up => up.UsuarioId == usuarioId && up.PermissaoId == permissaoId);
+            return await _context.UsuarioPermissao
+                .Include(up => up.UsuarioPermissaoUsuario)
+                .Include(up => up.UsuarioPermissaoPermissao)
+                .FirstOrDefaultAsync(up => up.UsuarioPermissaoUsuarioId == usuarioId && up.UsuarioPermissaoPermissaoId == permissaoId);
         }
-        
-        public UsuarioPermissaoEntity? Salvar(UsuarioPermissaoEntity entity)
+
+        public async Task<UsuarioPermissaoEntity?> SalvarAsync(UsuarioPermissaoEntity entity)
         {
             _context.UsuarioPermissao.Add(entity);
-            _context.SaveChanges();
-
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public UsuarioPermissaoEntity? Atualizar(UsuarioPermissaoEntity entity)
+        public async Task<UsuarioPermissaoEntity?> AtualizarAsync(UsuarioPermissaoEntity entity)
         {
             _context.UsuarioPermissao.Update(entity);
-            _context.SaveChanges();
-
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public UsuarioPermissaoEntity? Deletar(int usuarioId, int permissaoId)
+        public async Task<UsuarioPermissaoEntity?> DeletarAsync(int usuarioId, int permissaoId)
         {
-            var entity = _context.UsuarioPermissao
-                .FirstOrDefault(up => up.UsuarioId == usuarioId && up.PermissaoId == permissaoId);
-
+            var entity = await _context.UsuarioPermissao
+                .FirstOrDefaultAsync(up => up.UsuarioPermissaoUsuarioId == usuarioId && up.UsuarioPermissaoPermissaoId == permissaoId);
+            
             if (entity is not null)
             {
                 _context.UsuarioPermissao.Remove(entity);
-                _context.SaveChanges();
-
+                await _context.SaveChangesAsync();
                 return entity;
             }
 
             return null;
         }
-
-        public IEnumerable<UsuarioPermissaoEntity> ObterPorIdUsuario(long usuarioId)
-        {
-            return _context.UsuarioPermissao
-                .Include(up => up.Usuario)
-                .Include(up => up.Permissao)
-                .Where(up => up.UsuarioId == usuarioId)
-                .ToList();
-        }
-
-        public IEnumerable<UsuarioPermissaoEntity> ObterPorIdPermissao(long permissaoId)
-        {
-            return _context.UsuarioPermissao
-                .Include(up => up.Usuario)
-                .Include(up => up.Permissao)
-                .Where(up => up.PermissaoId == permissaoId)
-                .ToList();
-        }
-
     }
 }

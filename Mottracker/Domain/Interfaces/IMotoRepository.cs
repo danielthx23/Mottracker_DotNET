@@ -1,17 +1,17 @@
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Enums;
+using Mottracker.Application.Models;
 
 namespace Mottracker.Domain.Interfaces
-{   
+{
     public interface IMotoRepository
     {
-        IEnumerable<MotoEntity> ObterTodos();
-        MotoEntity? ObterPorId(int id);
-        MotoEntity? Salvar(MotoEntity entity);
-        MotoEntity? Atualizar(MotoEntity entity);
-        MotoEntity? Deletar(int id);
-        MotoEntity? ObterPorPlaca(string placaMoto);
-        IEnumerable<MotoEntity> ObterPorEstado(Estados estadoMoto);
-        IEnumerable<MotoEntity> ObterPorIdContrato(long contratoId);
+        Task<PageResultModel<IEnumerable<MotoEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3);
+        Task<MotoEntity?> ObterPorIdAsync(int id);
+        Task<MotoEntity?> SalvarAsync(MotoEntity entity);
+        Task<MotoEntity?> AtualizarAsync(MotoEntity entity);
+        Task<MotoEntity?> DeletarAsync(int id);
+        Task<MotoEntity?> ObterPorPlacaAsync(string placa);
+        Task<PageResultModel<IEnumerable<MotoEntity>>> ObterPorEstadoAsync(Estados estado, int Deslocamento = 0, int RegistrosRetornado = 3);
     }
 }

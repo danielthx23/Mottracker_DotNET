@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
-using Mottracker.Infrastructure.AppData;
+using Mottracker.Infrastructure.Data.AppData;
+using Mottracker.Application.Models;
 
 namespace Mottracker.Infrastructure.Data.Repositories
 {
@@ -14,81 +15,58 @@ namespace Mottracker.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public IEnumerable<QrCodePontoEntity> ObterTodos()
+        public async Task<PageResultModel<IEnumerable<QrCodePontoEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3)
         {
-            return _context.QrCodePonto
-                .Include(q => q.LayoutPatio)
-                .ToList();
+            var totalRegistros = await _context.QrCodePonto.CountAsync();
+
+            var result = await _context.QrCodePonto
+                .Include(q => q.LayoutPatioQrCode)
+                .OrderBy(q => q.IdQrCodePonto)
+                .Skip(Deslocamento)
+                .Take(RegistrosRetornado)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<QrCodePontoEntity>>
+            {
+                Data = result,
+                Deslocamento = Deslocamento,
+                RegistrosRetornado = RegistrosRetornado,
+                TotalRegistros = totalRegistros
+            };
         }
 
-        public QrCodePontoEntity? ObterPorId(int id)
+        public async Task<QrCodePontoEntity?> ObterPorIdAsync(int id)
         {
-            return _context.QrCodePonto
-                .Include(q => q.LayoutPatio)
-                .FirstOrDefault(q => q.IdQrCodePonto == id);
+            return await _context.QrCodePonto
+                .Include(q => q.LayoutPatioQrCode)
+                .FirstOrDefaultAsync(q => q.IdQrCodePonto == id);
         }
 
-        public QrCodePontoEntity? Salvar(QrCodePontoEntity entity)
+        public async Task<QrCodePontoEntity?> SalvarAsync(QrCodePontoEntity entity)
         {
             _context.QrCodePonto.Add(entity);
-            _context.SaveChanges();
-
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public QrCodePontoEntity? Atualizar(QrCodePontoEntity entity)
+        public async Task<QrCodePontoEntity?> AtualizarAsync(QrCodePontoEntity entity)
         {
             _context.QrCodePonto.Update(entity);
-            _context.SaveChanges();
-
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public QrCodePontoEntity? Deletar(int id)
+        public async Task<QrCodePontoEntity?> DeletarAsync(int id)
         {
-            var entity = _context.QrCodePonto.Find(id);
-
+            var entity = await _context.QrCodePonto.FindAsync(id);
             if (entity is not null)
             {
                 _context.QrCodePonto.Remove(entity);
-                _context.SaveChanges();
-
+                await _context.SaveChangesAsync();
                 return entity;
             }
 
             return null;
         }
-
-        public QrCodePontoEntity? ObterPorIdentificador(string identificadorQrCode)
-        {
-            return _context.QrCodePonto
-                .Include(q => q.LayoutPatio)
-                .FirstOrDefault(q => q.IdentificadorQrCode == identificadorQrCode);
-        }
-
-        public IEnumerable<QrCodePontoEntity> ObterPorIdLayoutPatio(long layoutPatioId)
-        {
-            return _context.QrCodePonto
-                .Include(q => q.LayoutPatio)
-                .Where(q => q.LayoutPatioId == layoutPatioId)
-                .ToList();
-        }
-
-        public IEnumerable<QrCodePontoEntity> ObterPorPosicaoXEntre(float posXInicial, float posXFinal)
-        {
-            return _context.QrCodePonto
-                .Include(q => q.LayoutPatio)
-                .Where(q => q.PosX >= posXInicial && q.PosX <= posXFinal)
-                .ToList();
-        }
-
-        public IEnumerable<QrCodePontoEntity> ObterPorPosicaoYEntre(float posYInicial, float posYFinal)
-        {
-            return _context.QrCodePonto
-                .Include(q => q.LayoutPatio)
-                .Where(q => q.PosY >= posYInicial && q.PosY <= posYFinal)
-                .ToList();
-        }
-
     }
 }

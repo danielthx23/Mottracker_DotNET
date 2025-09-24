@@ -1,16 +1,14 @@
 using Mottracker.Domain.Entities;
+using Mottracker.Application.Models;
 
 namespace Mottracker.Domain.Interfaces
-{   
+{
     public interface ITelefoneRepository
     {
-        IEnumerable<TelefoneEntity> ObterTodos();
-        TelefoneEntity? ObterPorId(int id);
-        TelefoneEntity? Salvar(TelefoneEntity entity);
-        TelefoneEntity? Atualizar(TelefoneEntity entity);
-        TelefoneEntity? Deletar(int id);
-        IEnumerable<TelefoneEntity> ObterPorNumero(string numero);
-        IEnumerable<TelefoneEntity> ObterPorIdUsuario(long usuarioId);
-        IEnumerable<TelefoneEntity> ObterPorTipo(string tipo);
+        Task<PageResultModel<IEnumerable<TelefoneEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3);
+        Task<TelefoneEntity?> ObterPorIdAsync(int id);
+        Task<TelefoneEntity?> SalvarAsync(TelefoneEntity entity);
+        Task<TelefoneEntity?> AtualizarAsync(TelefoneEntity entity);
+        Task<TelefoneEntity?> DeletarAsync(int id);
     }
 }

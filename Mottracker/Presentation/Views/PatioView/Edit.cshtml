@@ -1,0 +1,45 @@
+@model Mottracker.Application.Dtos.Patio.PatioRequestDto
+
+@{
+    ViewData["Title"] = "Editar Pátio";
+}
+
+<h1>Editar</h1>
+
+<h4>Pátio</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="NomePatio" class="control-label">Nome do Pátio</label>
+                <input asp-for="NomePatio" class="form-control" />
+                <span asp-validation-for="NomePatio" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="MotosTotaisPatio" class="control-label">Total de Motos</label>
+                <input asp-for="MotosTotaisPatio" class="form-control" type="number" />
+                <span asp-validation-for="MotosTotaisPatio" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="MotosDisponiveisPatio" class="control-label">Motos Disponíveis</label>
+                <input asp-for="MotosDisponiveisPatio" class="form-control" type="number" />
+                <span asp-validation-for="MotosDisponiveisPatio" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="DataPatio" class="control-label">Data do Pátio</label>
+                <input asp-for="DataPatio" class="form-control" type="date" />
+                <span asp-validation-for="DataPatio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,5 +1,4 @@
-﻿# -------- Build stage --------
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+﻿﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
@@ -20,16 +19,26 @@ RUN dotnet publish "Mottracker.csproj" -c $BUILD_CONFIGURATION -o /app/publish /
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS final
 ARG BUILD_CONFIGURATION=Release
 
+RUN useradd -m appuser
+
+USER appuser
+
+ENV PATH="/home/appuser/.dotnet/tools:$PATH"
 RUN dotnet tool install --global dotnet-ef --version 8.0.0
-ENV PATH="$PATH:/root/.dotnet/tools"
 
 WORKDIR /app
 
 COPY --from=publish /app/publish ./
-
+COPY --from=build /src ./src
 COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
 
-ENV ASPNETCORE_URLS=http://+:5169
+USER root
+RUN chmod +x entrypoint.sh && chown -R appuser:appuser /app/src /app/entrypoint.sh
+USER appuser
+
+ENV ASPNETCORE_URLS=http://+:5024
+ENV ASPNETCORE_ENVIRONMENT=Development
+
+EXPOSE 5024
 
 ENTRYPOINT ["./entrypoint.sh"]

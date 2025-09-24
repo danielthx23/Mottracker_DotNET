@@ -1,0 +1,65 @@
+@model IEnumerable<Mottracker.Application.Dtos.Contrato.ContratoResponseDto>
+
+@{
+    ViewData["Title"] = "Contratos";
+}
+
+<h1>Contratos</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Criar Novo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Data de Entrada
+            </th>
+            <th>
+                Data de Saída
+            </th>
+            <th>
+                Contrato Ativo
+            </th>
+            <th>
+                Renovação Automática
+            </th>
+            <th>
+                Usuário
+            </th>
+            <th>
+                Moto
+            </th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataEntrada)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataSaida)
+            </td>
+            <td>
+                @(item.AtivoContrato ? "Sim" : "Não")
+            </td>
+            <td>
+                @(item.RenovacaoAutomatica ? "Sim" : "Não")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Usuario.NomeUsuario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Moto.PlacaMoto)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdContrato" class="btn btn-warning btn-sm">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.IdContrato" class="btn btn-info btn-sm">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdContrato" class="btn btn-danger btn-sm">Excluir</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

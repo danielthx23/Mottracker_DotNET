@@ -1,15 +1,14 @@
 using Mottracker.Domain.Entities;
+using Mottracker.Application.Models;
 
 namespace Mottracker.Domain.Interfaces
-{   
+{
     public interface IUsuarioPermissaoRepository
     {
-        IEnumerable<UsuarioPermissaoEntity> ObterTodos();
-        UsuarioPermissaoEntity? ObterPorId(int usuarioId, int permissaoId);
-        UsuarioPermissaoEntity? Salvar(UsuarioPermissaoEntity entity);
-        UsuarioPermissaoEntity? Atualizar(UsuarioPermissaoEntity entity);
-        UsuarioPermissaoEntity? Deletar(int usuarioId, int permissaoId);
-        IEnumerable<UsuarioPermissaoEntity> ObterPorIdUsuario(long usuarioId);
-        IEnumerable<UsuarioPermissaoEntity> ObterPorIdPermissao(long permissaoId);
+        Task<PageResultModel<IEnumerable<UsuarioPermissaoEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3);
+        Task<UsuarioPermissaoEntity?> ObterPorIdAsync(int usuarioId, int permissaoId);
+        Task<UsuarioPermissaoEntity?> SalvarAsync(UsuarioPermissaoEntity entity);
+        Task<UsuarioPermissaoEntity?> AtualizarAsync(UsuarioPermissaoEntity entity);
+        Task<UsuarioPermissaoEntity?> DeletarAsync(int usuarioId, int permissaoId);
     }
 }

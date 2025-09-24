@@ -1,15 +1,14 @@
 using Mottracker.Domain.Entities;
+using Mottracker.Application.Models;
 
 namespace Mottracker.Domain.Interfaces
-{   
+{
     public interface ILayoutPatioRepository
     {
-        IEnumerable<LayoutPatioEntity> ObterTodos();
-        LayoutPatioEntity? ObterPorId(int id);
-        LayoutPatioEntity? Salvar(LayoutPatioEntity entity);
-        LayoutPatioEntity? Atualizar(LayoutPatioEntity entity);
-        LayoutPatioEntity? Deletar(int id);
-        IEnumerable<LayoutPatioEntity> ObterPorIdPatio(long patioId);
-        IEnumerable<LayoutPatioEntity> ObterPorDataCriacaoEntre(DateTime dataInicio, DateTime dataFim);
+        Task<PageResultModel<IEnumerable<LayoutPatioEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3);
+        Task<LayoutPatioEntity?> ObterPorIdAsync(int id);
+        Task<LayoutPatioEntity?> SalvarAsync(LayoutPatioEntity entity);
+        Task<LayoutPatioEntity?> AtualizarAsync(LayoutPatioEntity entity);
+        Task<LayoutPatioEntity?> DeletarAsync(int id);
     }
 }

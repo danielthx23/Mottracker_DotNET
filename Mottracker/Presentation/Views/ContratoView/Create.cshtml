@@ -1,0 +1,61 @@
+@model Mottracker.Application.Dtos.Contrato.ContratoRequestDto
+
+@{
+    ViewData["Title"] = "Criar Contrato";
+}
+
+<h1>Criar</h1>
+
+<h4>Contrato</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="DataEntrada" class="control-label">Data de Entrada</label>
+                <input asp-for="DataEntrada" class="form-control" type="date" />
+                <span asp-validation-for="DataEntrada" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="DataSaida" class="control-label">Data de Saída</label>
+                <input asp-for="DataSaida" class="form-control" type="date" />
+                <span asp-validation-for="DataSaida" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="AtivoContrato" class="control-label">Contrato Ativo</label>
+                <select asp-for="AtivoContrato" class="form-control">
+                    <option value="1">Sim</option>
+                    <option value="0">Não</option>
+                </select>
+                <span asp-validation-for="AtivoContrato" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="RenovacaoAutomatica" class="control-label">Renovação Automática</label>
+                <select asp-for="RenovacaoAutomatica" class="form-control">
+                    <option value="1">Sim</option>
+                    <option value="0">Não</option>
+                </select>
+                <span asp-validation-for="RenovacaoAutomatica" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="UsuarioContratoId" class="control-label">ID do Usuário</label>
+                <input asp-for="UsuarioContratoId" class="form-control" type="number" />
+                <span asp-validation-for="UsuarioContratoId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="MotoContratoId" class="control-label">ID da Moto</label>
+                <input asp-for="MotoContratoId" class="form-control" type="number" />
+                <span asp-validation-for="MotoContratoId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

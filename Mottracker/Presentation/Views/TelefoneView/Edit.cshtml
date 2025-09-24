@@ -1,0 +1,40 @@
+@model Mottracker.Application.Dtos.Telefone.TelefoneRequestDto
+
+@{
+    ViewData["Title"] = "Editar Telefone";
+}
+
+<h1>Editar</h1>
+
+<h4>Telefone</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="NumeroTelefone" class="control-label">Número do Telefone</label>
+                <input asp-for="NumeroTelefone" class="form-control" />
+                <span asp-validation-for="NumeroTelefone" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="TipoTelefone" class="control-label">Tipo do Telefone</label>
+                <input asp-for="TipoTelefone" class="form-control" />
+                <span asp-validation-for="TipoTelefone" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="UsuarioId" class="control-label">ID do Usuário</label>
+                <input asp-for="UsuarioId" class="form-control" type="number" />
+                <span asp-validation-for="UsuarioId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

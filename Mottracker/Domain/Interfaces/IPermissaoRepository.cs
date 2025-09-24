@@ -1,15 +1,14 @@
 using Mottracker.Domain.Entities;
+using Mottracker.Application.Models;
 
 namespace Mottracker.Domain.Interfaces
-{   
+{
     public interface IPermissaoRepository
     {
-        IEnumerable<PermissaoEntity> ObterTodos();
-        PermissaoEntity? ObterPorId(int id);
-        PermissaoEntity? Salvar(PermissaoEntity entity);
-        PermissaoEntity? Atualizar(PermissaoEntity entity);
-        PermissaoEntity? Deletar(int id);
-        IEnumerable<PermissaoEntity> ObterPorNomeContendo(string nomePermissao);
-        IEnumerable<PermissaoEntity> ObterPorDescricaoContendo(string descricao);
+        Task<PageResultModel<IEnumerable<PermissaoEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3);
+        Task<PermissaoEntity?> ObterPorIdAsync(int id);
+        Task<PermissaoEntity?> SalvarAsync(PermissaoEntity entity);
+        Task<PermissaoEntity?> AtualizarAsync(PermissaoEntity entity);
+        Task<PermissaoEntity?> DeletarAsync(int id);
     }
 }

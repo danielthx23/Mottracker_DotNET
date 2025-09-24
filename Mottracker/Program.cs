@@ -1,9 +1,14 @@
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using Mottracker.Infrastructure.AppData;
+using Microsoft.Extensions.FileProviders;
 using Mottracker.Application.Interfaces;
 using Mottracker.Application.Services;
 using Mottracker.Domain.Interfaces;
+using Mottracker.Infrastructure.AppData;
 using Mottracker.Infrastructure.Data.Repositories;
+using Swashbuckle.AspNetCore.Filters;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +49,16 @@ builder.Services.AddDbContext<ApplicationContext>(x =>
     x.UseOracle(connectionString);
 });
 
+builder.Services.AddControllersWithViews()
+    .AddRazorOptions(options =>
+    {
+        options.ViewLocationFormats.Clear();
+        options.ViewLocationFormats.Add("/Presentation/Views/{1}/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Presentation/Views/Shared/{0}.cshtml");
+    });
+
+builder.Services.AddControllersWithViews();
+
 
 // Register Repositories and Application Services
 builder.Services.AddTransient<ICameraRepository, CameraRepository>();
@@ -72,13 +87,43 @@ builder.Services.AddTransient<IUsuarioPermissaoApplicationService, UsuarioPermis
 
 // Add controllers
 builder.Services.AddControllers();
-
-// Add Swagger/OpenAPI configuration
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
+    c.ExampleFilters();
 });
+
+builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
+
+builder.Services.AddRateLimiter(options => {
+
+    options.AddFixedWindowLimiter(policyName: "rateLimitePolicy", opt => {
+        opt.PermitLimit = 5;
+        opt.Window = TimeSpan.FromSeconds(20);
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        opt.QueueLimit = 2;
+
+    });
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
+builder.Services.AddResponseCompression(options => {
+    //options.EnableForHttps = true;
+    options.Providers.Add<BrotliCompressionProvider>();
+    options.Providers.Add<GzipCompressionProvider>();
+});
+
+builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+{
+    options.Level = System.IO.Compression.CompressionLevel.Fastest;
+});
+
+builder.Services.Configure<GzipCompressionProviderOptions>(options => {
+    options.Level = System.IO.Compression.CompressionLevel.Fastest;
+});
+
 
 var app = builder.Build();
 
@@ -88,10 +133,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+}
 
 app.UseCors("AllowReactApp");
 
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Presentation", "wwwroot")),
+    RequestPath = ""
+});
+
 app.UseAuthorization();
+
+app.UseRateLimiter();
 
 app.MapControllers();
 

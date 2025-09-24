@@ -1,16 +1,17 @@
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Enums;
+using Mottracker.Application.Models;
 
 namespace Mottracker.Domain.Interfaces
-{   
+{
     public interface ICameraRepository
     {
-        IEnumerable<CameraEntity> ObterTodos();
-        CameraEntity? ObterPorId(int id);
-        CameraEntity? Salvar(CameraEntity entity);
-        CameraEntity? Atualizar(CameraEntity entity);
-        CameraEntity? Deletar(int id);
-        IEnumerable<CameraEntity> ObterPorNome(string nomeCamera);
-        IEnumerable<CameraEntity> ObterPorStatus(CameraStatus status);
+        Task<PageResultModel<IEnumerable<CameraEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3);
+        Task<CameraEntity?> ObterPorIdAsync(int id);
+        Task<CameraEntity?> SalvarAsync(CameraEntity entity);
+        Task<CameraEntity?> AtualizarAsync(CameraEntity entity);
+        Task<CameraEntity?> DeletarAsync(int id);
+        Task<PageResultModel<IEnumerable<CameraEntity>>> ObterPorNomeAsync(string nome, int Deslocamento = 0, int RegistrosRetornado = 3);
+        Task<PageResultModel<IEnumerable<CameraEntity>>> ObterPorStatusAsync(CameraStatus status, int Deslocamento = 0, int RegistrosRetornado = 3);
     }
 }

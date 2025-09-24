@@ -1,0 +1,53 @@
+@model IEnumerable<Mottracker.Application.Dtos.QrCodePonto.QrCodePontoResponseDto>
+
+@{
+    ViewData["Title"] = "QR Code Pontos";
+}
+
+<h1>QR Code Pontos</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Criar Novo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdentificadorQrCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PosX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PosY)
+            </th>
+            <th>
+                Layout do Pátio
+            </th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdentificadorQrCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PosX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PosY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LayoutPatio.NomeLayout)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdQrCodePonto" class="btn btn-warning btn-sm">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.IdQrCodePonto" class="btn btn-info btn-sm">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdQrCodePonto" class="btn btn-danger btn-sm">Excluir</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

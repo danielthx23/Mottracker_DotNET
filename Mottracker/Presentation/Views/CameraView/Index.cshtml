@@ -1,0 +1,65 @@
+@model IEnumerable<Mottracker.Application.Dtos.Camera.CameraResponseDto>
+
+@{
+    ViewData["Title"] = "Câmeras";
+}
+
+<h1>Câmeras</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Criar Nova</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NomeCamera)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IpCamera)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PosX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PosY)
+            </th>
+            <th>
+                Pátio
+            </th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomeCamera)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IpCamera)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PosX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PosY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patio.NomePatio)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdCamera" class="btn btn-warning btn-sm">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.IdCamera" class="btn btn-info btn-sm">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdCamera" class="btn btn-danger btn-sm">Excluir</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

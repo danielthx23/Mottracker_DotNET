@@ -1,0 +1,42 @@
+@model Mottracker.Application.Dtos.QrCodePonto.QrCodePontoResponseDto
+
+@{
+    ViewData["Title"] = "Detalhes do QR Code Ponto";
+}
+
+<h1>Detalhes</h1>
+
+<div>
+    <h4>QR Code Ponto</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Identificador do QR Code
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdentificadorQrCode)
+        </dd>
+        <dt class="col-sm-2">
+            Posição X
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PosX)
+        </dd>
+        <dt class="col-sm-2">
+            Posição Y
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PosY)
+        </dd>
+        <dt class="col-sm-2">
+            Layout do Pátio
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LayoutPatio.NomeLayout)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.IdQrCodePonto" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+</div>
