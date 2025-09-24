@@ -1,6 +1,5 @@
 using Mottracker.Application.Dtos.Telefone;
-using Mottracker.Application.Models;
-
+using Mottracker.Domain.Entities;
 namespace Mottracker.Application.Interfaces
 {
     public interface ITelefoneUseCase

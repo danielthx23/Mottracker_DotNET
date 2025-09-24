@@ -1,5 +1,5 @@
 using Mottracker.Application.Dtos.Camera;
-using Mottracker.Application.Models;
+using Mottracker.Domain.Entities;
 using Mottracker.Domain.Enums;
 
 namespace Mottracker.Application.Interfaces

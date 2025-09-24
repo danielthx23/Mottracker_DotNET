@@ -1,5 +1,5 @@
 using Mottracker.Application.Dtos.Usuario;
-using Mottracker.Application.Models;
+using Mottracker.Domain.Entities;
 
 namespace Mottracker.Application.Interfaces
 {
