@@ -1,7 +1,6 @@
 using Mottracker.Application.Dtos.Permissao;
 using Mottracker.Application.Interfaces;
 using Mottracker.Application.Mappers;
-using Mottracker.Application.Models;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
 using System.Net;
@@ -147,6 +146,155 @@ namespace Mottracker.Application.UseCases
             {
                 //Log
                 return OperationResult<PermissaoResponseDto?>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        // Métodos de consulta específicos (sem paginação)
+        public async Task<OperationResult<IEnumerable<PermissaoResponseDto>>> ObterTodosPermissoesAsync()
+        {
+            try
+            {
+                var result = await _repository.ObterTodasAsync();
+
+                if (!result.Data.Any())
+                    return OperationResult<IEnumerable<PermissaoResponseDto>>.Failure("Não foram encontradas permissões", (int)HttpStatusCode.NoContent);
+
+                var responseDtos = result.Data.Select(p => p.ToPermissaoResponseDto());
+
+                return OperationResult<IEnumerable<PermissaoResponseDto>>.Success(responseDtos);
+            }
+            catch (Exception ex)
+            {
+                //Log
+                return OperationResult<IEnumerable<PermissaoResponseDto>>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<OperationResult<PermissaoResponseDto?>> SalvarDadosPermissaoAsync(PermissaoRequestDto entity)
+        {
+            try
+            {
+                // Validação básica
+                if (string.IsNullOrWhiteSpace(entity.NomePermissao))
+                    return OperationResult<PermissaoResponseDto?>.Failure("Nome da permissão é obrigatório");
+
+                var result = await _repository.SalvarAsync(entity.ToPermissaoEntity());
+
+                if (result is null)
+                    return OperationResult<PermissaoResponseDto?>.Failure(
+                        "Não foi possível criar a permissão",
+                        (int)HttpStatusCode.UnprocessableEntity);
+
+                var responseDto = result.ToPermissaoResponseDto();
+
+                return OperationResult<PermissaoResponseDto?>.Success(responseDto, (int)HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                //Log
+                return OperationResult<PermissaoResponseDto?>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<OperationResult<PermissaoResponseDto?>> EditarDadosPermissaoAsync(int id, PermissaoRequestDto entity)
+        {
+            try
+            {
+                if (id <= 0)
+                    return OperationResult<PermissaoResponseDto?>.Failure("ID inválido");
+
+                if (string.IsNullOrWhiteSpace(entity.NomePermissao))
+                    return OperationResult<PermissaoResponseDto?>.Failure("Nome da permissão é obrigatório");
+
+                var permissaoExistente = await _repository.ObterPorIdAsync(id);
+                if (permissaoExistente == null)
+                    return OperationResult<PermissaoResponseDto?>.Failure("Permissão não encontrada", (int)HttpStatusCode.NotFound);
+
+                permissaoExistente.NomePermissao = entity.NomePermissao;
+                permissaoExistente.Descricao = entity.Descricao;
+
+                var result = await _repository.AtualizarAsync(permissaoExistente);
+
+                if (result is null)
+                    return OperationResult<PermissaoResponseDto?>.Failure("Não foi possível atualizar a permissão", (int)HttpStatusCode.UnprocessableEntity);
+
+                var responseDto = result.ToPermissaoResponseDto();
+
+                return OperationResult<PermissaoResponseDto?>.Success(responseDto);
+            }
+            catch (Exception ex)
+            {
+                //Log
+                return OperationResult<PermissaoResponseDto?>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<OperationResult<PermissaoResponseDto?>> DeletarDadosPermissaoAsync(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                    return OperationResult<PermissaoResponseDto?>.Failure("ID inválido");
+
+                var result = await _repository.DeletarAsync(id);
+
+                if (result is null)
+                    return OperationResult<PermissaoResponseDto?>.Failure("Permissão não encontrada", (int)HttpStatusCode.NotFound);
+
+                var responseDto = result.ToPermissaoResponseDto();
+
+                return OperationResult<PermissaoResponseDto?>.Success(responseDto);
+            }
+            catch (Exception ex)
+            {
+                //Log
+                return OperationResult<PermissaoResponseDto?>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<OperationResult<IEnumerable<PermissaoResponseDto>>> ObterPermissaoPorNomeAsync(string nomePermissao)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(nomePermissao))
+                    return OperationResult<IEnumerable<PermissaoResponseDto>>.Failure("Nome da permissão é obrigatório");
+
+                var result = await _repository.ObterPorNomeAsync(nomePermissao);
+
+                if (!result.Data.Any())
+                    return OperationResult<IEnumerable<PermissaoResponseDto>>.Failure("Não foram encontradas permissões para o nome especificado", (int)HttpStatusCode.NoContent);
+
+                var responseDtos = result.Data.Select(p => p.ToPermissaoResponseDto());
+
+                return OperationResult<IEnumerable<PermissaoResponseDto>>.Success(responseDtos);
+            }
+            catch (Exception ex)
+            {
+                //Log
+                return OperationResult<IEnumerable<PermissaoResponseDto>>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<OperationResult<IEnumerable<PermissaoResponseDto>>> ObterPermissaoPorDescricaoAsync(string descricao)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(descricao))
+                    return OperationResult<IEnumerable<PermissaoResponseDto>>.Failure("Descrição é obrigatória");
+
+                var result = await _repository.ObterPorDescricaoAsync(descricao);
+
+                if (!result.Data.Any())
+                    return OperationResult<IEnumerable<PermissaoResponseDto>>.Failure("Não foram encontradas permissões para a descrição especificada", (int)HttpStatusCode.NoContent);
+
+                var responseDtos = result.Data.Select(p => p.ToPermissaoResponseDto());
+
+                return OperationResult<IEnumerable<PermissaoResponseDto>>.Success(responseDtos);
+            }
+            catch (Exception ex)
+            {
+                //Log
+                return OperationResult<IEnumerable<PermissaoResponseDto>>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
             }
         }
 

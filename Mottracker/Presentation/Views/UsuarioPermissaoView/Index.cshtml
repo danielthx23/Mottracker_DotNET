@@ -31,9 +31,9 @@
                 @Html.DisplayFor(modelItem => item.Permissao.NomePermissao)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-usuarioId="@item.UsuarioPermissaoUsuarioId" asp-route-permissaoId="@item.UsuarioPermissaoPermissaoId" class="btn btn-warning btn-sm">Editar</a> |
-                <a asp-action="Details" asp-route-usuarioId="@item.UsuarioPermissaoUsuarioId" asp-route-permissaoId="@item.UsuarioPermissaoPermissaoId" class="btn btn-info btn-sm">Detalhes</a> |
-                <a asp-action="Delete" asp-route-usuarioId="@item.UsuarioPermissaoUsuarioId" asp-route-permissaoId="@item.UsuarioPermissaoPermissaoId" class="btn btn-danger btn-sm">Excluir</a>
+                <a asp-action="Edit" asp-route-usuarioId="@item.IdUsuario" asp-route-permissaoId="@item.IdPermissao" class="btn btn-warning btn-sm">Editar</a> |
+                <a asp-action="Details" asp-route-usuarioId="@item.IdUsuario" asp-route-permissaoId="@item.IdPermissao" class="btn btn-info btn-sm">Detalhes</a> |
+                <a asp-action="Delete" asp-route-usuarioId="@item.IdUsuario" asp-route-permissaoId="@item.IdPermissao" class="btn btn-danger btn-sm">Excluir</a>
             </td>
         </tr>
 }

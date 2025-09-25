@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
-using Mottracker.Infrastructure.Data.AppData;
-using Mottracker.Application.Models;
+using Mottracker.Infrastructure.AppData;
 
 namespace Mottracker.Infrastructure.Data.Repositories
 {
@@ -116,6 +115,132 @@ namespace Mottracker.Infrastructure.Data.Repositories
                 Deslocamento = Deslocamento,
                 RegistrosRetornado = RegistrosRetornado,
                 TotalRegistros = totalRegistros
+            };
+        }
+
+        // Métodos de consulta específicos (sem paginação)
+        public async Task<PageResultModel<IEnumerable<ContratoEntity>>> ObterTodasAsync()
+        {
+            var result = await _context.Contrato
+                .Include(c => c.UsuarioContrato)
+                .Include(c => c.MotoContrato)
+                .OrderBy(c => c.IdContrato)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<ContratoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<ContratoEntity>>> ObterPorAtivoAsync(int ativo)
+        {
+            var result = await _context.Contrato
+                .Include(c => c.UsuarioContrato)
+                .Include(c => c.MotoContrato)
+                .Where(c => c.AtivoContrato == ativo)
+                .OrderBy(c => c.IdContrato)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<ContratoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<ContratoEntity>>> ObterPorUsuarioAsync(long usuarioId)
+        {
+            var result = await _context.Contrato
+                .Include(c => c.UsuarioContrato)
+                .Include(c => c.MotoContrato)
+                .Where(c => c.UsuarioContratoId == usuarioId)
+                .OrderBy(c => c.IdContrato)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<ContratoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<ContratoEntity>>> ObterPorMotoAsync(long motoId)
+        {
+            var result = await _context.Contrato
+                .Include(c => c.UsuarioContrato)
+                .Include(c => c.MotoContrato)
+                .Where(c => c.MotoContrato.IdMoto == motoId)
+                .OrderBy(c => c.IdContrato)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<ContratoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<ContratoEntity>>> ObterContratosNaoExpiradosAsync(DateTime dataAtual)
+        {
+            var result = await _context.Contrato
+                .Include(c => c.UsuarioContrato)
+                .Include(c => c.MotoContrato)
+                .Where(c => c.DataDeExpiracaoContrato > dataAtual)
+                .OrderBy(c => c.IdContrato)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<ContratoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<ContratoEntity>>> ObterPorRenovacaoAutomaticaAsync(int renovacaoAutomatica)
+        {
+            var result = await _context.Contrato
+                .Include(c => c.UsuarioContrato)
+                .Include(c => c.MotoContrato)
+                .Where(c => c.RenovacaoAutomaticaContrato == renovacaoAutomatica)
+                .OrderBy(c => c.IdContrato)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<ContratoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<ContratoEntity>>> ObterPorDataEntradaEntreAsync(DateTime dataInicio, DateTime dataFim)
+        {
+            var result = await _context.Contrato
+                .Include(c => c.UsuarioContrato)
+                .Include(c => c.MotoContrato)
+                .Where(c => c.DataDeEntradaContrato >= dataInicio && c.DataDeEntradaContrato <= dataFim)
+                .OrderBy(c => c.IdContrato)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<ContratoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
             };
         }
     }

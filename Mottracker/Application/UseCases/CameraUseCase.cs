@@ -1,10 +1,10 @@
 using Mottracker.Application.Dtos.Camera;
 using Mottracker.Application.Interfaces;
 using Mottracker.Application.Mappers;
-using Mottracker.Application.Models;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
 using System.Net;
+using Mottracker.Domain.Enums;
 
 namespace Mottracker.Application.UseCases
 {

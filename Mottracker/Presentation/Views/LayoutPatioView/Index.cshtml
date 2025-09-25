@@ -13,10 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NomeLayout)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DescricaoLayout)
+                @Html.DisplayNameFor(model => model.Descricao)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DataCriacao)
@@ -31,16 +28,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.NomeLayout)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DescricaoLayout)
+                @Html.DisplayFor(modelItem => item.Descricao)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DataCriacao)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Patio.NomePatio)
+                @Html.DisplayFor(modelItem => item.PatioLayoutPatio.NomePatio)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdLayoutPatio" class="btn btn-warning btn-sm">Editar</a> |

@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.NomePermissao)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DescricaoPermissao)
+                @Html.DisplayNameFor(model => model.Descricao)
             </th>
             <th>Ações</th>
         </tr>
@@ -28,7 +28,7 @@
                 @Html.DisplayFor(modelItem => item.NomePermissao)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DescricaoPermissao)
+                @Html.DisplayFor(modelItem => item.Descricao)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdPermissao" class="btn btn-warning btn-sm">Editar</a> |

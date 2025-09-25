@@ -10,7 +10,8 @@ namespace Mottracker.Docs.Samples
             return new UsuarioPermissaoRequestDto
             {
                 IdUsuario = 1,
-                IdPermissao = 1
+                IdPermissao = 1,
+                PapelUsuarioPermissao = "Administrador"
             };
         }
     }

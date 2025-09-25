@@ -1,7 +1,6 @@
 using Mottracker.Application.Dtos.LayoutPatio;
 using Mottracker.Application.Interfaces;
 using Mottracker.Application.Mappers;
-using Mottracker.Application.Models;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
 using System.Net;
@@ -119,7 +118,7 @@ namespace Mottracker.Application.UseCases
                 layoutExistente.Largura = dto.Largura;
                 layoutExistente.Comprimento = dto.Comprimento;
                 layoutExistente.Altura = dto.Altura;
-                layoutExistente.PatioLayoutPatioId = dto.PatioId;
+                layoutExistente.PatioLayoutPatioId = dto.PatioLayoutPatioId;
 
                 var result = await _repository.AtualizarAsync(layoutExistente);
 
@@ -157,6 +156,162 @@ namespace Mottracker.Application.UseCases
             {
                 //Log
                 return OperationResult<LayoutPatioResponseDto?>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        // Métodos de consulta específicos (sem paginação)
+        public async Task<OperationResult<IEnumerable<LayoutPatioResponseDto>>> ObterTodosLayoutsPatiosAsync()
+        {
+            try
+            {
+                var result = await _repository.ObterTodasAsync();
+
+                if (!result.Data.Any())
+                    return OperationResult<IEnumerable<LayoutPatioResponseDto>>.Failure("Não foram encontrados layouts de pátio", (int)HttpStatusCode.NoContent);
+
+                var responseDtos = result.Data.Select(l => l.ToLayoutPatioResponseDto());
+
+                return OperationResult<IEnumerable<LayoutPatioResponseDto>>.Success(responseDtos);
+            }
+            catch (Exception ex)
+            {
+                //Log
+                return OperationResult<IEnumerable<LayoutPatioResponseDto>>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<OperationResult<LayoutPatioResponseDto?>> SalvarDadosLayoutPatioAsync(LayoutPatioRequestDto entity)
+        {
+            try
+            {
+                // Validação básica
+                if (entity.Largura <= 0)
+                    return OperationResult<LayoutPatioResponseDto?>.Failure("Largura deve ser maior que zero");
+
+                if (entity.Comprimento <= 0)
+                    return OperationResult<LayoutPatioResponseDto?>.Failure("Comprimento deve ser maior que zero");
+
+                var result = await _repository.SalvarAsync(entity.ToLayoutPatioEntity());
+
+                if (result is null)
+                    return OperationResult<LayoutPatioResponseDto?>.Failure(
+                        "Não foi possível criar o layout de pátio",
+                        (int)HttpStatusCode.UnprocessableEntity);
+
+                var responseDto = result.ToLayoutPatioResponseDto();
+
+                return OperationResult<LayoutPatioResponseDto?>.Success(responseDto, (int)HttpStatusCode.Created);
+            }
+            catch (Exception ex)
+            {
+                //Log
+                return OperationResult<LayoutPatioResponseDto?>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<OperationResult<LayoutPatioResponseDto?>> EditarDadosLayoutPatioAsync(int id, LayoutPatioRequestDto entity)
+        {
+            try
+            {
+                if (id <= 0)
+                    return OperationResult<LayoutPatioResponseDto?>.Failure("ID inválido");
+
+                if (entity.Largura <= 0)
+                    return OperationResult<LayoutPatioResponseDto?>.Failure("Largura deve ser maior que zero");
+
+                if (entity.Comprimento <= 0)
+                    return OperationResult<LayoutPatioResponseDto?>.Failure("Comprimento deve ser maior que zero");
+
+                var layoutExistente = await _repository.ObterPorIdAsync(id);
+                if (layoutExistente == null)
+                    return OperationResult<LayoutPatioResponseDto?>.Failure("Layout de pátio não encontrado", (int)HttpStatusCode.NotFound);
+
+                layoutExistente.Descricao = entity.Descricao;
+                layoutExistente.DataCriacao = entity.DataCriacao;
+                layoutExistente.Largura = entity.Largura;
+                layoutExistente.Comprimento = entity.Comprimento;
+                layoutExistente.Altura = entity.Altura;
+                layoutExistente.PatioLayoutPatioId = entity.PatioLayoutPatioId;
+
+                var result = await _repository.AtualizarAsync(layoutExistente);
+
+                if (result is null)
+                    return OperationResult<LayoutPatioResponseDto?>.Failure("Não foi possível atualizar o layout de pátio", (int)HttpStatusCode.UnprocessableEntity);
+
+                var responseDto = result.ToLayoutPatioResponseDto();
+
+                return OperationResult<LayoutPatioResponseDto?>.Success(responseDto);
+            }
+            catch (Exception ex)
+            {
+                //Log
+                return OperationResult<LayoutPatioResponseDto?>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<OperationResult<LayoutPatioResponseDto?>> DeletarDadosLayoutPatioAsync(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                    return OperationResult<LayoutPatioResponseDto?>.Failure("ID inválido");
+
+                var result = await _repository.DeletarAsync(id);
+
+                if (result is null)
+                    return OperationResult<LayoutPatioResponseDto?>.Failure("Layout de pátio não encontrado", (int)HttpStatusCode.NotFound);
+
+                var responseDto = result.ToLayoutPatioResponseDto();
+
+                return OperationResult<LayoutPatioResponseDto?>.Success(responseDto);
+            }
+            catch (Exception ex)
+            {
+                //Log
+                return OperationResult<LayoutPatioResponseDto?>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<OperationResult<IEnumerable<LayoutPatioResponseDto>>> ObterLayoutPatioPorPatioIdAsync(int patioId)
+        {
+            try
+            {
+                if (patioId <= 0)
+                    return OperationResult<IEnumerable<LayoutPatioResponseDto>>.Failure("ID do pátio inválido");
+
+                var result = await _repository.ObterPorPatioIdAsync(patioId);
+
+                if (!result.Data.Any())
+                    return OperationResult<IEnumerable<LayoutPatioResponseDto>>.Failure("Não foram encontrados layouts para o pátio especificado", (int)HttpStatusCode.NoContent);
+
+                var responseDtos = result.Data.Select(l => l.ToLayoutPatioResponseDto());
+
+                return OperationResult<IEnumerable<LayoutPatioResponseDto>>.Success(responseDtos);
+            }
+            catch (Exception ex)
+            {
+                //Log
+                return OperationResult<IEnumerable<LayoutPatioResponseDto>>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<OperationResult<IEnumerable<LayoutPatioResponseDto>>> ObterLayoutPatioPorDataCriacaoAsync(DateTime dataCriacao)
+        {
+            try
+            {
+                var result = await _repository.ObterPorDataCriacaoAsync(dataCriacao);
+
+                if (!result.Data.Any())
+                    return OperationResult<IEnumerable<LayoutPatioResponseDto>>.Failure("Não foram encontrados layouts para a data especificada", (int)HttpStatusCode.NoContent);
+
+                var responseDtos = result.Data.Select(l => l.ToLayoutPatioResponseDto());
+
+                return OperationResult<IEnumerable<LayoutPatioResponseDto>>.Success(responseDtos);
+            }
+            catch (Exception ex)
+            {
+                //Log
+                return OperationResult<IEnumerable<LayoutPatioResponseDto>>.Failure("Erro interno do servidor", (int)HttpStatusCode.InternalServerError);
             }
         }
 

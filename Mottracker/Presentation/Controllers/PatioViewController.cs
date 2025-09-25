@@ -6,36 +6,36 @@ namespace Mottracker.Presentation.Controllers
 {
     public class PatioViewController : Controller
     {
-        private readonly IPatioApplicationService _applicationService;
+        private readonly IPatioUseCase _useCase;
 
-        public PatioViewController(IPatioApplicationService applicationService)
+        public PatioViewController(IPatioUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _applicationService.ObterTodosPatios();
+            var result = await _useCase.ObterTodosPatiosAsync();
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 TempData["Error"] = "Erro ao carregar os pátios";
                 return View(new List<PatioResponseDto>());
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var result = _applicationService.ObterPatioPorId(id);
+            var result = await _useCase.ObterPatioPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         public IActionResult Create()
@@ -45,13 +45,13 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PatioRequestDto patio)
+        public async Task<IActionResult> Create(PatioRequestDto patio)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.SalvarDadosPatio(patio);
+                    var result = await _useCase.SalvarDadosPatioAsync(patio);
                     
                     if (result != null)
                     {
@@ -71,9 +71,9 @@ namespace Mottracker.Presentation.Controllers
             return View(patio);
         }
         
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var result = _applicationService.ObterPatioPorId(id);
+            var result = await _useCase.ObterPatioPorIdAsync(id);
             
             if (result == null)
             {
@@ -82,12 +82,11 @@ namespace Mottracker.Presentation.Controllers
 
             var requestDto = new PatioRequestDto
             {
-                IdPatio = result.IdPatio,
-                NomePatio = result.NomePatio,
-                MotosTotaisPatio = result.MotosTotaisPatio,
-                MotosDisponiveisPatio = result.MotosDisponiveisPatio,
-                DataPatio = result.DataPatio,
-                EnderecoPatioId = result.EnderecoPatio?.IdEndereco
+                IdPatio = result.Value.IdPatio,
+                NomePatio = result.Value.NomePatio,
+                MotosTotaisPatio = result.Value.MotosTotaisPatio,
+                MotosDisponiveisPatio = result.Value.MotosDisponiveisPatio,
+                DataPatio = result.Value.DataPatio
             };
 
             return View(requestDto);
@@ -95,13 +94,13 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, PatioRequestDto patio)
+        public async Task<IActionResult> Edit(int id, PatioRequestDto patio)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.EditarDadosPatio(id, patio);
+                    var result = await _useCase.EditarDadosPatioAsync(id, patio);
                     
                     if (result != null)
                     {
@@ -121,25 +120,25 @@ namespace Mottracker.Presentation.Controllers
             return View(patio);
         }
         
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = _applicationService.ObterPatioPorId(id);
+            var result = await _useCase.ObterPatioPorIdAsync(id);
             
             if (result == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
             {
-                var result = _applicationService.DeletarDadosPatio(id);
+                var result = await _useCase.DeletarDadosPatioAsync(id);
                 
                 if (result != null)
                 {

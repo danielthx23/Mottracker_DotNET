@@ -6,36 +6,36 @@ namespace Mottracker.Presentation.Controllers
 {
     public class CameraViewController : Controller
     {
-        private readonly ICameraApplicationService _applicationService;
+        private readonly ICameraUseCase _useCase;
 
-        public CameraViewController(ICameraApplicationService applicationService)
+        public CameraViewController(ICameraUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _applicationService.ObterTodasCameras();
+            var result = await _useCase.ObterTodasCamerasAsync();
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 TempData["Error"] = "Erro ao carregar as câmeras";
                 return View(new List<CameraResponseDto>());
             }
 
-            return View(result);
+            return View(result.Value.Data);
         }
         
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var result = _applicationService.ObterCameraPorId(id);
+            var result = await _useCase.ObterCameraPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         public IActionResult Create()
@@ -45,15 +45,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CameraRequestDto camera)
+        public async Task<IActionResult> Create(CameraRequestDto camera)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.SalvarDadosCamera(camera);
+                    var result = await _useCase.SalvarCameraAsync(camera);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Câmera criada com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -71,24 +71,24 @@ namespace Mottracker.Presentation.Controllers
             return View(camera);
         }
         
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var result = _applicationService.ObterCameraPorId(id);
+            var result = await _useCase.ObterCameraPorIdAsync(id);
             
-            if (result == null)
+            if (!result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
             var requestDto = new CameraRequestDto
             {
-                IdCamera = result.IdCamera,
-                NomeCamera = result.NomeCamera,
-                IpCamera = result.IpCamera,
-                Status = result.Status,
-                PosX = result.PosX,
-                PosY = result.PosY,
-                PatioId = result.Patio?.IdPatio
+                IdCamera = result.Value.IdCamera,
+                NomeCamera = result.Value.NomeCamera,
+                IpCamera = result.Value.IpCamera,
+                Status = result.Value.Status,
+                PosX = result.Value.PosX,
+                PosY = result.Value.PosY,
+                PatioId = result.Value.Patio?.IdPatio
             };
 
             return View(requestDto);
@@ -96,15 +96,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, CameraRequestDto camera)
+        public async Task<IActionResult> Edit(int id, CameraRequestDto camera)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.EditarDadosCamera(id, camera);
+                    var result = await _useCase.EditarCameraAsync(id, camera);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Câmera atualizada com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -122,27 +122,27 @@ namespace Mottracker.Presentation.Controllers
             return View(camera);
         }
         
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = _applicationService.ObterCameraPorId(id);
+            var result = await _useCase.ObterCameraPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
             {
-                var result = _applicationService.DeletarDadosCamera(id);
+                var result = await _useCase.DeletarCameraAsync(id);
                 
-                if (result != null)
+                if (result != null && result.IsSuccess)
                 {
                     TempData["Success"] = "Câmera deletada com sucesso!";
                 }

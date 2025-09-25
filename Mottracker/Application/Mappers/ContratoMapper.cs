@@ -1,3 +1,4 @@
+using Mottracker.Application.Dtos;
 using Mottracker.Application.Dtos.Contrato;
 using Mottracker.Domain.Entities;
 
@@ -14,10 +15,10 @@ namespace Mottracker.Application.Mappers
                 DataDeEntradaContrato = obj.DataDeEntradaContrato,
                 HorarioDeDevolucaoContrato = obj.HorarioDeDevolucaoContrato,
                 DataDeExpiracaoContrato = obj.DataDeExpiracaoContrato,
-                RenovacaoAutomaticaContrato = obj.RenovacaoAutomaticaContrato ? 1 : 0,
+                RenovacaoAutomaticaContrato = obj.RenovacaoAutomaticaContrato,
                 DataUltimaRenovacaoContrato = obj.DataUltimaRenovacaoContrato,
                 NumeroRenovacoesContrato = obj.NumeroRenovacoesContrato,
-                AtivoContrato = obj.AtivoContrato ? 1 : 0,
+                AtivoContrato = obj.AtivoContrato,
                 ValorToralContrato = obj.ValorToralContrato,
                 QuantidadeParcelas = obj.QuantidadeParcelas,
                 UsuarioContratoId = obj.UsuarioContratoId
@@ -51,10 +52,10 @@ namespace Mottracker.Application.Mappers
                 DataDeEntradaContrato = obj.DataDeEntradaContrato,
                 HorarioDeDevolucaoContrato = obj.HorarioDeDevolucaoContrato,
                 DataDeExpiracaoContrato = obj.DataDeExpiracaoContrato,
-                RenovacaoAutomaticaContrato = obj.RenovacaoAutomaticaContrato == 1,
+                RenovacaoAutomaticaContrato = obj.RenovacaoAutomaticaContrato,
                 DataUltimaRenovacaoContrato = obj.DataUltimaRenovacaoContrato,
                 NumeroRenovacoesContrato = obj.NumeroRenovacoesContrato,
-                AtivoContrato = obj.AtivoContrato == 1,
+                AtivoContrato = obj.AtivoContrato,
                 ValorToralContrato = obj.ValorToralContrato,
                 QuantidadeParcelas = obj.QuantidadeParcelas,
                 UsuarioContrato = obj.UsuarioContrato?.ToUsuarioDto(),

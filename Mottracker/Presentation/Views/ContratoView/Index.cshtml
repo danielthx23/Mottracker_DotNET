@@ -37,22 +37,22 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.DataEntrada)
+                @Html.DisplayFor(modelItem => item.DataDeEntradaContrato)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DataSaida)
+                @Html.DisplayFor(modelItem => item.DataDeExpiracaoContrato)
             </td>
             <td>
-                @(item.AtivoContrato ? "Sim" : "Não")
+                @(item.AtivoContrato == 1 ? "Sim" : "Não")
             </td>
             <td>
-                @(item.RenovacaoAutomatica ? "Sim" : "Não")
+                @(item.RenovacaoAutomaticaContrato == 1 ? "Sim" : "Não")
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Usuario.NomeUsuario)
+                @Html.DisplayFor(modelItem => item.UsuarioContrato.NomeUsuario)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Moto.PlacaMoto)
+                @Html.DisplayFor(modelItem => item.MotoContrato.PlacaMoto)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdContrato" class="btn btn-warning btn-sm">Editar</a> |

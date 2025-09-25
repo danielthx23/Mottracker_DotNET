@@ -13,11 +13,11 @@ namespace Mottracker.Presentation.Controllers
     [ApiController]
     public class QrCodePontoController : ControllerBase
     {
-        private readonly IQrCodePontoApplicationService _applicationService;
+        private readonly IQrCodePontoUseCase _useCase;
 
-        public QrCodePontoController(IQrCodePontoApplicationService applicationService)
+        public QrCodePontoController(IQrCodePontoUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
 
         [HttpGet]
@@ -34,47 +34,46 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
         [SwaggerResponseExample(statusCode: 200, typeof(QrCodePontoResponseListSample))]
         [EnableRateLimiting("rateLimitePolicy")]
-        public IActionResult Get(
+        public async Task<IActionResult> Get(
             [FromQuery, SwaggerParameter("Número de registros a pular (padrão: 0)", Required = false)] int Deslocamento = 0, 
             [FromQuery, SwaggerParameter("Número de registros a retornar (padrão: 3, máximo: 100)", Required = false)] int RegistrosRetornado = 3)
         {
-            var result = _applicationService.ObterTodosQrCodePontos();
+            var result = await _useCase.ObterTodosQrCodePontosAsync(Deslocamento, RegistrosRetornado);
 
-            if (result is not null && result.Any())
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value?.Data?.Select(q => new
                 {
-                    data = result.Select(q => new
-                    {
-                        q.IdQrCodePonto,
-                        q.IdentificadorQrCodePonto,
-                        q.PosXQrCodePonto,
-                        q.PosYQrCodePonto,
-                        q.LayoutPatioQrCodePonto,
-                        links = new
-                        {
-                            self = Url.Action(nameof(GetById), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
-                            put = Url.Action(nameof(Put), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
-                            delete = Url.Action(nameof(Delete), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
-                        }
-                    }),
+                    q.IdQrCodePonto,
+                    q.IdentificadorQrCode,
+                    q.PosX,
+                    q.PosY,
+                    q.LayoutPatio,
                     links = new
                     {
-                        self = Url.Action(nameof(Get), "QrCodePonto", null, Request.Scheme),
-                        create = Url.Action(nameof(Post), "QrCodePonto", null, Request.Scheme),
-                    },
-                    pagina = new
-                    {
-                        Deslocamento,
-                        RegistrosRetornado,
-                        TotalRegistros = result.Count()
+                        self = Url.Action(nameof(GetById), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
                     }
-                };
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(Get), "QrCodePonto", null, Request.Scheme),
+                    create = Url.Action(nameof(Post), "QrCodePonto", null, Request.Scheme),
+                },
+                pagina = new
+                {
+                    result.Value?.Deslocamento,
+                    result.Value?.RegistrosRetornado,
+                    result.Value?.TotalRegistros
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NoContent();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpGet("{id}")]
@@ -88,29 +87,28 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 404, description: "QR Code não encontrado para o ID fornecido")]
         [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult GetById(
+        public async Task<IActionResult> GetById(
             [FromRoute, SwaggerParameter("ID único do QR Code de ponto", Required = true)] int id)
         {
-            var result = _applicationService.ObterQrCodePontoPorId(id);
+            var result = await _useCase.ObterQrCodePontoPorIdAsync(id);
 
-            if (result is not null)
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value,
+                links = new
                 {
-                    data = result,
-                    links = new
-                    {
-                        self = Url.Action(nameof(GetById), "QrCodePonto", new { id }),
-                        get = Url.Action(nameof(Get), "QrCodePonto", null),
-                        put = Url.Action(nameof(Put), "QrCodePonto", new { id }),
-                        delete = Url.Action(nameof(Delete), "QrCodePonto", new { id }),
-                    }
-                };
+                    self = Url.Action(nameof(GetById), "QrCodePonto", new { id }),
+                    get = Url.Action(nameof(Get), "QrCodePonto", null),
+                    put = Url.Action(nameof(Put), "QrCodePonto", new { id }),
+                    delete = Url.Action(nameof(Delete), "QrCodePonto", new { id }),
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NotFound();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpGet("identificador/{identificador}")]
@@ -124,29 +122,39 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 404, description: "QR Code não encontrado para o identificador fornecido")]
         [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult GetByIdentificador(
+        public async Task<IActionResult> GetByIdentificador(
             [FromRoute, SwaggerParameter("Identificador único do QR Code", Required = true)] string identificador)
         {
-            var result = _applicationService.ObterQrCodePontoPorIdentificador(identificador);
+            var result = await _useCase.ObterQrCodePontoPorIdentificadorAsync(identificador);
 
-            if (result is not null)
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value?.Select(q => new
                 {
-                    data = result,
+                    q.IdQrCodePonto,
+                    q.IdentificadorQrCode,
+                    q.PosX,
+                    q.PosY,
+                    q.LayoutPatio,
                     links = new
                     {
-                        self = Url.Action(nameof(GetByIdentificador), "QrCodePonto", new { identificador }, Request.Scheme),
-                        get = Url.Action(nameof(Get), "QrCodePonto", null, Request.Scheme),
-                        put = Url.Action(nameof(Put), "QrCodePonto", new { id = result.IdQrCodePonto }, Request.Scheme),
-                        delete = Url.Action(nameof(Delete), "QrCodePonto", new { id = result.IdQrCodePonto }, Request.Scheme),
+                        self = Url.Action(nameof(GetById), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
                     }
-                };
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(GetByIdentificador), "QrCodePonto", new { identificador }, Request.Scheme),
+                    get = Url.Action(nameof(Get), "QrCodePonto", null, Request.Scheme),
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NotFound();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpGet("layout-patio/{layoutPatioId}")]
@@ -160,40 +168,39 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 400, description: "ID do layout de pátio é obrigatório")]
         [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult GetByLayoutPatioId(
-            [FromRoute, SwaggerParameter("ID único do layout de pátio", Required = true)] long layoutPatioId)
+        public async Task<IActionResult> GetByLayoutPatioId(
+            [FromRoute, SwaggerParameter("ID único do layout de pátio", Required = true)] int layoutPatioId)
         {
-            var result = _applicationService.ObterQrCodePontosPorLayoutPatioId(layoutPatioId);
+            var result = await _useCase.ObterQrCodePontoPorLayoutPatioIdAsync(layoutPatioId);
 
-            if (result is not null && result.Any())
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value?.Select(q => new
                 {
-                    data = result.Select(q => new
-                    {
-                        q.IdQrCodePonto,
-                        q.IdentificadorQrCodePonto,
-                        q.PosXQrCodePonto,
-                        q.PosYQrCodePonto,
-                        q.LayoutPatioQrCodePonto,
-                        links = new
-                        {
-                            self = Url.Action(nameof(GetById), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
-                            put = Url.Action(nameof(Put), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
-                            delete = Url.Action(nameof(Delete), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
-                        }
-                    }),
+                    q.IdQrCodePonto,
+                    q.IdentificadorQrCode,
+                    q.PosX,
+                    q.PosY,
+                    q.LayoutPatio,
                     links = new
                     {
-                        self = Url.Action(nameof(GetByLayoutPatioId), "QrCodePonto", new { layoutPatioId }, Request.Scheme),
-                        get = Url.Action(nameof(Get), "QrCodePonto", null, Request.Scheme),
+                        self = Url.Action(nameof(GetById), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
                     }
-                };
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(GetByLayoutPatioId), "QrCodePonto", new { layoutPatioId }, Request.Scheme),
+                    get = Url.Action(nameof(Get), "QrCodePonto", null, Request.Scheme),
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NoContent();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpGet("posicao-x")]
@@ -207,41 +214,40 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 400, description: "Valores de posição são obrigatórios")]
         [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult GetByPosXRange(
+        public async Task<IActionResult> GetByPosXRange(
             [FromQuery, SwaggerParameter("Posição X inicial", Required = true)] float posXInicial, 
             [FromQuery, SwaggerParameter("Posição X final", Required = true)] float posXFinal)
         {
-            var result = _applicationService.ObterQrCodePontosPorPosicaoXEntre(posXInicial, posXFinal);
+            var result = await _useCase.ObterQrCodePontoPorPosXRangeAsync(posXInicial, posXFinal);
 
-            if (result is not null && result.Any())
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value?.Select(q => new
                 {
-                    data = result.Select(q => new
-                    {
-                        q.IdQrCodePonto,
-                        q.IdentificadorQrCodePonto,
-                        q.PosXQrCodePonto,
-                        q.PosYQrCodePonto,
-                        q.LayoutPatioQrCodePonto,
-                        links = new
-                        {
-                            self = Url.Action(nameof(GetById), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
-                            put = Url.Action(nameof(Put), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
-                            delete = Url.Action(nameof(Delete), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
-                        }
-                    }),
+                    q.IdQrCodePonto,
+                    q.IdentificadorQrCode,
+                    q.PosX,
+                    q.PosY,
+                    q.LayoutPatio,
                     links = new
                     {
-                        self = Url.Action(nameof(GetByPosXRange), "QrCodePonto", new { posXInicial, posXFinal }, Request.Scheme),
-                        get = Url.Action(nameof(Get), "QrCodePonto", null, Request.Scheme),
+                        self = Url.Action(nameof(GetById), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
                     }
-                };
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(GetByPosXRange), "QrCodePonto", new { posXInicial, posXFinal }, Request.Scheme),
+                    get = Url.Action(nameof(Get), "QrCodePonto", null, Request.Scheme),
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NoContent();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpGet("posicao-y")]
@@ -255,41 +261,40 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 400, description: "Valores de posição são obrigatórios")]
         [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult GetByPosYRange(
+        public async Task<IActionResult> GetByPosYRange(
             [FromQuery, SwaggerParameter("Posição Y inicial", Required = true)] float posYInicial, 
             [FromQuery, SwaggerParameter("Posição Y final", Required = true)] float posYFinal)
         {
-            var result = _applicationService.ObterQrCodePontosPorPosicaoYEntre(posYInicial, posYFinal);
+            var result = await _useCase.ObterQrCodePontoPorPosYRangeAsync(posYInicial, posYFinal);
 
-            if (result is not null && result.Any())
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value?.Select(q => new
                 {
-                    data = result.Select(q => new
-                    {
-                        q.IdQrCodePonto,
-                        q.IdentificadorQrCodePonto,
-                        q.PosXQrCodePonto,
-                        q.PosYQrCodePonto,
-                        q.LayoutPatioQrCodePonto,
-                        links = new
-                        {
-                            self = Url.Action(nameof(GetById), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
-                            put = Url.Action(nameof(Put), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
-                            delete = Url.Action(nameof(Delete), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
-                        }
-                    }),
+                    q.IdQrCodePonto,
+                    q.IdentificadorQrCode,
+                    q.PosX,
+                    q.PosY,
+                    q.LayoutPatio,
                     links = new
                     {
-                        self = Url.Action(nameof(GetByPosYRange), "QrCodePonto", new { posYInicial, posYFinal }, Request.Scheme),
-                        get = Url.Action(nameof(Get), "QrCodePonto", null, Request.Scheme),
+                        self = Url.Action(nameof(GetById), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "QrCodePonto", new { id = q.IdQrCodePonto }, Request.Scheme),
                     }
-                };
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(GetByPosYRange), "QrCodePonto", new { posYInicial, posYFinal }, Request.Scheme),
+                    get = Url.Action(nameof(Get), "QrCodePonto", null, Request.Scheme),
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NoContent();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpPost]
@@ -304,26 +309,16 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 400, description: "Dados inválidos - campos obrigatórios ausentes")]
         [SwaggerResponse(statusCode: 422, description: "Não foi possível criar o QR Code - dados inválidos ou duplicados")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult Post(
+        public async Task<IActionResult> Post(
             [FromBody, SwaggerParameter("Dados do QR Code de ponto a ser criado", Required = true)] QrCodePontoRequestDto entity)
         {
-            try
-            {
-                var result = _applicationService.SalvarDadosQrCodePonto(entity);
+            var result = await _useCase.SalvarDadosQrCodePontoAsync(entity);
 
-                if (result is not null)
-                    return CreatedAtAction(nameof(GetById), new { id = result.IdQrCodePonto }, result);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
-                return BadRequest("Não foi possível salvar os dados.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Error = ex.Message,
-                    Status = HttpStatusCode.BadRequest
-                });
-            }
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, result.Value);
         }
 
         [HttpPut("{id}")]
@@ -339,27 +334,17 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 404, description: "QR Code não encontrado para o ID fornecido")]
         [SwaggerResponse(statusCode: 422, description: "Não foi possível atualizar o QR Code - dados inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult Put(
+        public async Task<IActionResult> Put(
             [FromRoute, SwaggerParameter("ID único do QR Code de ponto a ser atualizado", Required = true)] int id, 
             [FromBody, SwaggerParameter("Novos dados do QR Code de ponto", Required = true)] QrCodePontoRequestDto entity)
         {
-            try
-            {
-                var result = _applicationService.EditarDadosQrCodePonto(id, entity);
+            var result = await _useCase.EditarDadosQrCodePontoAsync(id, entity);
 
-                if (result is not null)
-                    return Ok(result);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Error = ex.Message,
-                    Status = HttpStatusCode.BadRequest
-                });
-            }
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, result.Value);
         }
 
         [HttpDelete("{id}")]
@@ -373,15 +358,16 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 404, description: "QR Code não encontrado para o ID fornecido")]
         [SwaggerResponse(statusCode: 422, description: "Não foi possível remover o QR Code")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult Delete(
+        public async Task<IActionResult> Delete(
             [FromRoute, SwaggerParameter("ID único do QR Code de ponto a ser removido", Required = true)] int id)
         {
-            var result = _applicationService.DeletarDadosQrCodePonto(id);
+            var result = await _useCase.DeletarDadosQrCodePontoAsync(id);
 
-            if (result is not null)
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            if (result.StatusCode == 204)
                 return NoContent();
-
-            return NotFound();
+            return StatusCode(result.StatusCode, result.Value);
         }
     }
 }

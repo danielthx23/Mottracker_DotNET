@@ -6,36 +6,36 @@ namespace Mottracker.Presentation.Controllers
 {
     public class UsuarioViewController : Controller
     {
-        private readonly IUsuarioApplicationService _applicationService;
+        private readonly IUsuarioUseCase _useCase;
 
-        public UsuarioViewController(IUsuarioApplicationService applicationService)
+        public UsuarioViewController(IUsuarioUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _applicationService.ObterTodosUsuarios();
+            var result = await _useCase.ObterTodosUsuariosAsync();
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 TempData["Error"] = "Erro ao carregar os usuários";
                 return View(new List<UsuarioResponseDto>());
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var result = _applicationService.ObterUsuarioPorId(id);
+            var result = await _useCase.ObterUsuarioPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         public IActionResult Create()
@@ -45,15 +45,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(UsuarioRequestDto usuario)
+        public async Task<IActionResult> Create(UsuarioRequestDto usuario)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.SalvarDadosUsuario(usuario);
+                    var result = await _useCase.SalvarDadosUsuarioAsync(usuario);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Usuário criado com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -71,26 +71,26 @@ namespace Mottracker.Presentation.Controllers
             return View(usuario);
         }
         
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var result = _applicationService.ObterUsuarioPorId(id);
+            var result = await _useCase.ObterUsuarioPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
             var requestDto = new UsuarioRequestDto
             {
-                IdUsuario = result.IdUsuario,
-                NomeUsuario = result.NomeUsuario,
-                CPFUsuario = result.CPFUsuario,
-                SenhaUsuario = result.SenhaUsuario,
-                CNHUsuario = result.CNHUsuario,
-                EmailUsuario = result.EmailUsuario,
-                TokenUsuario = result.TokenUsuario,
-                DataNascimentoUsuario = result.DataNascimentoUsuario,
-                CriadoEmUsuario = result.CriadoEmUsuario
+                IdUsuario = result.Value.IdUsuario,
+                NomeUsuario = result.Value.NomeUsuario,
+                CPFUsuario = result.Value.CPFUsuario,
+                SenhaUsuario = result.Value.SenhaUsuario,
+                CNHUsuario = result.Value.CNHUsuario,
+                EmailUsuario = result.Value.EmailUsuario,
+                TokenUsuario = result.Value.TokenUsuario,
+                DataNascimentoUsuario = result.Value.DataNascimentoUsuario,
+                CriadoEmUsuario = result.Value.CriadoEmUsuario
             };
 
             return View(requestDto);
@@ -98,15 +98,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, UsuarioRequestDto usuario)
+        public async Task<IActionResult> Edit(int id, UsuarioRequestDto usuario)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.EditarDadosUsuario(id, usuario);
+                    var result = await _useCase.EditarDadosUsuarioAsync(id, usuario);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Usuário atualizado com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -124,25 +124,25 @@ namespace Mottracker.Presentation.Controllers
             return View(usuario);
         }
         
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = _applicationService.ObterUsuarioPorId(id);
+            var result = await _useCase.ObterUsuarioPorIdAsync(id);
             
             if (result == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
             {
-                var result = _applicationService.DeletarDadosUsuario(id);
+                var result = await _useCase.DeletarDadosUsuarioAsync(id);
                 
                 if (result != null)
                 {

@@ -6,36 +6,36 @@ namespace Mottracker.Presentation.Controllers
 {
     public class MotoViewController : Controller
     {
-        private readonly IMotoApplicationService _applicationService;
+        private readonly IMotoUseCase _useCase;
 
-        public MotoViewController(IMotoApplicationService applicationService)
+        public MotoViewController(IMotoUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _applicationService.ObterTodasMotos();
+            var result = await _useCase.ObterTodasMotosAsync();
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 TempData["Error"] = "Erro ao carregar as motos";
                 return View(new List<MotoResponseDto>());
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var result = _applicationService.ObterMotoPorId(id);
+            var result = await _useCase.ObterMotoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         public IActionResult Create()
@@ -45,15 +45,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(MotoRequestDto moto)
+        public async Task<IActionResult> Create(MotoRequestDto moto)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.SalvarDadosMoto(moto);
+                    var result = await _useCase.SalvarDadosMotoAsync(moto);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Moto criada com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -71,28 +71,28 @@ namespace Mottracker.Presentation.Controllers
             return View(moto);
         }
         
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var result = _applicationService.ObterMotoPorId(id);
+            var result = await _useCase.ObterMotoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
             var requestDto = new MotoRequestDto
             {
-                IdMoto = result.IdMoto,
-                PlacaMoto = result.PlacaMoto,
-                ModeloMoto = result.ModeloMoto,
-                AnoMoto = result.AnoMoto,
-                IdentificadorMoto = result.IdentificadorMoto,
-                QuilometragemMoto = result.QuilometragemMoto,
-                EstadoMoto = result.EstadoMoto,
-                CondicoesMoto = result.CondicoesMoto,
-                MotoPatioOrigemId = result.MotoPatioOrigemId,
-                ContratoMotoId = result.ContratoMoto?.IdContrato,
-                MotoPatioAtualId = result.MotoPatioAtual?.IdPatio
+                IdMoto = result.Value.IdMoto,
+                PlacaMoto = result.Value.PlacaMoto,
+                ModeloMoto = result.Value.ModeloMoto,
+                AnoMoto = result.Value.AnoMoto,
+                IdentificadorMoto = result.Value.IdentificadorMoto,
+                QuilometragemMoto = result.Value.QuilometragemMoto,
+                EstadoMoto = result.Value.EstadoMoto,
+                CondicoesMoto = result.Value.CondicoesMoto,
+                MotoPatioOrigemId = result.Value.MotoPatioOrigemId,
+                ContratoMotoId = result.Value.ContratoMoto?.IdContrato,
+                MotoPatioAtualId = result.Value.MotoPatioAtual?.IdPatio
             };
 
             return View(requestDto);
@@ -100,15 +100,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, MotoRequestDto moto)
+        public async Task<IActionResult> Edit(int id, MotoRequestDto moto)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.EditarDadosMoto(id, moto);
+                    var result = await _useCase.EditarDadosMotoAsync(id, moto);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Moto atualizada com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -126,27 +126,27 @@ namespace Mottracker.Presentation.Controllers
             return View(moto);
         }
         
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = _applicationService.ObterMotoPorId(id);
+            var result = await _useCase.ObterMotoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
             {
-                var result = _applicationService.DeletarDadosMoto(id);
+                var result = await _useCase.DeletarDadosMotoAsync(id);
                 
-                if (result != null)
+                if (result != null && result.IsSuccess)
                 {
                     TempData["Success"] = "Moto deletada com sucesso!";
                 }

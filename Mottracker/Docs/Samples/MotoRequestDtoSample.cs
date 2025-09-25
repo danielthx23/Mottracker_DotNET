@@ -16,7 +16,7 @@ namespace Mottracker.Docs.Samples
                 AnoMoto = 2023,
                 IdentificadorMoto = "MOT001",
                 QuilometragemMoto = 5000,
-                EstadoMoto = Estados.NoPatio,
+                EstadoMoto = Estados.NoPatioCorreto,
                 CondicoesMoto = "Bom estado, sem avarias",
                 MotoPatioOrigemId = 1,
                 ContratoMotoId = 1,

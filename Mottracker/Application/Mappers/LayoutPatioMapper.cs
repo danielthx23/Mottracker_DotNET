@@ -15,7 +15,7 @@ namespace Mottracker.Application.Mappers
                 Largura = obj.Largura,
                 Comprimento = obj.Comprimento,
                 Altura = obj.Altura,
-                PatioLayoutPatioId = obj.PatioId
+                PatioLayoutPatioId = obj.PatioLayoutPatioId
             };
         }
 

@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
-using Mottracker.Infrastructure.Data.AppData;
-using Mottracker.Application.Models;
+using Mottracker.Infrastructure.AppData;
 
 namespace Mottracker.Infrastructure.Data.Repositories
 {
@@ -73,6 +72,106 @@ namespace Mottracker.Infrastructure.Data.Repositories
             }
 
             return null;
+        }
+
+        // Métodos de consulta específicos (sem paginação)
+        public async Task<PageResultModel<IEnumerable<PatioEntity>>> ObterTodasAsync()
+        {
+            var result = await _context.Patio
+                .Include(p => p.MotosPatioAtual)
+                .Include(p => p.CamerasPatio)
+                .Include(p => p.LayoutPatio)
+                .Include(p => p.EnderecoPatio)
+                .OrderBy(p => p.IdPatio)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<PatioEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<PatioEntity>>> ObterPorNomeAsync(string nomePatio)
+        {
+            var result = await _context.Patio
+                .Include(p => p.MotosPatioAtual)
+                .Include(p => p.CamerasPatio)
+                .Include(p => p.LayoutPatio)
+                .Include(p => p.EnderecoPatio)
+                .Where(p => p.NomePatio.Contains(nomePatio))
+                .OrderBy(p => p.IdPatio)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<PatioEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<PatioEntity>>> ObterPorMotosDisponiveisAsync(int motosDisponiveis)
+        {
+            var result = await _context.Patio
+                .Include(p => p.MotosPatioAtual)
+                .Include(p => p.CamerasPatio)
+                .Include(p => p.LayoutPatio)
+                .Include(p => p.EnderecoPatio)
+                .Where(p => p.MotosDisponiveisPatio >= motosDisponiveis)
+                .OrderBy(p => p.IdPatio)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<PatioEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<PatioEntity>>> ObterPorDataPosteriorAsync(DateTime data)
+        {
+            var result = await _context.Patio
+                .Include(p => p.MotosPatioAtual)
+                .Include(p => p.CamerasPatio)
+                .Include(p => p.LayoutPatio)
+                .Include(p => p.EnderecoPatio)
+                .Where(p => p.DataPatio > data)
+                .OrderBy(p => p.IdPatio)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<PatioEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<PatioEntity>>> ObterPorDataAnteriorAsync(DateTime data)
+        {
+            var result = await _context.Patio
+                .Include(p => p.MotosPatioAtual)
+                .Include(p => p.CamerasPatio)
+                .Include(p => p.LayoutPatio)
+                .Include(p => p.EnderecoPatio)
+                .Where(p => p.DataPatio < data)
+                .OrderBy(p => p.IdPatio)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<PatioEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
     }
 }

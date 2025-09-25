@@ -13,14 +13,14 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group mb-3">
-                <label asp-for="UsuarioPermissaoUsuarioId" class="control-label">ID do Usuário</label>
-                <input asp-for="UsuarioPermissaoUsuarioId" class="form-control" type="number" />
-                <span asp-validation-for="UsuarioPermissaoUsuarioId" class="text-danger"></span>
+                <label asp-for="IdUsuario" class="control-label">ID do Usuário</label>
+                <input asp-for="IdUsuario" class="form-control" type="number" />
+                <span asp-validation-for="IdUsuario" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="UsuarioPermissaoPermissaoId" class="control-label">ID da Permissão</label>
-                <input asp-for="UsuarioPermissaoPermissaoId" class="form-control" type="number" />
-                <span asp-validation-for="UsuarioPermissaoPermissaoId" class="text-danger"></span>
+                <label asp-for="IdPermissao" class="control-label">ID da Permissão</label>
+                <input asp-for="IdPermissao" class="form-control" type="number" />
+                <span asp-validation-for="IdPermissao" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Salvar" class="btn btn-primary" />

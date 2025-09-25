@@ -1,25 +1,27 @@
 using Mottracker.Application.Dtos.QrCodePonto;
-using Mottracker.Application.Models;
+using Mottracker.Domain.Entities;
 
 namespace Mottracker.Application.Interfaces
 {
     public interface IQrCodePontoUseCase
     {
+        // Métodos com paginação
         Task<OperationResult<PageResultModel<IEnumerable<QrCodePontoResponseDto>>>> ObterTodosQrCodePontosAsync(int Deslocamento = 0, int RegistrosRetornado = 3);
+        
+        // Métodos básicos CRUD
         Task<OperationResult<QrCodePontoResponseDto?>> ObterQrCodePontoPorIdAsync(int id);
         Task<OperationResult<QrCodePontoResponseDto?>> SalvarQrCodePontoAsync(QrCodePontoRequestDto dto);
         Task<OperationResult<QrCodePontoResponseDto?>> EditarQrCodePontoAsync(int id, QrCodePontoRequestDto dto);
         Task<OperationResult<QrCodePontoResponseDto?>> DeletarQrCodePontoAsync(int id);
         
-        // Métodos síncronos para compatibilidade
-        IEnumerable<QrCodePontoResponseDto> ObterTodosQrCodePontos();
-        QrCodePontoResponseDto? ObterQrCodePontoPorId(int id);
-        QrCodePontoResponseDto? SalvarDadosQrCodePonto(QrCodePontoRequestDto entity);
-        QrCodePontoResponseDto? EditarDadosQrCodePonto(int id, QrCodePontoRequestDto entity);
-        QrCodePontoResponseDto? DeletarDadosQrCodePonto(int id);
-        IEnumerable<QrCodePontoResponseDto>? ObterQrCodePontoPorIdentificador(string identificador);
-        IEnumerable<QrCodePontoResponseDto>? ObterQrCodePontoPorLayoutPatioId(int layoutPatioId);
-        IEnumerable<QrCodePontoResponseDto>? ObterQrCodePontoPorPosXRange(float posXMin, float posXMax);
-        IEnumerable<QrCodePontoResponseDto>? ObterQrCodePontoPorPosYRange(float posYMin, float posYMax);
+        // Métodos de consulta específicos (sem paginação)
+        Task<OperationResult<IEnumerable<QrCodePontoResponseDto>>> ObterTodosQrCodePontosAsync();
+        Task<OperationResult<QrCodePontoResponseDto?>> SalvarDadosQrCodePontoAsync(QrCodePontoRequestDto entity);
+        Task<OperationResult<QrCodePontoResponseDto?>> EditarDadosQrCodePontoAsync(int id, QrCodePontoRequestDto entity);
+        Task<OperationResult<QrCodePontoResponseDto?>> DeletarDadosQrCodePontoAsync(int id);
+        Task<OperationResult<IEnumerable<QrCodePontoResponseDto>>> ObterQrCodePontoPorIdentificadorAsync(string identificador);
+        Task<OperationResult<IEnumerable<QrCodePontoResponseDto>>> ObterQrCodePontoPorLayoutPatioIdAsync(int layoutPatioId);
+        Task<OperationResult<IEnumerable<QrCodePontoResponseDto>>> ObterQrCodePontoPorPosXRangeAsync(float posXMin, float posXMax);
+        Task<OperationResult<IEnumerable<QrCodePontoResponseDto>>> ObterQrCodePontoPorPosYRangeAsync(float posYMin, float posYMax);
     }
 }

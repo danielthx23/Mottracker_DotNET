@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
-using Mottracker.Infrastructure.Data.AppData;
-using Mottracker.Application.Models;
+using Mottracker.Infrastructure.AppData;
 
 namespace Mottracker.Infrastructure.Data.Repositories
 {
@@ -80,6 +79,25 @@ namespace Mottracker.Infrastructure.Data.Repositories
                 .Include(u => u.Telefones)
                 .Include(u => u.UsuarioPermissoes)
                 .FirstOrDefaultAsync(u => u.EmailUsuario == email);
+        }
+
+        // Métodos de consulta específicos (sem paginação)
+        public async Task<PageResultModel<IEnumerable<UsuarioEntity>>> ObterTodasAsync()
+        {
+            var result = await _context.Usuario
+                .Include(u => u.ContratoUsuario)
+                .Include(u => u.Telefones)
+                .Include(u => u.UsuarioPermissoes)
+                .OrderBy(u => u.IdUsuario)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<UsuarioEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
     }
 }

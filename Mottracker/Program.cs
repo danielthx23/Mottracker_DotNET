@@ -1,18 +1,25 @@
-using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.AspNetCore.ResponseCompression;
+using System.Threading.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
-using Mottracker.Application.Interfaces;
-using Mottracker.Application.Services;
 using Mottracker.Domain.Interfaces;
+using Mottracker.Application.Interfaces;
+using Mottracker.Application.UseCases;
 using Mottracker.Infrastructure.AppData;
 using Mottracker.Infrastructure.Data.Repositories;
+using DotNetEnv;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.FileProviders;
 using Swashbuckle.AspNetCore.Filters;
-using System.Threading.RateLimiting;
+
+// Carrega variáveis de ambiente do .env se não estiverem definidas
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ORACLE_HOST")))
+{
+    Env.Load();
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
-// CORS Configuration
+// Configuração de CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
@@ -23,20 +30,37 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add DbContext and configure Oracle connection
+// Configuração de conexão com Oracle
 string connectionString = builder.Configuration.GetConnectionString("Oracle");
 
 if (string.IsNullOrWhiteSpace(connectionString))
 {
     var oracleUser = Environment.GetEnvironmentVariable("ORACLE_USER");
     var oraclePassword = Environment.GetEnvironmentVariable("ORACLE_PASSWORD");
-    var oracleHost = Environment.GetEnvironmentVariable("ORACLE_HOST");
-    var oraclePort = Environment.GetEnvironmentVariable("ORACLE_PORT");
+    var oracleHost = Environment.GetEnvironmentVariable("ORACLE_HOST") ?? "localhost";
+    var oraclePort = Environment.GetEnvironmentVariable("ORACLE_PORT") ?? "1521";
+    var oracleServiceName = Environment.GetEnvironmentVariable("ORACLE_SERVICE_NAME");
     var oracleSid = Environment.GetEnvironmentVariable("ORACLE_SID");
 
     if (!string.IsNullOrEmpty(oracleUser) && !string.IsNullOrEmpty(oraclePassword))
     {
-        connectionString = $"Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={oracleHost})(PORT={oraclePort})))(CONNECT_DATA=(SERVER=DEDICATED)(SID={oracleSid})));User Id={oracleUser};Password={oraclePassword};";
+        string connectDataPart;
+
+        if (!string.IsNullOrEmpty(oracleServiceName))
+        {
+            connectDataPart = $"(SERVICE_NAME={oracleServiceName})";
+        }
+        else if (!string.IsNullOrEmpty(oracleSid))
+        {
+            connectDataPart = $"(SID={oracleSid})";
+        }
+        else
+        {
+            connectDataPart = "(SID=XE)";
+        }
+
+        connectionString =
+            $"Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={oracleHost})(PORT={oraclePort})))(CONNECT_DATA=(SERVER=DEDICATED){connectDataPart}));User Id={oracleUser};Password={oraclePassword};";
     }
     else
     {
@@ -49,6 +73,7 @@ builder.Services.AddDbContext<ApplicationContext>(x =>
     x.UseOracle(connectionString);
 });
 
+// MVC + Views
 builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
     {
@@ -57,10 +82,7 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Add("/Presentation/Views/Shared/{0}.cshtml");
     });
 
-builder.Services.AddControllersWithViews();
-
-
-// Register Repositories and Application Services
+// Repositórios
 builder.Services.AddTransient<ICameraRepository, CameraRepository>();
 builder.Services.AddTransient<IContratoRepository, ContratoRepository>();
 builder.Services.AddTransient<IEnderecoRepository, EnderecoRepository>();
@@ -73,44 +95,45 @@ builder.Services.AddTransient<ITelefoneRepository, TelefoneRepository>();
 builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddTransient<IUsuarioPermissaoRepository, UsuarioPermissaoRepository>();
 
-builder.Services.AddTransient<ICameraApplicationService, CameraApplicationService>();
-builder.Services.AddTransient<IContratoApplicationService, ContratoApplicationService>();
-builder.Services.AddTransient<IEnderecoApplicationService, EnderecoApplicationService>();
-builder.Services.AddTransient<ILayoutPatioApplicationService, LayoutPatioApplicationService>();
-builder.Services.AddTransient<IMotoApplicationService, MotoApplicationService>();
-builder.Services.AddTransient<IPatioApplicationService, PatioApplicationService>();
-builder.Services.AddTransient<IPermissaoApplicationService, PermissaoApplicationService>();
-builder.Services.AddTransient<IQrCodePontoApplicationService, QrCodePontoApplicationService>();
-builder.Services.AddTransient<ITelefoneApplicationService, TelefoneApplicationService>();
-builder.Services.AddTransient<IUsuarioApplicationService, UsuarioApplicationService>();
-builder.Services.AddTransient<IUsuarioPermissaoApplicationService, UsuarioPermissaoApplicationService>();
+// UseCases
+builder.Services.AddTransient<ICameraUseCase, CameraUseCase>();
+builder.Services.AddTransient<IContratoUseCase, ContratoUseCase>();
+builder.Services.AddTransient<IEnderecoUseCase, EnderecoUseCase>();
+builder.Services.AddTransient<ILayoutPatioUseCase, LayoutPatioUseCase>();
+builder.Services.AddTransient<IMotoUseCase, MotoUseCase>();
+builder.Services.AddTransient<IPatioUseCase, PatioUseCase>();
+builder.Services.AddTransient<IPermissaoUseCase, PermissaoUseCase>();
+builder.Services.AddTransient<IQrCodePontoUseCase, QrCodePontoUseCase>();
+builder.Services.AddTransient<ITelefoneUseCase, TelefoneUseCase>();
+builder.Services.AddTransient<IUsuarioUseCase, UsuarioUseCase>();
+builder.Services.AddTransient<IUsuarioPermissaoUseCase, UsuarioPermissaoUseCase>();
 
-// Add controllers
+// Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
     c.ExampleFilters();
 });
-
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
-builder.Services.AddRateLimiter(options => {
-
-    options.AddFixedWindowLimiter(policyName: "rateLimitePolicy", opt => {
+// Rate Limiting
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter(policyName: "rateLimitePolicy", opt =>
+    {
         opt.PermitLimit = 5;
         opt.Window = TimeSpan.FromSeconds(20);
         opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
         opt.QueueLimit = 2;
-
     });
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
 
-builder.Services.AddResponseCompression(options => {
-    //options.EnableForHttps = true;
+// Response Compression
+builder.Services.AddResponseCompression(options =>
+{
     options.Providers.Add<BrotliCompressionProvider>();
     options.Providers.Add<GzipCompressionProvider>();
 });
@@ -120,14 +143,14 @@ builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
     options.Level = System.IO.Compression.CompressionLevel.Fastest;
 });
 
-builder.Services.Configure<GzipCompressionProviderOptions>(options => {
+builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+{
     options.Level = System.IO.Compression.CompressionLevel.Fastest;
 });
 
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -147,10 +170,14 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = ""
 });
 
+app.UseRouting();
+
 app.UseAuthorization();
 
 app.UseRateLimiter();
 
-app.MapControllers();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

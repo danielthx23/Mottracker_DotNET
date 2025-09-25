@@ -6,36 +6,36 @@ namespace Mottracker.Presentation.Controllers
 {
     public class QrCodePontoViewController : Controller
     {
-        private readonly IQrCodePontoApplicationService _applicationService;
+        private readonly IQrCodePontoUseCase _useCase;
 
-        public QrCodePontoViewController(IQrCodePontoApplicationService applicationService)
+        public QrCodePontoViewController(IQrCodePontoUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _applicationService.ObterTodosQrCodePontos();
+            var result = await _useCase.ObterTodosQrCodePontosAsync();
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 TempData["Error"] = "Erro ao carregar os QR Codes de ponto";
                 return View(new List<QrCodePontoResponseDto>());
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var result = _applicationService.ObterQrCodePontoPorId(id);
+            var result = await _useCase.ObterQrCodePontoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         public IActionResult Create()
@@ -45,15 +45,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(QrCodePontoRequestDto qrCodePonto)
+        public async Task<IActionResult> Create(QrCodePontoRequestDto qrCodePonto)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.SalvarDadosQrCodePonto(qrCodePonto);
+                    var result = await _useCase.SalvarDadosQrCodePontoAsync(qrCodePonto);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "QR Code de ponto criado com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -71,22 +71,22 @@ namespace Mottracker.Presentation.Controllers
             return View(qrCodePonto);
         }
         
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var result = _applicationService.ObterQrCodePontoPorId(id);
+            var result = await _useCase.ObterQrCodePontoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
             var requestDto = new QrCodePontoRequestDto
             {
-                IdQrCodePonto = result.IdQrCodePonto,
-                IdentificadorQrCodePonto = result.IdentificadorQrCodePonto,
-                PosXQrCodePonto = result.PosXQrCodePonto,
-                PosYQrCodePonto = result.PosYQrCodePonto,
-                LayoutPatioQrCodePontoId = result.LayoutPatioQrCodePonto?.IdLayoutPatio
+                IdQrCodePonto = result.Value.IdQrCodePonto,
+                IdentificadorQrCode = result.Value.IdentificadorQrCode,
+                PosX = result.Value.PosX,
+                PosY = result.Value.PosY,
+                LayoutPatioId = result.Value.LayoutPatio?.IdLayoutPatio
             };
 
             return View(requestDto);
@@ -94,15 +94,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, QrCodePontoRequestDto qrCodePonto)
+        public async Task<IActionResult> Edit(int id, QrCodePontoRequestDto qrCodePonto)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.EditarDadosQrCodePonto(id, qrCodePonto);
+                    var result = await _useCase.EditarDadosQrCodePontoAsync(id, qrCodePonto);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "QR Code de ponto atualizado com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -120,27 +120,27 @@ namespace Mottracker.Presentation.Controllers
             return View(qrCodePonto);
         }
         
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = _applicationService.ObterQrCodePontoPorId(id);
+            var result = await _useCase.ObterQrCodePontoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
             {
-                var result = _applicationService.DeletarDadosQrCodePonto(id);
+                var result = await _useCase.DeletarDadosQrCodePontoAsync(id);
                 
-                if (result != null)
+                if (result != null && result.IsSuccess)
                 {
                     TempData["Success"] = "QR Code de ponto deletado com sucesso!";
                 }

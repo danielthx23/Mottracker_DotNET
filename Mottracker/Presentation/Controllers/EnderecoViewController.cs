@@ -6,36 +6,36 @@ namespace Mottracker.Presentation.Controllers
 {
     public class EnderecoViewController : Controller
     {
-        private readonly IEnderecoApplicationService _applicationService;
+        private readonly IEnderecoUseCase _useCase;
 
-        public EnderecoViewController(IEnderecoApplicationService applicationService)
+        public EnderecoViewController(IEnderecoUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _applicationService.ObterTodosEnderecos();
+            var result = await _useCase.ObterTodosEnderecosAsync();
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 TempData["Error"] = "Erro ao carregar os endereços";
                 return View(new List<EnderecoResponseDto>());
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var result = _applicationService.ObterEnderecoPorId(id);
+            var result = await _useCase.ObterEnderecoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         public IActionResult Create()
@@ -45,15 +45,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(EnderecoRequestDto endereco)
+        public async Task<IActionResult> Create(EnderecoRequestDto endereco)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.SalvarDadosEndereco(endereco);
+                    var result = await _useCase.SalvarDadosEnderecoAsync(endereco);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Endereço criado com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -71,26 +71,26 @@ namespace Mottracker.Presentation.Controllers
             return View(endereco);
         }
         
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var result = _applicationService.ObterEnderecoPorId(id);
+            var result = await _useCase.ObterEnderecoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
             var requestDto = new EnderecoRequestDto
             {
-                IdEndereco = result.IdEndereco,
-                CepEndereco = result.CepEndereco,
-                LogradouroEndereco = result.LogradouroEndereco,
-                NumeroEndereco = result.NumeroEndereco,
-                ComplementoEndereco = result.ComplementoEndereco,
-                BairroEndereco = result.BairroEndereco,
-                CidadeEndereco = result.CidadeEndereco,
-                EstadoEndereco = result.EstadoEndereco,
-                PatioEnderecoId = result.PatioEndereco?.IdPatio
+                IdEndereco = result.Value.IdEndereco,
+                CEP = result.Value.CEP,
+                Logradouro = result.Value.Logradouro,
+                Numero = result.Value.Numero,
+                Complemento = result.Value.Complemento,
+                Bairro = result.Value.Bairro,
+                Cidade = result.Value.Cidade,
+                Estado = result.Value.Estado,
+                PatioEnderecoId = result.Value.PatioEndereco?.IdPatio
             };
 
             return View(requestDto);
@@ -98,15 +98,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, EnderecoRequestDto endereco)
+        public async Task<IActionResult> Edit(int id, EnderecoRequestDto endereco)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.EditarDadosEndereco(id, endereco);
+                    var result = await _useCase.EditarDadosEnderecoAsync(id, endereco);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Endereço atualizado com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -124,27 +124,27 @@ namespace Mottracker.Presentation.Controllers
             return View(endereco);
         }
         
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = _applicationService.ObterEnderecoPorId(id);
+            var result = await _useCase.ObterEnderecoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
             {
-                var result = _applicationService.DeletarDadosEndereco(id);
+                var result = await _useCase.DeletarDadosEnderecoAsync(id);
                 
-                if (result != null)
+                if (result != null && result.IsSuccess)
                 {
                     TempData["Success"] = "Endereço deletado com sucesso!";
                 }

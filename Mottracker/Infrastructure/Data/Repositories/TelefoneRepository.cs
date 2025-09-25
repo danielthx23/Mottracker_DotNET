@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Interfaces;
-using Mottracker.Infrastructure.Data.AppData;
-using Mottracker.Application.Models;
+using Mottracker.Infrastructure.AppData;
 
 namespace Mottracker.Infrastructure.Data.Repositories
 {
@@ -20,7 +19,7 @@ namespace Mottracker.Infrastructure.Data.Repositories
             var totalRegistros = await _context.Telefone.CountAsync();
 
             var result = await _context.Telefone
-                .Include(t => t.UsuarioTelefone)
+                .Include(t => t.Usuario)
                 .OrderBy(t => t.IdTelefone)
                 .Skip(Deslocamento)
                 .Take(RegistrosRetornado)
@@ -38,7 +37,7 @@ namespace Mottracker.Infrastructure.Data.Repositories
         public async Task<TelefoneEntity?> ObterPorIdAsync(int id)
         {
             return await _context.Telefone
-                .Include(t => t.UsuarioTelefone)
+                .Include(t => t.Usuario)
                 .FirstOrDefaultAsync(t => t.IdTelefone == id);
         }
 
@@ -67,6 +66,74 @@ namespace Mottracker.Infrastructure.Data.Repositories
             }
 
             return null;
+        }
+
+        // Métodos de consulta específicos (sem paginação)
+        public async Task<PageResultModel<IEnumerable<TelefoneEntity>>> ObterTodasAsync()
+        {
+            var result = await _context.Telefone
+                .Include(t => t.Usuario)
+                .OrderBy(t => t.IdTelefone)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<TelefoneEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<TelefoneEntity>>> ObterPorNumeroAsync(string numero)
+        {
+            var result = await _context.Telefone
+                .Include(t => t.Usuario)
+                .Where(t => t.Numero.Contains(numero))
+                .OrderBy(t => t.IdTelefone)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<TelefoneEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<TelefoneEntity>>> ObterPorUsuarioIdAsync(int usuarioId)
+        {
+            var result = await _context.Telefone
+                .Include(t => t.Usuario)
+                .Where(t => t.UsuarioId == usuarioId)
+                .OrderBy(t => t.IdTelefone)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<TelefoneEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<TelefoneEntity>>> ObterPorTipoAsync(string tipo)
+        {
+            var result = await _context.Telefone
+                .Include(t => t.Usuario)
+                .Where(t => t.Tipo == tipo)
+                .OrderBy(t => t.IdTelefone)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<TelefoneEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
     }
 }

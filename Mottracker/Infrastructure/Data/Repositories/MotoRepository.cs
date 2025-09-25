@@ -2,8 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Enums;
 using Mottracker.Domain.Interfaces;
-using Mottracker.Infrastructure.Data.AppData;
-using Mottracker.Application.Models;
+using Mottracker.Infrastructure.AppData;
 
 namespace Mottracker.Infrastructure.Data.Repositories
 {
@@ -101,6 +100,60 @@ namespace Mottracker.Infrastructure.Data.Repositories
                 Deslocamento = Deslocamento,
                 RegistrosRetornado = RegistrosRetornado,
                 TotalRegistros = totalRegistros
+            };
+        }
+
+        // Métodos de consulta específicos (sem paginação)
+        public async Task<PageResultModel<IEnumerable<MotoEntity>>> ObterTodasAsync()
+        {
+            var result = await _context.Moto
+                .Include(m => m.ContratoMoto)
+                .Include(m => m.MotoPatioAtual)
+                .OrderBy(m => m.IdMoto)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<MotoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<MotoEntity>>> ObterPorEstadoAsync(Estados estado)
+        {
+            var result = await _context.Moto
+                .Include(m => m.ContratoMoto)
+                .Include(m => m.MotoPatioAtual)
+                .Where(m => m.EstadoMoto == estado)
+                .OrderBy(m => m.IdMoto)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<MotoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<MotoEntity>>> ObterPorContratoAsync(long contratoId)
+        {
+            var result = await _context.Moto
+                .Include(m => m.ContratoMoto)
+                .Include(m => m.MotoPatioAtual)
+                .Where(m => m.ContratoMotoId == contratoId)
+                .OrderBy(m => m.IdMoto)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<MotoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
             };
         }
     }

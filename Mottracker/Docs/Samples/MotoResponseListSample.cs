@@ -1,4 +1,5 @@
-﻿using Swashbuckle.AspNetCore.Filters;
+﻿using Mottracker.Application.Dtos;
+using Swashbuckle.AspNetCore.Filters;
 using Mottracker.Application.Dtos.Moto;
 using Mottracker.Application.Dtos.Contrato;
 using Mottracker.Application.Dtos.Patio;
@@ -20,7 +21,7 @@ namespace Mottracker.Docs.Samples
                     AnoMoto = 2023,
                     IdentificadorMoto = "MOT001",
                     QuilometragemMoto = 5000,
-                    EstadoMoto = Estados.NoPatio,
+                    EstadoMoto = Estados.NoPatioCorreto,
                     CondicoesMoto = "Bom estado, sem avarias",
                     MotoPatioOrigemId = 1,
                     ContratoMoto = new ContratoDto

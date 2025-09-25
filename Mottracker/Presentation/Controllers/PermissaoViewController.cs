@@ -6,36 +6,36 @@ namespace Mottracker.Presentation.Controllers
 {
     public class PermissaoViewController : Controller
     {
-        private readonly IPermissaoApplicationService _applicationService;
+        private readonly IPermissaoUseCase _useCase;
 
-        public PermissaoViewController(IPermissaoApplicationService applicationService)
+        public PermissaoViewController(IPermissaoUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _applicationService.ObterTodosPermissoes();
+            var result = await _useCase.ObterTodosPermissoesAsync();
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 TempData["Error"] = "Erro ao carregar as permissões";
                 return View(new List<PermissaoResponseDto>());
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var result = _applicationService.ObterPermissaoPorId(id);
+            var result = await _useCase.ObterPermissaoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         public IActionResult Create()
@@ -45,15 +45,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PermissaoRequestDto permissao)
+        public async Task<IActionResult> Create(PermissaoRequestDto permissao)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.SalvarDadosPermissao(permissao);
+                    var result = await _useCase.SalvarDadosPermissaoAsync(permissao);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Permissão criada com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -71,20 +71,20 @@ namespace Mottracker.Presentation.Controllers
             return View(permissao);
         }
         
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var result = _applicationService.ObterPermissaoPorId(id);
+            var result = await _useCase.ObterPermissaoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
             var requestDto = new PermissaoRequestDto
             {
-                IdPermissao = result.IdPermissao,
-                NomePermissao = result.NomePermissao,
-                DescricaoPermissao = result.DescricaoPermissao
+                IdPermissao = result.Value.IdPermissao,
+                NomePermissao = result.Value.NomePermissao,
+                Descricao = result.Value.Descricao
             };
 
             return View(requestDto);
@@ -92,15 +92,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, PermissaoRequestDto permissao)
+        public async Task<IActionResult> Edit(int id, PermissaoRequestDto permissao)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.EditarDadosPermissao(id, permissao);
+                    var result = await _useCase.EditarDadosPermissaoAsync(id, permissao);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Permissão atualizada com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -118,27 +118,27 @@ namespace Mottracker.Presentation.Controllers
             return View(permissao);
         }
         
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = _applicationService.ObterPermissaoPorId(id);
+            var result = await _useCase.ObterPermissaoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
             {
-                var result = _applicationService.DeletarDadosPermissao(id);
+                var result = await _useCase.DeletarDadosPermissaoAsync(id);
                 
-                if (result != null)
+                if (result != null && result.IsSuccess)
                 {
                     TempData["Success"] = "Permissão deletada com sucesso!";
                 }

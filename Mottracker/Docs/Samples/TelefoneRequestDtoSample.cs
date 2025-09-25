@@ -10,9 +10,9 @@ namespace Mottracker.Docs.Samples
             return new TelefoneRequestDto
             {
                 IdTelefone = 0,
-                NumeroTelefone = "(11) 99999-9999",
-                TipoTelefone = "Celular",
-                UsuarioTelefoneId = 1
+                Numero = "(11) 99999-9999",
+                Tipo = "Celular",
+                UsuarioId = 1
             };
         }
     }

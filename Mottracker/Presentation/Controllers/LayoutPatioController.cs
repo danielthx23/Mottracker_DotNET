@@ -13,11 +13,11 @@ namespace Mottracker.Presentation.Controllers
     [ApiController]
     public class LayoutPatioController : ControllerBase
     {
-        private readonly ILayoutPatioApplicationService _applicationService;
+        private readonly ILayoutPatioUseCase _useCase;
 
-        public LayoutPatioController(ILayoutPatioApplicationService applicationService)
+        public LayoutPatioController(ILayoutPatioUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
 
         [HttpGet]
@@ -34,48 +34,49 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
         [SwaggerResponseExample(statusCode: 200, typeof(LayoutPatioResponseListSample))]
         [EnableRateLimiting("rateLimitePolicy")]
-        public IActionResult Get(
+        public async Task<IActionResult> Get(
             [FromQuery, SwaggerParameter("Número de registros a pular (padrão: 0)", Required = false)] int Deslocamento = 0, 
             [FromQuery, SwaggerParameter("Número de registros a retornar (padrão: 3, máximo: 100)", Required = false)] int RegistrosRetornado = 3)
         {
-            var result = _applicationService.ObterTodosLayoutsPatios();
+            var result = await _useCase.ObterTodosLayoutsPatiosAsync(Deslocamento, RegistrosRetornado);
 
-            if (result is not null && result.Any())
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value?.Data?.Select(l => new
                 {
-                    data = result.Select(l => new
-                    {
-                        l.IdLayoutPatio,
-                        l.NomeLayoutPatio,
-                        l.DescricaoLayoutPatio,
-                        l.DataCriacaoLayoutPatio,
-                        l.PatioLayoutPatio,
-                        l.QrCodePontosLayoutPatio,
-                        links = new
-                        {
-                            self = Url.Action(nameof(GetById), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
-                            put = Url.Action(nameof(Put), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
-                            delete = Url.Action(nameof(Delete), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
-                        }
-                    }),
+                    l.IdLayoutPatio,
+                    l.Descricao,
+                    l.DataCriacao,
+                    l.Largura,
+                    l.Comprimento,
+                    l.Altura,
+                    l.PatioLayoutPatio,
+                    l.QrCodesLayoutPatio,
                     links = new
                     {
-                        self = Url.Action(nameof(Get), "LayoutPatio", null, Request.Scheme),
-                        create = Url.Action(nameof(Post), "LayoutPatio", null, Request.Scheme),
-                    },
-                    pagina = new
-                    {
-                        Deslocamento,
-                        RegistrosRetornado,
-                        TotalRegistros = result.Count()
+                        self = Url.Action(nameof(GetById), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
                     }
-                };
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(Get), "LayoutPatio", null, Request.Scheme),
+                    create = Url.Action(nameof(Post), "LayoutPatio", null, Request.Scheme),
+                },
+                pagina = new
+                {
+                    result.Value?.Deslocamento,
+                    result.Value?.RegistrosRetornado,
+                    result.Value?.TotalRegistros
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NoContent();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpGet("{id}")]
@@ -89,29 +90,28 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 404, description: "Layout não encontrado para o ID fornecido")]
         [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult GetById(
+        public async Task<IActionResult> GetById(
             [FromRoute, SwaggerParameter("ID único do layout de pátio", Required = true)] int id)
         {
-            var result = _applicationService.ObterLayoutPatioPorId(id);
+            var result = await _useCase.ObterLayoutPatioPorIdAsync(id);
 
-            if (result is not null)
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value,
+                links = new
                 {
-                    data = result,
-                    links = new
-                    {
-                        self = Url.Action(nameof(GetById), "LayoutPatio", new { id }),
-                        get = Url.Action(nameof(Get), "LayoutPatio", null),
-                        put = Url.Action(nameof(Put), "LayoutPatio", new { id }),
-                        delete = Url.Action(nameof(Delete), "LayoutPatio", new { id }),
-                    }
-                };
+                    self = Url.Action(nameof(GetById), "LayoutPatio", new { id }),
+                    get = Url.Action(nameof(Get), "LayoutPatio", null),
+                    put = Url.Action(nameof(Put), "LayoutPatio", new { id }),
+                    delete = Url.Action(nameof(Delete), "LayoutPatio", new { id }),
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NotFound();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpGet("patio/{patioId}")]
@@ -125,99 +125,97 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 400, description: "ID do pátio é obrigatório e deve ser maior que zero")]
         [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult GetByPatioId(
-            [FromRoute, SwaggerParameter("ID único do pátio", Required = true)] long patioId)
+        public async Task<IActionResult> GetByPatioId(
+            [FromRoute, SwaggerParameter("ID único do pátio", Required = true)] int patioId)
         {
             if (patioId <= 0)
                 return BadRequest("O parâmetro patioId deve ser maior que zero.");
 
-            var result = _applicationService.ObterLayoutsPorIdPatio(patioId);
+            var result = await _useCase.ObterLayoutPatioPorPatioIdAsync(patioId);
 
-            if (result is not null && result.Any())
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value?.Select(l => new
                 {
-                    data = result.Select(l => new
-                    {
-                        l.IdLayoutPatio,
-                        l.NomeLayoutPatio,
-                        l.DescricaoLayoutPatio,
-                        l.DataCriacaoLayoutPatio,
-                        l.PatioLayoutPatio,
-                        l.QrCodePontosLayoutPatio,
-                        links = new
-                        {
-                            self = Url.Action(nameof(GetById), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
-                            put = Url.Action(nameof(Put), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
-                            delete = Url.Action(nameof(Delete), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
-                        }
-                    }),
+                    l.IdLayoutPatio,
+                    l.Descricao,
+                    l.DataCriacao,
+                    l.Largura,
+                    l.Comprimento,
+                    l.Altura,
+                    l.PatioLayoutPatio,
+                    l.QrCodesLayoutPatio,
                     links = new
                     {
-                        self = Url.Action(nameof(GetByPatioId), "LayoutPatio", new { patioId }, Request.Scheme),
-                        get = Url.Action(nameof(Get), "LayoutPatio", null, Request.Scheme),
+                        self = Url.Action(nameof(GetById), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
                     }
-                };
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(GetByPatioId), "LayoutPatio", new { patioId }, Request.Scheme),
+                    get = Url.Action(nameof(Get), "LayoutPatio", null, Request.Scheme),
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NoContent();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpGet("data-criacao")]
         [SwaggerOperation(
             Summary = "Obtém layouts por data de criação",
-            Description = "Retorna uma lista paginada de layouts filtrados por intervalo de data de criação. " +
-                        "Útil para encontrar layouts criados em um período específico."
+            Description = "Retorna uma lista de layouts filtrados por data de criação específica. " +
+                        "Útil para encontrar layouts criados em uma data específica."
         )]
         [SwaggerResponse(statusCode: 200, description: "Layouts encontrados com sucesso", type: typeof(IEnumerable<LayoutPatioResponseDto>))]
-        [SwaggerResponse(statusCode: 204, description: "Nenhum layout encontrado para o período especificado")]
-        [SwaggerResponse(statusCode: 400, description: "Datas são obrigatórias e data de início não pode ser maior que data fim")]
+        [SwaggerResponse(statusCode: 204, description: "Nenhum layout encontrado para a data especificada")]
+        [SwaggerResponse(statusCode: 400, description: "Data é obrigatória")]
         [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult GetByDataCriacao(
-            [FromQuery, SwaggerParameter("Data de início do período", Required = true)] DateTime dataInicio, 
-            [FromQuery, SwaggerParameter("Data fim do período", Required = true)] DateTime dataFim)
+        public async Task<IActionResult> GetByDataCriacao(
+            [FromQuery, SwaggerParameter("Data de criação", Required = true)] DateTime dataCriacao)
         {
-            if (dataInicio == default || dataFim == default)
-                return BadRequest("Os parâmetros dataInicio e dataFim são obrigatórios.");
+            if (dataCriacao == default)
+                return BadRequest("O parâmetro dataCriacao é obrigatório.");
 
-            if (dataInicio > dataFim)
-                return BadRequest("A data de início não pode ser maior que a data fim.");
+            var result = await _useCase.ObterLayoutPatioPorDataCriacaoAsync(dataCriacao);
 
-            var result = _applicationService.ObterLayoutsPorDataCriacaoEntre(dataInicio, dataFim);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
-            if (result is not null && result.Any())
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value?.Select(l => new
                 {
-                    data = result.Select(l => new
-                    {
-                        l.IdLayoutPatio,
-                        l.NomeLayoutPatio,
-                        l.DescricaoLayoutPatio,
-                        l.DataCriacaoLayoutPatio,
-                        l.PatioLayoutPatio,
-                        l.QrCodePontosLayoutPatio,
-                        links = new
-                        {
-                            self = Url.Action(nameof(GetById), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
-                            put = Url.Action(nameof(Put), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
-                            delete = Url.Action(nameof(Delete), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
-                        }
-                    }),
+                    l.IdLayoutPatio,
+                    l.Descricao,
+                    l.DataCriacao,
+                    l.Largura,
+                    l.Comprimento,
+                    l.Altura,
+                    l.PatioLayoutPatio,
+                    l.QrCodesLayoutPatio,
                     links = new
                     {
-                        self = Url.Action(nameof(GetByDataCriacao), "LayoutPatio", new { dataInicio, dataFim }, Request.Scheme),
-                        get = Url.Action(nameof(Get), "LayoutPatio", null, Request.Scheme),
+                        self = Url.Action(nameof(GetById), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "LayoutPatio", new { id = l.IdLayoutPatio }, Request.Scheme),
                     }
-                };
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(GetByDataCriacao), "LayoutPatio", new { dataCriacao }, Request.Scheme),
+                    get = Url.Action(nameof(Get), "LayoutPatio", null, Request.Scheme),
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NoContent();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpPost]
@@ -232,26 +230,16 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 400, description: "Dados inválidos - campos obrigatórios ausentes")]
         [SwaggerResponse(statusCode: 422, description: "Não foi possível criar o layout - dados inválidos ou duplicados")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult Post(
+        public async Task<IActionResult> Post(
             [FromBody, SwaggerParameter("Dados do layout de pátio a ser criado", Required = true)] LayoutPatioRequestDto entity)
         {
-            try
-            {
-                var result = _applicationService.SalvarDadosLayoutPatio(entity);
+            var result = await _useCase.SalvarDadosLayoutPatioAsync(entity);
 
-                if (result is not null)
-                    return CreatedAtAction(nameof(GetById), new { id = result.IdLayoutPatio }, result);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
-                return BadRequest("Não foi possível salvar os dados.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Error = ex.Message,
-                    Status = HttpStatusCode.BadRequest
-                });
-            }
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, result.Value);
         }
 
         [HttpPut("{id}")]
@@ -267,27 +255,17 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 404, description: "Layout não encontrado para o ID fornecido")]
         [SwaggerResponse(statusCode: 422, description: "Não foi possível atualizar o layout - dados inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult Put(
+        public async Task<IActionResult> Put(
             [FromRoute, SwaggerParameter("ID único do layout de pátio a ser atualizado", Required = true)] int id, 
             [FromBody, SwaggerParameter("Novos dados do layout de pátio", Required = true)] LayoutPatioRequestDto entity)
         {
-            try
-            {
-                var result = _applicationService.EditarDadosLayoutPatio(id, entity);
+            var result = await _useCase.EditarDadosLayoutPatioAsync(id, entity);
 
-                if (result is not null)
-                    return Ok(result);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Error = ex.Message,
-                    Status = HttpStatusCode.BadRequest
-                });
-            }
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, result.Value);
         }
 
         [HttpDelete("{id}")]
@@ -301,15 +279,16 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 404, description: "Layout não encontrado para o ID fornecido")]
         [SwaggerResponse(statusCode: 422, description: "Não foi possível remover o layout")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult Delete(
+        public async Task<IActionResult> Delete(
             [FromRoute, SwaggerParameter("ID único do layout de pátio a ser removido", Required = true)] int id)
         {
-            var result = _applicationService.DeletarDadosLayoutPatio(id);
+            var result = await _useCase.DeletarDadosLayoutPatioAsync(id);
 
-            if (result is not null)
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            if (result.StatusCode == 204)
                 return NoContent();
-
-            return NotFound();
+            return StatusCode(result.StatusCode, result.Value);
         }
     }
 }

@@ -6,36 +6,36 @@ namespace Mottracker.Presentation.Controllers
 {
     public class LayoutPatioViewController : Controller
     {
-        private readonly ILayoutPatioApplicationService _applicationService;
+        private readonly ILayoutPatioUseCase _useCase;
 
-        public LayoutPatioViewController(ILayoutPatioApplicationService applicationService)
+        public LayoutPatioViewController(ILayoutPatioUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _applicationService.ObterTodosLayoutsPatios();
+            var result = await _useCase.ObterTodosLayoutsPatiosAsync();
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 TempData["Error"] = "Erro ao carregar os layouts de pátio";
                 return View(new List<LayoutPatioResponseDto>());
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var result = _applicationService.ObterLayoutPatioPorId(id);
+            var result = await _useCase.ObterLayoutPatioPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         public IActionResult Create()
@@ -45,15 +45,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(LayoutPatioRequestDto layoutPatio)
+        public async Task<IActionResult> Create(LayoutPatioRequestDto layoutPatio)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.SalvarDadosLayoutPatio(layoutPatio);
+                    var result = await _useCase.SalvarDadosLayoutPatioAsync(layoutPatio);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Layout de pátio criado com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -71,22 +71,24 @@ namespace Mottracker.Presentation.Controllers
             return View(layoutPatio);
         }
         
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var result = _applicationService.ObterLayoutPatioPorId(id);
+            var result = await _useCase.ObterLayoutPatioPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
             var requestDto = new LayoutPatioRequestDto
             {
-                IdLayoutPatio = result.IdLayoutPatio,
-                NomeLayoutPatio = result.NomeLayoutPatio,
-                DescricaoLayoutPatio = result.DescricaoLayoutPatio,
-                DataCriacaoLayoutPatio = result.DataCriacaoLayoutPatio,
-                PatioLayoutPatioId = result.PatioLayoutPatio?.IdPatio
+                IdLayoutPatio = result.Value.IdLayoutPatio,
+                Descricao = result.Value.Descricao,
+                DataCriacao = result.Value.DataCriacao,
+                Largura = result.Value.Largura,
+                Comprimento = result.Value.Comprimento,
+                Altura = result.Value.Altura,
+                PatioLayoutPatioId = result.Value.PatioLayoutPatio?.IdPatio
             };
 
             return View(requestDto);
@@ -94,15 +96,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, LayoutPatioRequestDto layoutPatio)
+        public async Task<IActionResult> Edit(int id, LayoutPatioRequestDto layoutPatio)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.EditarDadosLayoutPatio(id, layoutPatio);
+                    var result = await _useCase.EditarDadosLayoutPatioAsync(id, layoutPatio);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Layout de pátio atualizado com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -120,27 +122,27 @@ namespace Mottracker.Presentation.Controllers
             return View(layoutPatio);
         }
         
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = _applicationService.ObterLayoutPatioPorId(id);
+            var result = await _useCase.ObterLayoutPatioPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
             {
-                var result = _applicationService.DeletarDadosLayoutPatio(id);
+                var result = await _useCase.DeletarDadosLayoutPatioAsync(id);
                 
-                if (result != null)
+                if (result != null && result.IsSuccess)
                 {
                     TempData["Success"] = "Layout de pátio deletado com sucesso!";
                 }

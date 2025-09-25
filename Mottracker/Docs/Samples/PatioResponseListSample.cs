@@ -30,7 +30,7 @@ namespace Mottracker.Docs.Samples
                             AnoMoto = 2023,
                             IdentificadorMoto = "MOT001",
                             QuilometragemMoto = 5000,
-                            EstadoMoto = Domain.Enums.Estados.NoPatio,
+                            EstadoMoto = Domain.Enums.Estados.NoPatioCorreto,
                             CondicoesMoto = "Bom estado",
                             MotoPatioOrigemId = 1
                         },
@@ -42,7 +42,7 @@ namespace Mottracker.Docs.Samples
                             AnoMoto = 2024,
                             IdentificadorMoto = "MOT002",
                             QuilometragemMoto = 2000,
-                            EstadoMoto = Domain.Enums.Estados.NoPatio,
+                            EstadoMoto = Domain.Enums.Estados.NoPatioCorreto,
                             CondicoesMoto = "Excelente estado",
                             MotoPatioOrigemId = 1
                         }
@@ -107,7 +107,7 @@ namespace Mottracker.Docs.Samples
                             AnoMoto = 2023,
                             IdentificadorMoto = "MOT003",
                             QuilometragemMoto = 8000,
-                            EstadoMoto = Domain.Enums.Estados.NoPatio,
+                            EstadoMoto = Domain.Enums.Estados.NoPatioCorreto,
                             CondicoesMoto = "Necessita manutenção",
                             MotoPatioOrigemId = 2
                         }

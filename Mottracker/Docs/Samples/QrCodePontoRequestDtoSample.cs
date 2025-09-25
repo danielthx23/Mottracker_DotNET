@@ -10,10 +10,10 @@ namespace Mottracker.Docs.Samples
             return new QrCodePontoRequestDto
             {
                 IdQrCodePonto = 0,
-                IdentificadorQrCodePonto = "QR001",
-                PosXQrCodePonto = 100.5f,
-                PosYQrCodePonto = 200.3f,
-                LayoutPatioQrCodePontoId = 1
+                IdentificadorQrCode = "QR001",
+                PosX = 100.5f,
+                PosY = 200.3f,
+                LayoutPatioId = 1
             };
         }
     }

@@ -13,11 +13,11 @@ namespace Mottracker.Presentation.Controllers
     [ApiController]
     public class UsuarioPermissaoController : ControllerBase
     {
-        private readonly IUsuarioPermissaoApplicationService _applicationService;
+        private readonly IUsuarioPermissaoUseCase _useCase;
 
-        public UsuarioPermissaoController(IUsuarioPermissaoApplicationService applicationService)
+        public UsuarioPermissaoController(IUsuarioPermissaoUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
 
         [HttpGet]
@@ -34,46 +34,46 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
         [SwaggerResponseExample(statusCode: 200, typeof(UsuarioPermissaoResponseListSample))]
         [EnableRateLimiting("rateLimitePolicy")]
-        public IActionResult Get(
+        public async Task<IActionResult> Get(
             [FromQuery, SwaggerParameter("Número de registros a pular (padrão: 0)", Required = false)] int Deslocamento = 0, 
             [FromQuery, SwaggerParameter("Número de registros a retornar (padrão: 3, máximo: 100)", Required = false)] int RegistrosRetornado = 3)
         {
-            var result = _applicationService.ObterTodosUsuarioPermissoes();
+            var result = await _useCase.ObterTodosUsuarioPermissoesAsync(Deslocamento, RegistrosRetornado);
 
-            if (result is not null && result.Any())
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value?.Data?.Select<UsuarioPermissaoResponseDto, object>(up => new
                 {
-                    data = result.Select(up => new
-                    {
-                        up.IdUsuario,
-                        up.IdPermissao,
-                        up.UsuarioPermissao,
-                        up.PermissaoUsuarioPermissao,
-                        links = new
-                        {
-                            self = Url.Action(nameof(GetById), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
-                            put = Url.Action(nameof(Put), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
-                            delete = Url.Action(nameof(Delete), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
-                        }
-                    }),
+                    up.IdUsuario,
+                    up.IdPermissao,
+                    up.PapelUsuarioPermissao,
+                    up.Usuario,
+                    up.Permissao,
                     links = new
                     {
-                        self = Url.Action(nameof(Get), "UsuarioPermissao", null, Request.Scheme),
-                        create = Url.Action(nameof(Post), "UsuarioPermissao", null, Request.Scheme),
-                    },
-                    pagina = new
-                    {
-                        Deslocamento,
-                        RegistrosRetornado,
-                        TotalRegistros = result.Count()
+                        self = Url.Action(nameof(GetById), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
                     }
-                };
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(Get), "UsuarioPermissao", null, Request.Scheme),
+                    create = Url.Action(nameof(Post), "UsuarioPermissao", null, Request.Scheme),
+                },
+                pagina = new
+                {
+                    result.Value?.Deslocamento,
+                    result.Value?.RegistrosRetornado,
+                    result.Value?.TotalRegistros
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NoContent();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpGet("usuario/{usuarioId}/permissao/{permissaoId}")]
@@ -87,30 +87,29 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 404, description: "Permissão de usuário não encontrada para os IDs fornecidos")]
         [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult GetById(
+        public async Task<IActionResult> GetById(
             [FromRoute, SwaggerParameter("ID único do usuário", Required = true)] int usuarioId, 
             [FromRoute, SwaggerParameter("ID único da permissão", Required = true)] int permissaoId)
         {
-            var result = _applicationService.ObterUsuarioPermissaoPorId(usuarioId, permissaoId);
+            var result = await _useCase.ObterUsuarioPermissaoPorIdAsync(usuarioId, permissaoId);
 
-            if (result is not null)
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value,
+                links = new
                 {
-                    data = result,
-                    links = new
-                    {
-                        self = Url.Action(nameof(GetById), "UsuarioPermissao", new { usuarioId, permissaoId }),
-                        get = Url.Action(nameof(Get), "UsuarioPermissao", null),
-                        put = Url.Action(nameof(Put), "UsuarioPermissao", new { usuarioId, permissaoId }),
-                        delete = Url.Action(nameof(Delete), "UsuarioPermissao", new { usuarioId, permissaoId }),
-                    }
-                };
+                    self = Url.Action(nameof(GetById), "UsuarioPermissao", new { usuarioId, permissaoId }),
+                    get = Url.Action(nameof(Get), "UsuarioPermissao", null),
+                    put = Url.Action(nameof(Put), "UsuarioPermissao", new { usuarioId, permissaoId }),
+                    delete = Url.Action(nameof(Delete), "UsuarioPermissao", new { usuarioId, permissaoId }),
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NotFound();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpGet("usuario/{usuarioId}")]
@@ -124,39 +123,39 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 400, description: "ID do usuário é obrigatório")]
         [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult GetByUsuarioId(
+        public async Task<IActionResult> GetByUsuarioId(
             [FromRoute, SwaggerParameter("ID único do usuário", Required = true)] long usuarioId)
         {
-            var result = _applicationService.ObterUsuarioPermissoesPorUsuarioId(usuarioId);
+            var result = await _useCase.ObterUsuarioPermissoesPorUsuarioIdAsync(usuarioId);
 
-            if (result is not null && result.Any())
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value?.Select<UsuarioPermissaoResponseDto, object>(up => new
                 {
-                    data = result.Select(up => new
-                    {
-                        up.IdUsuario,
-                        up.IdPermissao,
-                        up.UsuarioPermissao,
-                        up.PermissaoUsuarioPermissao,
-                        links = new
-                        {
-                            self = Url.Action(nameof(GetById), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
-                            put = Url.Action(nameof(Put), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
-                            delete = Url.Action(nameof(Delete), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
-                        }
-                    }),
+                    up.IdUsuario,
+                    up.IdPermissao,
+                    up.PapelUsuarioPermissao,
+                    up.Usuario,
+                    up.Permissao,
                     links = new
                     {
-                        self = Url.Action(nameof(GetByUsuarioId), "UsuarioPermissao", new { usuarioId }, Request.Scheme),
-                        get = Url.Action(nameof(Get), "UsuarioPermissao", null, Request.Scheme),
+                        self = Url.Action(nameof(GetById), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
                     }
-                };
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(GetByUsuarioId), "UsuarioPermissao", new { usuarioId }, Request.Scheme),
+                    get = Url.Action(nameof(Get), "UsuarioPermissao", null, Request.Scheme),
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NoContent();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpGet("permissao/{permissaoId}")]
@@ -170,39 +169,39 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 400, description: "ID da permissão é obrigatório")]
         [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult GetByPermissaoId(
+        public async Task<IActionResult> GetByPermissaoId(
             [FromRoute, SwaggerParameter("ID único da permissão", Required = true)] long permissaoId)
         {
-            var result = _applicationService.ObterUsuarioPermissoesPorPermissaoId(permissaoId);
+            var result = await _useCase.ObterUsuarioPermissoesPorPermissaoIdAsync(permissaoId);
 
-            if (result is not null && result.Any())
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var hateaos = new
+                data = result.Value?.Select<UsuarioPermissaoResponseDto, object>(up => new
                 {
-                    data = result.Select(up => new
-                    {
-                        up.IdUsuario,
-                        up.IdPermissao,
-                        up.UsuarioPermissao,
-                        up.PermissaoUsuarioPermissao,
-                        links = new
-                        {
-                            self = Url.Action(nameof(GetById), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
-                            put = Url.Action(nameof(Put), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
-                            delete = Url.Action(nameof(Delete), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
-                        }
-                    }),
+                    up.IdUsuario,
+                    up.IdPermissao,
+                    up.PapelUsuarioPermissao,
+                    up.Usuario,
+                    up.Permissao,
                     links = new
                     {
-                        self = Url.Action(nameof(GetByPermissaoId), "UsuarioPermissao", new { permissaoId }, Request.Scheme),
-                        get = Url.Action(nameof(Get), "UsuarioPermissao", null, Request.Scheme),
+                        self = Url.Action(nameof(GetById), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "UsuarioPermissao", new { usuarioId = up.IdUsuario, permissaoId = up.IdPermissao }, Request.Scheme),
                     }
-                };
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(GetByPermissaoId), "UsuarioPermissao", new { permissaoId }, Request.Scheme),
+                    get = Url.Action(nameof(Get), "UsuarioPermissao", null, Request.Scheme),
+                }
+            };
 
-                return Ok(hateaos);
-            }
-
-            return NoContent();
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpPost]
@@ -217,26 +216,16 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 400, description: "Dados inválidos - campos obrigatórios ausentes")]
         [SwaggerResponse(statusCode: 422, description: "Não foi possível criar a permissão - dados inválidos ou duplicados")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult Post(
+        public async Task<IActionResult> Post(
             [FromBody, SwaggerParameter("Dados da permissão de usuário a ser criada", Required = true)] UsuarioPermissaoRequestDto entity)
         {
-            try
-            {
-                var result = _applicationService.SalvarDadosUsuarioPermissao(entity);
+            var result = await _useCase.SalvarDadosUsuarioPermissaoAsync(entity);
 
-                if (result is not null)
-                    return CreatedAtAction(nameof(GetById), new { usuarioId = result.IdUsuario, permissaoId = result.IdPermissao }, result);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
-                return BadRequest("Não foi possível salvar os dados.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Error = ex.Message,
-                    Status = HttpStatusCode.BadRequest
-                });
-            }
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, result.Value);
         }
 
         [HttpPut("usuario/{usuarioId}/permissao/{permissaoId}")]
@@ -252,28 +241,18 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 404, description: "Permissão de usuário não encontrada para os IDs fornecidos")]
         [SwaggerResponse(statusCode: 422, description: "Não foi possível atualizar a permissão - dados inválidos")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult Put(
+        public async Task<IActionResult> Put(
             [FromRoute, SwaggerParameter("ID único do usuário", Required = true)] int usuarioId, 
             [FromRoute, SwaggerParameter("ID único da permissão", Required = true)] int permissaoId, 
             [FromBody, SwaggerParameter("Novos dados da permissão de usuário", Required = true)] UsuarioPermissaoRequestDto entity)
         {
-            try
-            {
-                var result = _applicationService.EditarDadosUsuarioPermissao(usuarioId, permissaoId, entity);
+            var result = await _useCase.EditarDadosUsuarioPermissaoAsync(usuarioId, permissaoId, entity);
 
-                if (result is not null)
-                    return Ok(result);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Error = ex.Message,
-                    Status = HttpStatusCode.BadRequest
-                });
-            }
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, result.Value);
         }
 
         [HttpDelete("usuario/{usuarioId}/permissao/{permissaoId}")]
@@ -287,16 +266,17 @@ namespace Mottracker.Presentation.Controllers
         [SwaggerResponse(statusCode: 404, description: "Permissão de usuário não encontrada para os IDs fornecidos")]
         [SwaggerResponse(statusCode: 422, description: "Não foi possível remover a permissão")]
         [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
-        public IActionResult Delete(
+        public async Task<IActionResult> Delete(
             [FromRoute, SwaggerParameter("ID único do usuário", Required = true)] int usuarioId, 
             [FromRoute, SwaggerParameter("ID único da permissão", Required = true)] int permissaoId)
         {
-            var result = _applicationService.DeletarDadosUsuarioPermissao(usuarioId, permissaoId);
+            var result = await _useCase.DeletarDadosUsuarioPermissaoAsync(usuarioId, permissaoId);
 
-            if (result is not null)
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            if (result.StatusCode == 204)
                 return NoContent();
-
-            return NotFound();
+            return StatusCode(result.StatusCode, result.Value);
         }
     }
 }

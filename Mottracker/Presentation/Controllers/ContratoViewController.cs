@@ -6,36 +6,36 @@ namespace Mottracker.Presentation.Controllers
 {
     public class ContratoViewController : Controller
     {
-        private readonly IContratoApplicationService _applicationService;
+        private readonly IContratoUseCase _useCase;
 
-        public ContratoViewController(IContratoApplicationService applicationService)
+        public ContratoViewController(IContratoUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _applicationService.ObterTodosContratos();
+            var result = await _useCase.ObterTodosContratosAsync();
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 TempData["Error"] = "Erro ao carregar os contratos";
                 return View(new List<ContratoResponseDto>());
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var result = _applicationService.ObterContratoPorId(id);
+            var result = await _useCase.ObterContratoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         public IActionResult Create()
@@ -45,15 +45,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ContratoRequestDto contrato)
+        public async Task<IActionResult> Create(ContratoRequestDto contrato)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.SalvarDadosContrato(contrato);
+                    var result = await _useCase.SalvarContratoAsync(contrato);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Contrato criado com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -71,29 +71,29 @@ namespace Mottracker.Presentation.Controllers
             return View(contrato);
         }
         
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var result = _applicationService.ObterContratoPorId(id);
+            var result = await _useCase.ObterContratoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
             var requestDto = new ContratoRequestDto
             {
-                IdContrato = result.IdContrato,
-                ClausulasContrato = result.ClausulasContrato,
-                DataDeEntradaContrato = result.DataDeEntradaContrato,
-                HorarioDeDevolucaoContrato = result.HorarioDeDevolucaoContrato,
-                DataDeExpiracaoContrato = result.DataDeExpiracaoContrato,
-                RenovacaoAutomaticaContrato = result.RenovacaoAutomaticaContrato,
-                DataUltimaRenovacaoContrato = result.DataUltimaRenovacaoContrato,
-                NumeroRenovacoesContrato = result.NumeroRenovacoesContrato,
-                AtivoContrato = result.AtivoContrato,
-                ValorToralContrato = result.ValorToralContrato,
-                QuantidadeParcelas = result.QuantidadeParcelas,
-                UsuarioContratoId = result.UsuarioContrato?.IdUsuario
+                IdContrato = result.Value.IdContrato,
+                ClausulasContrato = result.Value.ClausulasContrato,
+                DataDeEntradaContrato = result.Value.DataDeEntradaContrato,
+                HorarioDeDevolucaoContrato = result.Value.HorarioDeDevolucaoContrato,
+                DataDeExpiracaoContrato = result.Value.DataDeExpiracaoContrato,
+                RenovacaoAutomaticaContrato = result.Value.RenovacaoAutomaticaContrato,
+                DataUltimaRenovacaoContrato = result.Value.DataUltimaRenovacaoContrato,
+                NumeroRenovacoesContrato = result.Value.NumeroRenovacoesContrato,
+                AtivoContrato = result.Value.AtivoContrato,
+                ValorToralContrato = result.Value.ValorToralContrato,
+                QuantidadeParcelas = result.Value.QuantidadeParcelas,
+                UsuarioContratoId = result.Value.UsuarioContrato?.IdUsuario
             };
 
             return View(requestDto);
@@ -101,15 +101,15 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, ContratoRequestDto contrato)
+        public async Task<IActionResult> Edit(int id, ContratoRequestDto contrato)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.EditarDadosContrato(id, contrato);
+                    var result = await _useCase.EditarContratoAsync(id, contrato);
                     
-                    if (result != null)
+                    if (result != null && result.IsSuccess && result.Value != null)
                     {
                         TempData["Success"] = "Contrato atualizado com sucesso!";
                         return RedirectToAction(nameof(Index));
@@ -127,27 +127,27 @@ namespace Mottracker.Presentation.Controllers
             return View(contrato);
         }
         
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = _applicationService.ObterContratoPorId(id);
+            var result = await _useCase.ObterContratoPorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
             {
-                var result = _applicationService.DeletarDadosContrato(id);
+                var result = await _useCase.DeletarContratoAsync(id);
                 
-                if (result != null)
+                if (result != null && result.IsSuccess)
                 {
                     TempData["Success"] = "Contrato deletado com sucesso!";
                 }

@@ -10,13 +10,13 @@ namespace Mottracker.Docs.Samples
             return new EnderecoRequestDto
             {
                 IdEndereco = 0,
-                CepEndereco = "01234-567",
-                LogradouroEndereco = "Rua das Flores",
-                NumeroEndereco = "123",
-                ComplementoEndereco = "Apto 45",
-                BairroEndereco = "Centro",
-                CidadeEndereco = "São Paulo",
-                EstadoEndereco = "SP",
+                CEP = "01234-567",
+                Logradouro = "Rua das Flores",
+                Numero = "123",
+                Complemento = "Apto 45",
+                Bairro = "Centro",
+                Cidade = "São Paulo",
+                Estado = "SP",
                 PatioEnderecoId = 1
             };
         }

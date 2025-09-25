@@ -10,9 +10,11 @@ namespace Mottracker.Docs.Samples
             return new LayoutPatioRequestDto
             {
                 IdLayoutPatio = 0,
-                NomeLayoutPatio = "Layout Principal",
-                DescricaoLayoutPatio = "Layout padrão do pátio central",
-                DataCriacaoLayoutPatio = new DateTime(2024, 1, 15),
+                Descricao = "Layout padrão do pátio central",
+                DataCriacao = new DateTime(2024, 1, 15),
+                Largura = 25.50m,
+                Comprimento = 40.00m,
+                Altura = 3.00m,
                 PatioLayoutPatioId = 1
             };
         }

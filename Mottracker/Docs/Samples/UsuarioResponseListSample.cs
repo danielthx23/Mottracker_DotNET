@@ -1,3 +1,4 @@
+using Mottracker.Application.Dtos;
 using Swashbuckle.AspNetCore.Filters;
 using Mottracker.Application.Dtos.Usuario;
 using Mottracker.Application.Dtos.Contrato;

@@ -18,7 +18,7 @@ namespace Mottracker.Application.Mappers
                 Estado = obj.Estado,
                 CEP = obj.CEP,
                 Referencia = obj.Referencia,
-                PatioEnderecoId = obj.PatioId
+                PatioEnderecoId = obj.PatioEnderecoId
             };
         }
 

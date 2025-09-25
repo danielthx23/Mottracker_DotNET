@@ -14,7 +14,6 @@ namespace Mottracker.Docs.Samples
                 MotosTotaisPatio = 50,
                 MotosDisponiveisPatio = 35,
                 DataPatio = new DateTime(2024, 1, 15),
-                EnderecoPatioId = 1
             };
         }
     }

@@ -1,6 +1,5 @@
 using Mottracker.Domain.Entities;
 using Mottracker.Domain.Enums;
-using Mottracker.Application.Models;
 
 namespace Mottracker.Domain.Interfaces
 {

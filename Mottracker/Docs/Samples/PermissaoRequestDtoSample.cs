@@ -11,7 +11,7 @@ namespace Mottracker.Docs.Samples
             {
                 IdPermissao = 0,
                 NomePermissao = "Administrador",
-                DescricaoPermissao = "Acesso total ao sistema"
+                Descricao = "Acesso total ao sistema"
             };
         }
     }

@@ -1,28 +1,22 @@
-namespace Mottracker.Application.Models
+namespace Mottracker.Domain.Entities;
+
+public class OperationResult<T>
 {
-    public class OperationResult<T>
+    public bool IsSuccess { get; set; }
+    public string? Error { get; set; }
+    public int StatusCode { get; set; } = 200;
+    public T? Value { get; set; }
+
+    private OperationResult() { }
+
+    public static OperationResult<T> Success(T value, int statusCode = 200)
     {
-        public bool IsSuccess { get; private set; }
-        public T? Data { get; private set; }
-        public string? ErrorMessage { get; private set; }
-        public int StatusCode { get; private set; }
-
-        private OperationResult(bool isSuccess, T? data, string? errorMessage, int statusCode = 200)
-        {
-            IsSuccess = isSuccess;
-            Data = data;
-            ErrorMessage = errorMessage;
-            StatusCode = statusCode;
-        }
-
-        public static OperationResult<T> Success(T data, int statusCode = 200)
-        {
-            return new OperationResult<T>(true, data, null, statusCode);
-        }
-
-        public static OperationResult<T> Failure(string errorMessage, int statusCode = 400)
-        {
-            return new OperationResult<T>(false, default(T), errorMessage, statusCode);
-        }
+        return new OperationResult<T> { IsSuccess = true, Value = value, StatusCode = statusCode };
     }
+
+    public static OperationResult<T> Failure(string error, int statusCode = 400)
+    {
+        return new OperationResult<T> { IsSuccess = false, Error = error, StatusCode = statusCode };
+    }
+
 }

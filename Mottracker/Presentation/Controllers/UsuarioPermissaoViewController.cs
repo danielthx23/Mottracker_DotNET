@@ -9,61 +9,64 @@ namespace Mottracker.Presentation.Controllers
 {
     public class UsuarioPermissaoViewController : Controller
     {
-        private readonly IUsuarioPermissaoApplicationService _applicationService;
-        private readonly IUsuarioApplicationService _usuarioApplicationService;
-        private readonly IPermissaoApplicationService _permissaoApplicationService;
+        private readonly IUsuarioPermissaoUseCase _useCase;
+        private readonly IUsuarioUseCase _usuarioUseCase;
+        private readonly IPermissaoUseCase _permissaoUseCase;
 
         public UsuarioPermissaoViewController(
-            IUsuarioPermissaoApplicationService applicationService,
-            IUsuarioApplicationService usuarioApplicationService,
-            IPermissaoApplicationService permissaoApplicationService)
+            IUsuarioPermissaoUseCase useCase,
+            IUsuarioUseCase usuarioUseCase,
+            IPermissaoUseCase permissaoUseCase)
         {
-            _applicationService = applicationService;
-            _usuarioApplicationService = usuarioApplicationService;
-            _permissaoApplicationService = permissaoApplicationService;
+            _useCase = useCase;
+            _usuarioUseCase = usuarioUseCase;
+            _permissaoUseCase = permissaoUseCase;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _applicationService.ObterTodosUsuarioPermissoes();
+            var result = await _useCase.ObterTodosUsuarioPermissoesAsync();
 
-            if (result == null || !result.Any())
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 TempData["Error"] = "Nenhuma permissão de usuário encontrada.";
                 return View(new List<UsuarioPermissaoResponseDto>());
             }
 
-            return View(result);
+            return View(result.Value);
         }
 
-        public IActionResult Details(int usuarioId, int permissaoId)
+        public async Task<IActionResult> Details(int usuarioId, int permissaoId)
         {
-            var result = _applicationService.ObterUsuarioPermissaoPorId(usuarioId, permissaoId);
+            var result = await _useCase.ObterUsuarioPermissaoPorIdAsync(usuarioId, permissaoId);
 
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Usuarios = new SelectList(_usuarioApplicationService.ObterTodosUsuarios(), "IdUsuario", "NomeUsuario");
-            ViewBag.Permissoes = new SelectList(_permissaoApplicationService.ObterTodosPermissoes(), "IdPermissao", "NomePermissao");
+            var usuariosResult = await _usuarioUseCase.ObterTodosUsuariosAsync();
+            var permissoesResult = await _permissaoUseCase.ObterTodosPermissoesAsync();
+            
+            ViewBag.Usuarios = new SelectList(usuariosResult.Value ?? new List<UsuarioResponseDto>(), "IdUsuario", "NomeUsuario");
+            ViewBag.Permissoes = new SelectList(permissoesResult.Value ?? new List<PermissaoResponseDto>(), "IdPermissao", "NomePermissao");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(UsuarioPermissaoRequestDto usuarioPermissao)
+        public async Task<IActionResult> Create(UsuarioPermissaoRequestDto usuarioPermissao)
         {
             if (ModelState.IsValid)
             {
-                var result = _applicationService.SalvarDadosUsuarioPermissao(usuarioPermissao);
+                var result = await _useCase.SalvarDadosUsuarioPermissaoAsync(usuarioPermissao);
 
-                if (result != null)
+                if (result != null && result.IsSuccess && result.Value != null)
                 {
                     TempData["Success"] = "Permissão de usuário criada com sucesso!";
                     return RedirectToAction(nameof(Index));
@@ -73,40 +76,45 @@ namespace Mottracker.Presentation.Controllers
                     TempData["Error"] = "Não foi possível criar a permissão de usuário.";
                 }
             }
-            ViewBag.Usuarios = new SelectList(_usuarioApplicationService.ObterTodosUsuarios(), "IdUsuario", "NomeUsuario", usuarioPermissao.IdUsuario);
-            ViewBag.Permissoes = new SelectList(_permissaoApplicationService.ObterTodosPermissoes(), "IdPermissao", "NomePermissao", usuarioPermissao.IdPermissao);
+            var usuariosResult = await _usuarioUseCase.ObterTodosUsuariosAsync();
+            var permissoesResult = await _permissaoUseCase.ObterTodosPermissoesAsync();
+            
+            ViewBag.Usuarios = new SelectList(usuariosResult.Value ?? new List<UsuarioResponseDto>(), "IdUsuario", "NomeUsuario", usuarioPermissao.IdUsuario);
+            ViewBag.Permissoes = new SelectList(permissoesResult.Value ?? new List<PermissaoResponseDto>(), "IdPermissao", "NomePermissao", usuarioPermissao.IdPermissao);
             return View(usuarioPermissao);
         }
 
-        public IActionResult Edit(int usuarioId, int permissaoId)
+        public async Task<IActionResult> Edit(int usuarioId, int permissaoId)
         {
-            var result = _applicationService.ObterUsuarioPermissaoPorId(usuarioId, permissaoId);
+            var result = await _useCase.ObterUsuarioPermissaoPorIdAsync(usuarioId, permissaoId);
 
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
             var requestDto = new UsuarioPermissaoRequestDto
             {
-                IdUsuario = result.IdUsuario,
-                IdPermissao = result.IdPermissao
+                IdUsuario = result.Value.IdUsuario,
+                IdPermissao = result.Value.IdPermissao
             };
+            var usuariosResult = await _usuarioUseCase.ObterTodosUsuariosAsync();
+            var permissoesResult = await _permissaoUseCase.ObterTodosPermissoesAsync();
 
-            ViewBag.Usuarios = new SelectList(_usuarioApplicationService.ObterTodosUsuarios(), "IdUsuario", "NomeUsuario", requestDto.IdUsuario);
-            ViewBag.Permissoes = new SelectList(_permissaoApplicationService.ObterTodosPermissoes(), "IdPermissao", "NomePermissao", requestDto.IdPermissao);
+            ViewBag.Usuarios = new SelectList(usuariosResult.Value ?? new List<UsuarioResponseDto>(), "IdUsuario", "NomeUsuario", requestDto.IdUsuario);
+            ViewBag.Permissoes = new SelectList(permissoesResult.Value ?? new List<PermissaoResponseDto>(), "IdPermissao", "NomePermissao", requestDto.IdPermissao);
             return View(requestDto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int usuarioId, int permissaoId, UsuarioPermissaoRequestDto usuarioPermissao)
+        public async Task<IActionResult> Edit(int usuarioId, int permissaoId, UsuarioPermissaoRequestDto usuarioPermissao)
         {
             if (ModelState.IsValid)
             {
-                var result = _applicationService.EditarDadosUsuarioPermissao(usuarioId, permissaoId, usuarioPermissao);
+                var result = await _useCase.EditarDadosUsuarioPermissaoAsync(usuarioId, permissaoId, usuarioPermissao);
 
-                if (result != null)
+                if (result != null && result.IsSuccess && result.Value != null)
                 {
                     TempData["Success"] = "Permissão de usuário atualizada com sucesso!";
                     return RedirectToAction(nameof(Index));
@@ -116,30 +124,33 @@ namespace Mottracker.Presentation.Controllers
                     TempData["Error"] = "Não foi possível atualizar a permissão de usuário.";
                 }
             }
-            ViewBag.Usuarios = new SelectList(_usuarioApplicationService.ObterTodosUsuarios(), "IdUsuario", "NomeUsuario", usuarioPermissao.IdUsuario);
-            ViewBag.Permissoes = new SelectList(_permissaoApplicationService.ObterTodosPermissoes(), "IdPermissao", "NomePermissao", usuarioPermissao.IdPermissao);
+            var usuariosResult = await _usuarioUseCase.ObterTodosUsuariosAsync();
+            var permissoesResult = await _permissaoUseCase.ObterTodosPermissoesAsync();
+            
+            ViewBag.Usuarios = new SelectList(usuariosResult.Value ?? new List<UsuarioResponseDto>(), "IdUsuario", "NomeUsuario", usuarioPermissao.IdUsuario);
+            ViewBag.Permissoes = new SelectList(permissoesResult.Value ?? new List<PermissaoResponseDto>(), "IdPermissao", "NomePermissao", usuarioPermissao.IdPermissao);
             return View(usuarioPermissao);
         }
 
-        public IActionResult Delete(int usuarioId, int permissaoId)
+        public async Task<IActionResult> Delete(int usuarioId, int permissaoId)
         {
-            var result = _applicationService.ObterUsuarioPermissaoPorId(usuarioId, permissaoId);
+            var result = await _useCase.ObterUsuarioPermissaoPorIdAsync(usuarioId, permissaoId);
 
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int usuarioId, int permissaoId)
+        public async Task<IActionResult> DeleteConfirmed(int usuarioId, int permissaoId)
         {
-            var result = _applicationService.DeletarDadosUsuarioPermissao(usuarioId, permissaoId);
+            var result = await _useCase.DeletarDadosUsuarioPermissaoAsync(usuarioId, permissaoId);
 
-            if (result != null)
+            if (result != null && result.IsSuccess)
             {
                 TempData["Success"] = "Permissão de usuário deletada com sucesso!";
             }

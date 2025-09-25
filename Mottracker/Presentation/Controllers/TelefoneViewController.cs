@@ -6,36 +6,36 @@ namespace Mottracker.Presentation.Controllers
 {
     public class TelefoneViewController : Controller
     {
-        private readonly ITelefoneApplicationService _applicationService;
+        private readonly ITelefoneUseCase _useCase;
 
-        public TelefoneViewController(ITelefoneApplicationService applicationService)
+        public TelefoneViewController(ITelefoneUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var result = _applicationService.ObterTodosTelefones();
+            var result = await _useCase.ObterTodosTelefonesAsync();
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 TempData["Error"] = "Erro ao carregar os telefones";
                 return View(new List<TelefoneResponseDto>());
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var result = _applicationService.ObterTelefonePorId(id);
+            var result = await _useCase.ObterTelefonePorIdAsync(id);
             
-            if (result == null)
+            if (result == null || !result.IsSuccess || result.Value == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         public IActionResult Create()
@@ -45,13 +45,13 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(TelefoneRequestDto telefone)
+        public async Task<IActionResult> Create(TelefoneRequestDto telefone)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.SalvarDadosTelefone(telefone);
+                    var result = await _useCase.SalvarDadosTelefoneAsync(telefone);
                     
                     if (result != null)
                     {
@@ -71,9 +71,9 @@ namespace Mottracker.Presentation.Controllers
             return View(telefone);
         }
         
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var result = _applicationService.ObterTelefonePorId(id);
+            var result = await _useCase.ObterTelefonePorIdAsync(id);
             
             if (result == null)
             {
@@ -82,10 +82,9 @@ namespace Mottracker.Presentation.Controllers
 
             var requestDto = new TelefoneRequestDto
             {
-                IdTelefone = result.IdTelefone,
-                NumeroTelefone = result.NumeroTelefone,
-                TipoTelefone = result.TipoTelefone,
-                UsuarioTelefoneId = result.UsuarioTelefone?.IdUsuario
+                Numero = result.Value.Numero,
+                Tipo = result.Value.Tipo,
+                UsuarioId = result.Value.Usuario?.IdUsuario
             };
 
             return View(requestDto);
@@ -93,13 +92,13 @@ namespace Mottracker.Presentation.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, TelefoneRequestDto telefone)
+        public async Task<IActionResult> Edit(int id, TelefoneRequestDto telefone)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = _applicationService.EditarDadosTelefone(id, telefone);
+                    var result = await _useCase.EditarDadosTelefoneAsync(id, telefone);
                     
                     if (result != null)
                     {
@@ -119,25 +118,25 @@ namespace Mottracker.Presentation.Controllers
             return View(telefone);
         }
         
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = _applicationService.ObterTelefonePorId(id);
+            var result = await _useCase.ObterTelefonePorIdAsync(id);
             
             if (result == null)
             {
                 return NotFound();
             }
 
-            return View(result);
+            return View(result.Value);
         }
         
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
             {
-                var result = _applicationService.DeletarDadosTelefone(id);
+                var result = await _useCase.DeletarDadosTelefoneAsync(id);
                 
                 if (result != null)
                 {

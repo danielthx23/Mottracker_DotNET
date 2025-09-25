@@ -26,8 +26,8 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="UsuarioPermissaoUsuarioId" />
-        <input type="hidden" asp-for="UsuarioPermissaoPermissaoId" />
+        <input type="hidden" asp-for="Usuario.IdUsuario" />
+        <input type="hidden" asp-for="Permissao.IdPermissao" />
         <input type="submit" value="Excluir" class="btn btn-danger" />
         <a asp-action="Index" class="btn btn-secondary">Voltar</a>
     </form>

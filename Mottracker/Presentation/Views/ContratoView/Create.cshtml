@@ -13,14 +13,14 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group mb-3">
-                <label asp-for="DataEntrada" class="control-label">Data de Entrada</label>
-                <input asp-for="DataEntrada" class="form-control" type="date" />
-                <span asp-validation-for="DataEntrada" class="text-danger"></span>
+                <label asp-for="DataDeEntradaContrato" class="control-label">Data de Entrada</label>
+                <input asp-for="DataDeEntradaContrato" class="form-control" type="date" />
+                <span asp-validation-for="DataDeEntradaContrato" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="DataSaida" class="control-label">Data de Saída</label>
-                <input asp-for="DataSaida" class="form-control" type="date" />
-                <span asp-validation-for="DataSaida" class="text-danger"></span>
+                <label asp-for="DataDeExpiracaoContrato" class="control-label">Data de Saída</label>
+                <input asp-for="DataDeExpiracaoContrato" class="form-control" type="date" />
+                <span asp-validation-for="DataDeExpiracaoContrato" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="AtivoContrato" class="control-label">Contrato Ativo</label>
@@ -31,12 +31,12 @@
                 <span asp-validation-for="AtivoContrato" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="RenovacaoAutomatica" class="control-label">Renovação Automática</label>
-                <select asp-for="RenovacaoAutomatica" class="form-control">
+                <label asp-for="RenovacaoAutomaticaContrato" class="control-label">Renovação Automática</label>
+                <select asp-for="RenovacaoAutomaticaContrato" class="form-control">
                     <option value="1">Sim</option>
                     <option value="0">Não</option>
                 </select>
-                <span asp-validation-for="RenovacaoAutomatica" class="text-danger"></span>
+                <span asp-validation-for="RenovacaoAutomaticaContrato" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="UsuarioContratoId" class="control-label">ID do Usuário</label>

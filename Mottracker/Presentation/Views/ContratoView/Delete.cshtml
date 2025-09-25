@@ -15,37 +15,37 @@
             Data de Entrada
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DataEntrada)
+            @Html.DisplayFor(model => model.DataDeEntradaContrato)
         </dd>
         <dt class="col-sm-2">
             Data de Saída
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DataSaida)
+            @Html.DisplayFor(model => model.DataUltimaRenovacaoContrato)
         </dd>
         <dt class="col-sm-2">
             Contrato Ativo
         </dt>
         <dd class="col-sm-10">
-            @(Model.AtivoContrato ? "Sim" : "Não")
+            @(Model.AtivoContrato == 1 ? "Sim" : "Não")
         </dd>
         <dt class="col-sm-2">
             Renovação Automática
         </dt>
         <dd class="col-sm-10">
-            @(Model.RenovacaoAutomatica ? "Sim" : "Não")
+            @(Model.RenovacaoAutomaticaContrato == 1 ? "Sim" : "Não")
         </dd>
         <dt class="col-sm-2">
             Usuário
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Usuario.NomeUsuario)
+            @Html.DisplayFor(model => model.UsuarioContrato.NomeUsuario)
         </dd>
         <dt class="col-sm-2">
             Moto
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Moto.PlacaMoto)
+            @Html.DisplayFor(model => model.MotoContrato.PlacaMoto)
         </dd>
     </dl>
     
