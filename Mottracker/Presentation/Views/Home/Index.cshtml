@@ -1,0 +1,155 @@
+@{
+    ViewData["Title"] = "Início";
+}
+
+<div class="container">
+    <div class="text-center mb-5">
+        <h1 class="display-4">Bem-vindo ao Mottracker</h1>
+        <p class="lead">Sistema de Rastreamento e Monitoramento de Motos</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-camera display-4 text-primary mb-3"></i>
+                    <h5 class="card-title">Câmeras</h5>
+                    <p class="card-text">Gerencie as câmeras de monitoramento dos pátios.</p>
+                    <a asp-controller="CameraView" asp-action="Index" class="btn btn-primary">
+                        <i class="bi bi-arrow-right"></i> Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-file-text display-4 text-success mb-3"></i>
+                    <h5 class="card-title">Contratos</h5>
+                    <p class="card-text">Gerencie os contratos de locação das motos.</p>
+                    <a asp-controller="ContratoView" asp-action="Index" class="btn btn-success">
+                        <i class="bi bi-arrow-right"></i> Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-people display-4 text-info mb-3"></i>
+                    <h5 class="card-title">Usuários</h5>
+                    <p class="card-text">Gerencie os usuários do sistema e suas permissões.</p>
+                    <a asp-controller="UsuarioView" asp-action="Index" class="btn btn-info">
+                        <i class="bi bi-arrow-right"></i> Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-bicycle display-4 text-warning mb-3"></i>
+                    <h5 class="card-title">Motos</h5>
+                    <p class="card-text">Gerencie o cadastro e status das motos.</p>
+                    <a asp-controller="MotoView" asp-action="Index" class="btn btn-warning">
+                        <i class="bi bi-arrow-right"></i> Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-building display-4 text-danger mb-3"></i>
+                    <h5 class="card-title">Pátios</h5>
+                    <p class="card-text">Gerencie os pátios onde as motos são armazenadas.</p>
+                    <a asp-controller="PatioView" asp-action="Index" class="btn btn-danger">
+                        <i class="bi bi-arrow-right"></i> Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-geo-alt display-4 text-secondary mb-3"></i>
+                    <h5 class="card-title">Endereços</h5>
+                    <p class="card-text">Gerencie os endereços dos pátios.</p>
+                    <a asp-controller="EnderecoView" asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-right"></i> Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-grid display-4 text-primary mb-3"></i>
+                    <h5 class="card-title">Layouts do Pátio</h5>
+                    <p class="card-text">Gerencie os layouts dos pátios.</p>
+                    <a asp-controller="LayoutPatioView" asp-action="Index" class="btn btn-primary">
+                        <i class="bi bi-arrow-right"></i> Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-shield-check display-4 text-success mb-3"></i>
+                    <h5 class="card-title">Permissões</h5>
+                    <p class="card-text">Gerencie as permissões do sistema.</p>
+                    <a asp-controller="PermissaoView" asp-action="Index" class="btn btn-success">
+                        <i class="bi bi-arrow-right"></i> Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-qr-code display-4 text-info mb-3"></i>
+                    <h5 class="card-title">QR Code Pontos</h5>
+                    <p class="card-text">Gerencie os pontos QR Code dos pátios.</p>
+                    <a asp-controller="QrCodePontoView" asp-action="Index" class="btn btn-info">
+                        <i class="bi bi-arrow-right"></i> Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-telephone display-4 text-warning mb-3"></i>
+                    <h5 class="card-title">Telefones</h5>
+                    <p class="card-text">Gerencie os telefones dos usuários.</p>
+                    <a asp-controller="TelefoneView" asp-action="Index" class="btn btn-warning">
+                        <i class="bi bi-arrow-right"></i> Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-person-check display-4 text-danger mb-3"></i>
+                    <h5 class="card-title">Usuário Permissões</h5>
+                    <p class="card-text">Gerencie as permissões dos usuários.</p>
+                    <a asp-controller="UsuarioPermissaoView" asp-action="Index" class="btn btn-danger">
+                        <i class="bi bi-arrow-right"></i> Acessar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

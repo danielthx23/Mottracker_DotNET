@@ -1,184 +1,286 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Mottracker.Application.Interfaces;
 using Mottracker.Application.Dtos.Camera;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Net;
+using Mottracker.Docs.Samples;
 using Mottracker.Domain.Enums;
+using Swashbuckle.AspNetCore.Annotations;
+using Swashbuckle.AspNetCore.Filters;
+using System.Net;
 
 namespace Mottracker.Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/camera")]
     [ApiController]
     public class CameraController : ControllerBase
     {
-        private readonly ICameraApplicationService _applicationService;
+        private readonly ICameraUseCase _useCase;
 
-        public CameraController(ICameraApplicationService applicationService)
+        public CameraController(ICameraUseCase useCase)
         {
-            _applicationService = applicationService;
+            _useCase = useCase;
         }
 
         [HttpGet]
-        [SwaggerOperation(Summary = "Lista todas as câmeras", Description = "Retorna todas as câmeras cadastradas no sistema.")]
-        [SwaggerResponse(200, "Lista de câmeras retornada com sucesso", typeof(List<CameraResponseDto>))]
-        [SwaggerResponse(204, "Nenhuma câmera encontrada")]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao obter as câmeras")]
-        [ProducesResponseType(typeof(IEnumerable<CameraResponseDto>), 200)]
-        public IActionResult Get()
+        [SwaggerOperation(
+           Summary = "Lista câmeras com paginação",
+           Description = "Retorna uma lista paginada de câmeras cadastradas no sistema. " +
+                        "Este endpoint suporta paginação para otimizar a performance com grandes volumes de dados. " +
+                        "As câmeras são retornadas com informações completas e links HATEOAS para navegação."
+        )]
+        [SwaggerResponse(statusCode: 200, description: "Lista de câmeras retornada com sucesso", type: typeof(IEnumerable<CameraResponseDto>))]
+        [SwaggerResponse(statusCode: 204, description: "Nenhuma câmera encontrada")]
+        [SwaggerResponse(statusCode: 400, description: "Parâmetros de paginação inválidos")]
+        [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
+        [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
+        [SwaggerResponseExample(statusCode: 200, typeof(CameraResponseListSample))]
+        [EnableRateLimiting("rateLimitePolicy")]
+        public async Task<IActionResult> Get(
+            [FromQuery, SwaggerParameter("Número de registros a pular (padrão: 0)", Required = false)] int Deslocamento = 0, 
+            [FromQuery, SwaggerParameter("Número de registros a retornar (padrão: 3, máximo: 100)", Required = false)] int RegistrosRetornado = 3)
         {
-            var result = _applicationService.ObterTodasCameras();
+            var result = await _useCase.ObterTodasCamerasAsync(Deslocamento, RegistrosRetornado);
 
-            if (result is not null && result.Any())
-                return Ok(result);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
-            return NoContent();
+            var hateaos = new
+            {
+                data = result.Value?.Data.Select(c => new
+                {
+                    c.IdCamera,
+                    c.NomeCamera,
+                    c.IpCamera,
+                    c.Status,
+                    c.PosX,
+                    c.PosY,
+                    c.Patio,
+                    links = new
+                    {
+                        self = Url.Action(nameof(GetById), "Camera", new { id = c.IdCamera }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "Camera", new { id = c.IdCamera }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "Camera", new { id = c.IdCamera }, Request.Scheme),
+                    }
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(Get), "Camera", null, Request.Scheme),
+                    create = Url.Action(nameof(Post), "Camera", null, Request.Scheme),
+                },
+                pagina = new
+                {
+                    result.Value?.Deslocamento,
+                    result.Value?.RegistrosRetornado,
+                    result.Value?.TotalRegistros
+                }
+            };
+
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpGet("{id}")]
-        [SwaggerOperation(Summary = "Obtém câmera por ID", Description = "Retorna os dados de uma câmera específica.")]
-        [SwaggerResponse(200, "Câmera retornada com sucesso", typeof(CameraResponseDto))]
-        [SwaggerResponse(404, "Câmera não encontrada")]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao obter a câmera")]
-        [ProducesResponseType(typeof(CameraResponseDto), 200)]
-        public IActionResult GetById(int id)
+        [SwaggerOperation(
+            Summary = "Obtém câmera por ID",
+            Description = "Retorna os dados completos de uma câmera específica baseada no ID fornecido. " +
+                        "Inclui informações detalhadas da câmera e links HATEOAS para operações relacionadas."
+        )]
+        [SwaggerResponse(statusCode: 200, description: "Câmera encontrada com sucesso", type: typeof(CameraResponseDto))]
+        [SwaggerResponse(statusCode: 400, description: "ID inválido - deve ser um número positivo")]
+        [SwaggerResponse(statusCode: 404, description: "Câmera não encontrada para o ID fornecido")]
+        [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
+        [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
+        public async Task<IActionResult> GetById(
+            [FromRoute, SwaggerParameter("ID único da câmera", Required = true)] int id)
         {
-            try
+            var result = await _useCase.ObterCameraPorIdAsync(id);
+
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            var hateaos = new
             {
-                var result = _applicationService.ObterCameraPorId(id);
-                if (result is not null)
-                    return Ok(result);
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
+                data = result,
+                links = new
                 {
-                    Error = ex.Message,
-                    Status = HttpStatusCode.BadRequest
-                });
-            }
+                    self = Url.Action(nameof(GetById), "Camera", new { id }),
+                    get = Url.Action(nameof(Get), "Camera", null),
+                    put = Url.Action(nameof(Put), "Camera", new { id }),
+                    delete = Url.Action(nameof(Delete), "Camera", new { id }),
+                }
+            };
+
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
-        [HttpGet("por-nome")]
-        [SwaggerOperation(Summary = "Obtém câmeras por nome", Description = "Retorna todas as câmeras que correspondem ao nome informado.")]
-        [SwaggerResponse(200, "Câmeras retornadas com sucesso", typeof(IEnumerable<CameraResponseDto>))]
-        [SwaggerResponse(204, "Nenhuma câmera encontrada com o nome especificado")]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao obter as câmeras")]
-        [ProducesResponseType(typeof(IEnumerable<CameraResponseDto>), 200)]
-        public IActionResult GetByNome([FromQuery] string nome)
+        [HttpGet("nome/{nome}")]
+        [SwaggerOperation(
+            Summary = "Obtém câmeras por nome",
+            Description = "Retorna uma lista paginada de câmeras filtradas por nome específico. " +
+                        "Útil para encontrar todas as câmeras que contenham palavras-chave no nome."
+        )]
+        [SwaggerResponse(statusCode: 200, description: "Câmeras encontradas com sucesso", type: typeof(IEnumerable<CameraResponseDto>))]
+        [SwaggerResponse(statusCode: 204, description: "Nenhuma câmera encontrada para o nome especificado")]
+        [SwaggerResponse(statusCode: 400, description: "Nome é obrigatório e não pode estar vazio")]
+        [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
+        [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
+        public async Task<IActionResult> GetByNome(
+            [FromRoute, SwaggerParameter("Nome da câmera para busca", Required = true)] string nome)
         {
-            try
-            {
-                var result = _applicationService.ObterCameraPorNome(nome);
+            var result = await _useCase.ObterCamerasPorNomeAsync(nome);
 
-                if (result is not null && result.Any())
-                    return Ok(result);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
-                return NoContent();
-            }
-            catch (Exception ex)
+            var hateaos = new
             {
-                return BadRequest(new
+                data = result.Value?.Data.Select(c => new
                 {
-                    Error = ex.Message,
-                    Status = HttpStatusCode.BadRequest
-                });
-            }
+                    c.IdCamera,
+                    c.NomeCamera,
+                    c.IpCamera,
+                    c.Status,
+                    c.PosX,
+                    c.PosY,
+                    c.Patio,
+                    links = new
+                    {
+                        self = Url.Action(nameof(GetById), "Camera", new { id = c.IdCamera }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "Camera", new { id = c.IdCamera }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "Camera", new { id = c.IdCamera }, Request.Scheme),
+                    }
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(GetByNome), "Camera", new { nome }, Request.Scheme),
+                    get = Url.Action(nameof(Get), "Camera", null, Request.Scheme),
+                }
+            };
+
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
-        [HttpGet("por-status")]
-        [SwaggerOperation(Summary = "Obtém câmeras por status", Description = "Retorna todas as câmeras que possuem o status informado.")]
-        [SwaggerResponse(200, "Câmeras retornadas com sucesso", typeof(IEnumerable<CameraResponseDto>))]
-        [SwaggerResponse(204, "Nenhuma câmera encontrada com o status especificado")]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao obter as câmeras")]
-        [ProducesResponseType(typeof(IEnumerable<CameraResponseDto>), 200)]
-        public IActionResult GetByStatus([FromQuery] CameraStatus status)
+        [HttpGet("status/{status}")]
+        [SwaggerOperation(
+            Summary = "Obtém câmeras por status",
+            Description = "Retorna uma lista paginada de câmeras filtradas por status específico. " +
+                        "Útil para encontrar todas as câmeras com um determinado status (Ativa, Inativa)."
+        )]
+        [SwaggerResponse(statusCode: 200, description: "Câmeras encontradas com sucesso", type: typeof(IEnumerable<CameraResponseDto>))]
+        [SwaggerResponse(statusCode: 204, description: "Nenhuma câmera encontrada para o status especificado")]
+        [SwaggerResponse(statusCode: 400, description: "Status é obrigatório")]
+        [SwaggerResponse(statusCode: 422, description: "Dados de entrada inválidos")]
+        [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
+        public async Task<IActionResult> GetByStatus(
+            [FromRoute, SwaggerParameter("Status da câmera (Ativa, Inativa)", Required = true)] CameraStatus status)
         {
-            try
-            {
-                var result = _applicationService.ObterCameraPorStatus(status);
+            var result = await _useCase.ObterCamerasPorStatusAsync(status);
 
-                if (result is not null && result.Any())
-                    return Ok(result);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
-                return NoContent();
-            }
-            catch (Exception ex)
+            var hateaos = new
             {
-                return BadRequest(new
+                data = result.Value?.Data.Select(c => new
                 {
-                    Error = ex.Message,
-                    Status = HttpStatusCode.BadRequest
-                });
-            }
+                    c.IdCamera,
+                    c.NomeCamera,
+                    c.IpCamera,
+                    c.Status,
+                    c.PosX,
+                    c.PosY,
+                    c.Patio,
+                    links = new
+                    {
+                        self = Url.Action(nameof(GetById), "Camera", new { id = c.IdCamera }, Request.Scheme),
+                        put = Url.Action(nameof(Put), "Camera", new { id = c.IdCamera }, Request.Scheme),
+                        delete = Url.Action(nameof(Delete), "Camera", new { id = c.IdCamera }, Request.Scheme),
+                    }
+                }),
+                links = new
+                {
+                    self = Url.Action(nameof(GetByStatus), "Camera", new { status }, Request.Scheme),
+                    get = Url.Action(nameof(Get), "Camera", null, Request.Scheme),
+                }
+            };
+
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, hateaos);
         }
 
         [HttpPost]
-        [SwaggerOperation(Summary = "Salva uma nova câmera", Description = "Cria uma nova câmera no sistema.")]
-        [SwaggerResponse(201, "Câmera criada com sucesso", typeof(CameraResponseDto))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao salvar a câmera")]
-        [ProducesResponseType(typeof(CameraResponseDto), 201)]
-        public IActionResult Post([FromBody] CameraRequestDto entity)
+        [SwaggerOperation(
+            Summary = "Cria nova câmera",
+            Description = "Cria uma nova câmera no sistema com os dados fornecidos. " +
+                        "Valida se todos os campos obrigatórios estão preenchidos e se não há duplicatas. " +
+                        "Retorna os dados da câmera criada incluindo o ID gerado."
+        )]
+        [SwaggerRequestExample(typeof(CameraRequestDto), typeof(CameraRequestDtoSample))]
+        [SwaggerResponse(statusCode: 201, description: "Câmera criada com sucesso", type: typeof(CameraResponseDto))]
+        [SwaggerResponse(statusCode: 400, description: "Dados inválidos - nome é obrigatório")]
+        [SwaggerResponse(statusCode: 422, description: "Não foi possível criar a câmera - dados inválidos ou duplicados")]
+        [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
+        public async Task<IActionResult> Post(
+            [FromBody, SwaggerParameter("Dados da câmera a ser criada", Required = true)] CameraRequestDto entity)
         {
-            try
-            {
-                var result = _applicationService.SalvarDadosCamera(entity);
+            var result = await _useCase.SalvarCameraAsync(entity);
 
-                if (result is not null)
-                    return CreatedAtAction(nameof(GetById), new { id = result.IdCamera }, result);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
-                return BadRequest("Não foi possível salvar os dados.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Error = ex.Message,
-                    Status = HttpStatusCode.BadRequest
-                });
-            }
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, result);
         }
 
         [HttpPut("{id}")]
-        [SwaggerOperation(Summary = "Atualiza uma câmera", Description = "Atualiza os dados de uma câmera existente.")]
-        [SwaggerResponse(200, "Câmera atualizada com sucesso", typeof(CameraResponseDto))]
-        [SwaggerResponse(404, "Câmera não encontrada")]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao atualizar a câmera")]
-        [ProducesResponseType(typeof(CameraResponseDto), 200)]
-        public IActionResult Put(int id, [FromBody] CameraRequestDto entity)
+        [SwaggerOperation(
+            Summary = "Atualiza câmera existente",
+            Description = "Atualiza os dados de uma câmera existente baseada no ID fornecido. " +
+                        "Valida se a câmera existe e se os novos dados são válidos. " +
+                        "Retorna os dados atualizados da câmera."
+        )]
+        [SwaggerRequestExample(typeof(CameraRequestDto), typeof(CameraRequestDtoSample))]
+        [SwaggerResponse(statusCode: 200, description: "Câmera atualizada com sucesso", type: typeof(CameraResponseDto))]
+        [SwaggerResponse(statusCode: 400, description: "ID inválido ou dados obrigatórios ausentes")]
+        [SwaggerResponse(statusCode: 404, description: "Câmera não encontrada para o ID fornecido")]
+        [SwaggerResponse(statusCode: 422, description: "Não foi possível atualizar a câmera - dados inválidos")]
+        [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
+        public async Task<IActionResult> Put(
+            [FromRoute, SwaggerParameter("ID único da câmera a ser atualizada", Required = true)] int id, 
+            [FromBody, SwaggerParameter("Novos dados da câmera", Required = true)] CameraRequestDto entity)
         {
-            try
-            {
-                var result = _applicationService.EditarDadosCamera(id, entity);
+            var result = await _useCase.EditarCameraAsync(id, entity);
 
-                if (result is not null)
-                    return Ok(result);
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
 
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Error = ex.Message,
-                    Status = HttpStatusCode.BadRequest
-                });
-            }
+            if (result.StatusCode == 204)
+                return NoContent();
+            return StatusCode(result.StatusCode, result);
         }
 
         [HttpDelete("{id}")]
-        [SwaggerOperation(Summary = "Deleta uma câmera", Description = "Remove uma câmera do sistema com base no ID.")]
-        [SwaggerResponse(204, "Câmera deletada com sucesso")]
-        [SwaggerResponse(404, "Câmera não encontrada")]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Erro ao deletar a câmera")]
-        public IActionResult Delete(int id)
+        [SwaggerOperation(
+            Summary = "Remove câmera",
+            Description = "Remove permanentemente uma câmera do sistema baseada no ID fornecido. " +
+                        "Esta operação é irreversível e remove todos os dados associados à câmera."
+        )]
+        [SwaggerResponse(statusCode: 204, description: "Câmera removida com sucesso")]
+        [SwaggerResponse(statusCode: 400, description: "ID inválido - deve ser um número positivo")]
+        [SwaggerResponse(statusCode: 404, description: "Câmera não encontrada para o ID fornecido")]
+        [SwaggerResponse(statusCode: 422, description: "Não foi possível remover a câmera")]
+        [SwaggerResponse(statusCode: 500, description: "Erro interno do servidor")]
+        public async Task<IActionResult> Delete(
+            [FromRoute, SwaggerParameter("ID único da câmera a ser removida", Required = true)] int id)
         {
-            var result = _applicationService.DeletarDadosCamera(id);
+            var result = await _useCase.DeletarCameraAsync(id);
 
-            if (result is not null)
+            if (!result.IsSuccess) return StatusCode(result.StatusCode, result.Error);
+
+            if (result.StatusCode == 204)
                 return NoContent();
-
-            return NotFound();
+            return StatusCode(result.StatusCode, result);
         }
     }
 }

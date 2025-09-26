@@ -1,15 +1,21 @@
 using Mottracker.Domain.Entities;
 
 namespace Mottracker.Domain.Interfaces
-{   
+{
     public interface IUsuarioPermissaoRepository
     {
-        IEnumerable<UsuarioPermissaoEntity> ObterTodos();
-        UsuarioPermissaoEntity? ObterPorId(int usuarioId, int permissaoId);
-        UsuarioPermissaoEntity? Salvar(UsuarioPermissaoEntity entity);
-        UsuarioPermissaoEntity? Atualizar(UsuarioPermissaoEntity entity);
-        UsuarioPermissaoEntity? Deletar(int usuarioId, int permissaoId);
-        IEnumerable<UsuarioPermissaoEntity> ObterPorIdUsuario(long usuarioId);
-        IEnumerable<UsuarioPermissaoEntity> ObterPorIdPermissao(long permissaoId);
+        // Métodos com paginação
+        Task<PageResultModel<IEnumerable<UsuarioPermissaoEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3);
+        
+        // Métodos básicos CRUD
+        Task<UsuarioPermissaoEntity?> ObterPorIdAsync(int usuarioId, int permissaoId);
+        Task<UsuarioPermissaoEntity?> SalvarAsync(UsuarioPermissaoEntity entity);
+        Task<UsuarioPermissaoEntity?> AtualizarAsync(UsuarioPermissaoEntity entity);
+        Task<UsuarioPermissaoEntity?> DeletarAsync(int usuarioId, int permissaoId);
+        
+        // Métodos de consulta específicos (sem paginação)
+        Task<PageResultModel<IEnumerable<UsuarioPermissaoEntity>>> ObterTodasAsync();
+        Task<PageResultModel<IEnumerable<UsuarioPermissaoEntity>>> ObterPorUsuarioIdAsync(long usuarioId);
+        Task<PageResultModel<IEnumerable<UsuarioPermissaoEntity>>> ObterPorPermissaoIdAsync(long permissaoId);
     }
 }

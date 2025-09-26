@@ -14,81 +14,143 @@ namespace Mottracker.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public IEnumerable<QrCodePontoEntity> ObterTodos()
+        public async Task<PageResultModel<IEnumerable<QrCodePontoEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3)
         {
-            return _context.QrCodePonto
+            var totalRegistros = await _context.QrCodePonto.CountAsync();
+
+            var result = await _context.QrCodePonto
                 .Include(q => q.LayoutPatio)
-                .ToList();
+                .OrderBy(q => q.IdQrCodePonto)
+                .Skip(Deslocamento)
+                .Take(RegistrosRetornado)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<QrCodePontoEntity>>
+            {
+                Data = result,
+                Deslocamento = Deslocamento,
+                RegistrosRetornado = RegistrosRetornado,
+                TotalRegistros = totalRegistros
+            };
         }
 
-        public QrCodePontoEntity? ObterPorId(int id)
+        public async Task<QrCodePontoEntity?> ObterPorIdAsync(int id)
         {
-            return _context.QrCodePonto
+            return await _context.QrCodePonto
                 .Include(q => q.LayoutPatio)
-                .FirstOrDefault(q => q.IdQrCodePonto == id);
+                .FirstOrDefaultAsync(q => q.IdQrCodePonto == id);
         }
 
-        public QrCodePontoEntity? Salvar(QrCodePontoEntity entity)
+        public async Task<QrCodePontoEntity?> SalvarAsync(QrCodePontoEntity entity)
         {
             _context.QrCodePonto.Add(entity);
-            _context.SaveChanges();
-
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public QrCodePontoEntity? Atualizar(QrCodePontoEntity entity)
+        public async Task<QrCodePontoEntity?> AtualizarAsync(QrCodePontoEntity entity)
         {
             _context.QrCodePonto.Update(entity);
-            _context.SaveChanges();
-
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public QrCodePontoEntity? Deletar(int id)
+        public async Task<QrCodePontoEntity?> DeletarAsync(int id)
         {
-            var entity = _context.QrCodePonto.Find(id);
-
+            var entity = await _context.QrCodePonto.FindAsync(id);
             if (entity is not null)
             {
                 _context.QrCodePonto.Remove(entity);
-                _context.SaveChanges();
-
+                await _context.SaveChangesAsync();
                 return entity;
             }
 
             return null;
         }
 
-        public QrCodePontoEntity? ObterPorIdentificador(string identificadorQrCode)
+        // Métodos de consulta específicos (sem paginação)
+        public async Task<PageResultModel<IEnumerable<QrCodePontoEntity>>> ObterTodasAsync()
         {
-            return _context.QrCodePonto
+            var result = await _context.QrCodePonto
                 .Include(q => q.LayoutPatio)
-                .FirstOrDefault(q => q.IdentificadorQrCode == identificadorQrCode);
+                .OrderBy(q => q.IdQrCodePonto)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<QrCodePontoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
 
-        public IEnumerable<QrCodePontoEntity> ObterPorIdLayoutPatio(long layoutPatioId)
+        public async Task<PageResultModel<IEnumerable<QrCodePontoEntity>>> ObterPorIdentificadorAsync(string identificador)
         {
-            return _context.QrCodePonto
+            var result = await _context.QrCodePonto
+                .Include(q => q.LayoutPatio)
+                .Where(q => q.IdentificadorQrCode.Contains(identificador))
+                .OrderBy(q => q.IdQrCodePonto)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<QrCodePontoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<QrCodePontoEntity>>> ObterPorLayoutPatioIdAsync(int layoutPatioId)
+        {
+            var result = await _context.QrCodePonto
                 .Include(q => q.LayoutPatio)
                 .Where(q => q.LayoutPatioId == layoutPatioId)
-                .ToList();
+                .OrderBy(q => q.IdQrCodePonto)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<QrCodePontoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
 
-        public IEnumerable<QrCodePontoEntity> ObterPorPosicaoXEntre(float posXInicial, float posXFinal)
+        public async Task<PageResultModel<IEnumerable<QrCodePontoEntity>>> ObterPorPosXRangeAsync(float posXMin, float posXMax)
         {
-            return _context.QrCodePonto
+            var result = await _context.QrCodePonto
                 .Include(q => q.LayoutPatio)
-                .Where(q => q.PosX >= posXInicial && q.PosX <= posXFinal)
-                .ToList();
+                .Where(q => q.PosX >= posXMin && q.PosX <= posXMax)
+                .OrderBy(q => q.IdQrCodePonto)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<QrCodePontoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
 
-        public IEnumerable<QrCodePontoEntity> ObterPorPosicaoYEntre(float posYInicial, float posYFinal)
+        public async Task<PageResultModel<IEnumerable<QrCodePontoEntity>>> ObterPorPosYRangeAsync(float posYMin, float posYMax)
         {
-            return _context.QrCodePonto
+            var result = await _context.QrCodePonto
                 .Include(q => q.LayoutPatio)
-                .Where(q => q.PosY >= posYInicial && q.PosY <= posYFinal)
-                .ToList();
-        }
+                .Where(q => q.PosY >= posYMin && q.PosY <= posYMax)
+                .OrderBy(q => q.IdQrCodePonto)
+                .ToListAsync();
 
+            return new PageResultModel<IEnumerable<QrCodePontoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
     }
 }

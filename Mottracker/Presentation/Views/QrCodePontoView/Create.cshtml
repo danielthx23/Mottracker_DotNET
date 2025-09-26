@@ -1,0 +1,45 @@
+@model Mottracker.Application.Dtos.QrCodePonto.QrCodePontoRequestDto
+
+@{
+    ViewData["Title"] = "Criar QR Code Ponto";
+}
+
+<h1>Criar</h1>
+
+<h4>QR Code Ponto</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="IdentificadorQrCode" class="control-label">Identificador do QR Code</label>
+                <input asp-for="IdentificadorQrCode" class="form-control" />
+                <span asp-validation-for="IdentificadorQrCode" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="PosX" class="control-label">Posição X</label>
+                <input asp-for="PosX" class="form-control" type="number" step="0.01" />
+                <span asp-validation-for="PosX" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="PosY" class="control-label">Posição Y</label>
+                <input asp-for="PosY" class="form-control" type="number" step="0.01" />
+                <span asp-validation-for="PosY" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="LayoutPatioId" class="control-label">ID do Layout do Pátio</label>
+                <input asp-for="LayoutPatioId" class="form-control" type="number" />
+                <span asp-validation-for="LayoutPatioId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

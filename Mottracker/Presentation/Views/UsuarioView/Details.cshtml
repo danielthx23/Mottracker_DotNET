@@ -1,0 +1,30 @@
+@model Mottracker.Application.Dtos.Usuario.UsuarioResponseDto
+
+@{
+    ViewData["Title"] = "Detalhes do Usuário";
+}
+
+<h1>Detalhes</h1>
+
+<div>
+    <h4>Usuário</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Nome do Usuário
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NomeUsuario)
+        </dd>
+        <dt class="col-sm-2">
+            Email do Usuário
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EmailUsuario)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.IdUsuario" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+</div>

@@ -1,0 +1,39 @@
+@model Mottracker.Application.Dtos.Moto.MotoResponseDto
+
+@{
+    ViewData["Title"] = "Excluir Moto";
+}
+
+<h1>Excluir</h1>
+
+<h3>Tem certeza que deseja excluir esta moto?</h3>
+<div>
+    <h4>Moto</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Placa da Moto
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PlacaMoto)
+        </dd>
+        <dt class="col-sm-2">
+            Estado da Moto
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EstadoMoto)
+        </dd>
+        <dt class="col-sm-2">
+            Pátio Atual
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MotoPatioAtual.NomePatio)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="IdMoto" />
+        <input type="submit" value="Excluir" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+    </form>
+</div>

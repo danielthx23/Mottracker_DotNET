@@ -1,0 +1,30 @@
+@model Mottracker.Application.Dtos.Permissao.PermissaoResponseDto
+
+@{
+    ViewData["Title"] = "Detalhes da Permissão";
+}
+
+<h1>Detalhes</h1>
+
+<div>
+    <h4>Permissão</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Nome da Permissão
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NomePermissao)
+        </dd>
+        <dt class="col-sm-2">
+            Descrição da Permissão
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.IdPermissao" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+</div>

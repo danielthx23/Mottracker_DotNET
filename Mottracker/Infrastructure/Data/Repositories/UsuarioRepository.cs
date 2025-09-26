@@ -14,63 +14,90 @@ namespace Mottracker.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public IEnumerable<UsuarioEntity> ObterTodos()
+        public async Task<PageResultModel<IEnumerable<UsuarioEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3)
         {
-            return _context.Usuario
+            var totalRegistros = await _context.Usuario.CountAsync();
+
+            var result = await _context.Usuario
                 .Include(u => u.ContratoUsuario)
                 .Include(u => u.Telefones)
                 .Include(u => u.UsuarioPermissoes)
-                .ToList();
+                .OrderBy(u => u.IdUsuario)
+                .Skip(Deslocamento)
+                .Take(RegistrosRetornado)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<UsuarioEntity>>
+            {
+                Data = result,
+                Deslocamento = Deslocamento,
+                RegistrosRetornado = RegistrosRetornado,
+                TotalRegistros = totalRegistros
+            };
         }
 
-        public UsuarioEntity? ObterPorId(int id)
+        public async Task<UsuarioEntity?> ObterPorIdAsync(int id)
         {
-            return _context.Usuario
+            return await _context.Usuario
                 .Include(u => u.ContratoUsuario)
                 .Include(u => u.Telefones)
                 .Include(u => u.UsuarioPermissoes)
-                .FirstOrDefault(u => u.IdUsuario == id);
+                .FirstOrDefaultAsync(u => u.IdUsuario == id);
         }
 
-        public UsuarioEntity? Salvar(UsuarioEntity entity)
+        public async Task<UsuarioEntity?> SalvarAsync(UsuarioEntity entity)
         {
             _context.Usuario.Add(entity);
-            _context.SaveChanges();
-
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public UsuarioEntity? Atualizar(UsuarioEntity entity)
+        public async Task<UsuarioEntity?> AtualizarAsync(UsuarioEntity entity)
         {
             _context.Usuario.Update(entity);
-            _context.SaveChanges();
-
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public UsuarioEntity? Deletar(int id)
+        public async Task<UsuarioEntity?> DeletarAsync(int id)
         {
-            var entity = _context.Usuario.Find(id);
-
+            var entity = await _context.Usuario.FindAsync(id);
             if (entity is not null)
             {
                 _context.Usuario.Remove(entity);
-                _context.SaveChanges();
-
+                await _context.SaveChangesAsync();
                 return entity;
             }
 
             return null;
         }
 
-        public UsuarioEntity? ObterPorEmail(string emailUsuario)
+        public async Task<UsuarioEntity?> ObterPorEmailAsync(string email)
         {
-            return _context.Usuario
+            return await _context.Usuario
                 .Include(u => u.ContratoUsuario)
                 .Include(u => u.Telefones)
                 .Include(u => u.UsuarioPermissoes)
-                .FirstOrDefault(u => u.EmailUsuario.ToLower() == emailUsuario.ToLower());
+                .FirstOrDefaultAsync(u => u.EmailUsuario == email);
         }
 
+        // Métodos de consulta específicos (sem paginação)
+        public async Task<PageResultModel<IEnumerable<UsuarioEntity>>> ObterTodasAsync()
+        {
+            var result = await _context.Usuario
+                .Include(u => u.ContratoUsuario)
+                .Include(u => u.Telefones)
+                .Include(u => u.UsuarioPermissoes)
+                .OrderBy(u => u.IdUsuario)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<UsuarioEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
     }
 }

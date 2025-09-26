@@ -1,0 +1,40 @@
+﻿@model ErrorViewModel
+@{
+ViewData["Title"] = "Erro";
+}
+
+<div class="text-center">
+    <h1 class="text-danger">
+        <i class="bi bi-exclamation-triangle"></i> Ops! Algo deu errado
+    </h1>
+    <h2 class="text-danger">Ocorreu um erro ao processar sua solicitação.</h2>
+    
+    @if (Model.ShowRequestId)
+    {
+        <p class="mt-4">
+            <strong>ID da Solicitação:</strong> <code>@Model.RequestId</code>
+        </p>
+    }
+    
+    <div class="mt-4">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+            <i class="bi bi-house"></i> Voltar ao Início
+        </a>
+    </div>
+</div>
+
+@if (Model.ShowRequestId)
+{
+    <div class="mt-5">
+        <h3>Modo de Desenvolvimento</h3>
+        <p>
+            Alternar para o ambiente <strong>Development</strong> exibirá informações mais detalhadas sobre o erro que ocorreu.
+        </p>
+        <p>
+            <strong>O ambiente de desenvolvimento não deve ser habilitado para aplicações em produção.</strong>
+            Pode resultar na exibição de informações sensíveis de exceções para usuários finais.
+            Para depuração local, habilite o ambiente <strong>Development</strong> definindo a variável de ambiente <strong>ASPNETCORE_ENVIRONMENT</strong> como <strong>Development</strong>
+            e reinicie o aplicativo.
+        </p>
+    </div>
+}

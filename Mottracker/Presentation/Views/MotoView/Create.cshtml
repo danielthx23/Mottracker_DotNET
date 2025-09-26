@@ -1,0 +1,42 @@
+@model Mottracker.Application.Dtos.Moto.MotoRequestDto
+
+@{
+    ViewData["Title"] = "Criar Moto";
+}
+
+<h1>Criar</h1>
+
+<h4>Moto</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="PlacaMoto" class="control-label">Placa da Moto</label>
+                <input asp-for="PlacaMoto" class="form-control" />
+                <span asp-validation-for="PlacaMoto" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="EstadoMoto" class="control-label">Estado da Moto</label>
+                <select asp-for="EstadoMoto" class="form-control" asp-items="Html.GetEnumSelectList<Mottracker.Domain.Enums.Estados>()">
+                    <option value="">Selecione o Estado</option>
+                </select>
+                <span asp-validation-for="EstadoMoto" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="MotoPatioAtualId" class="control-label">ID do Pátio Atual</label>
+                <input asp-for="MotoPatioAtualId" class="form-control" type="number" />
+                <span asp-validation-for="MotoPatioAtualId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

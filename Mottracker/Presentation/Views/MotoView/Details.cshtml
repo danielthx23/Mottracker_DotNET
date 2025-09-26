@@ -1,0 +1,36 @@
+@model Mottracker.Application.Dtos.Moto.MotoResponseDto
+
+@{
+    ViewData["Title"] = "Detalhes da Moto";
+}
+
+<h1>Detalhes</h1>
+
+<div>
+    <h4>Moto</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Placa da Moto
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PlacaMoto)
+        </dd>
+        <dt class="col-sm-2">
+            Estado da Moto
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EstadoMoto)
+        </dd>
+        <dt class="col-sm-2">
+            Pátio Atual
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MotoPatioAtual.NomePatio)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.IdMoto" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+</div>

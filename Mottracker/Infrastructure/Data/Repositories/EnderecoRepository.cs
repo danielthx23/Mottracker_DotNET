@@ -4,7 +4,7 @@ using Mottracker.Domain.Interfaces;
 using Mottracker.Infrastructure.AppData;
 
 namespace Mottracker.Infrastructure.Data.Repositories
-{   
+{
     public class EnderecoRepository : IEnderecoRepository
     {
         private readonly ApplicationContext _context;
@@ -14,101 +14,194 @@ namespace Mottracker.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public IEnumerable<EnderecoEntity> ObterTodos()
+        public async Task<PageResultModel<IEnumerable<EnderecoEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3)
         {
-            return _context.Endereco
+            var totalRegistros = await _context.Endereco.CountAsync();
+
+            var result = await _context.Endereco
                 .Include(e => e.PatioEndereco)
-                .ToList();
+                .OrderBy(e => e.IdEndereco)
+                .Skip(Deslocamento)
+                .Take(RegistrosRetornado)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<EnderecoEntity>>
+            {
+                Data = result,
+                Deslocamento = Deslocamento,
+                RegistrosRetornado = RegistrosRetornado,
+                TotalRegistros = totalRegistros
+            };
         }
 
-        public EnderecoEntity? ObterPorId(int id)
+        public async Task<EnderecoEntity?> ObterPorIdAsync(int id)
         {
-            return _context.Endereco
+            return await _context.Endereco
                 .Include(e => e.PatioEndereco)
-                .FirstOrDefault(e => e.IdEndereco == id);
+                .FirstOrDefaultAsync(e => e.IdEndereco == id);
         }
 
-        public EnderecoEntity? Salvar(EnderecoEntity entity)
+        public async Task<EnderecoEntity?> SalvarAsync(EnderecoEntity entity)
         {
             _context.Endereco.Add(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public EnderecoEntity? Atualizar(EnderecoEntity entity)
+        public async Task<EnderecoEntity?> AtualizarAsync(EnderecoEntity entity)
         {
             _context.Endereco.Update(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public EnderecoEntity? Deletar(int id)
+        public async Task<EnderecoEntity?> DeletarAsync(int id)
         {
-            var entity = _context.Endereco.Find(id);
-
+            var entity = await _context.Endereco.FindAsync(id);
             if (entity is not null)
             {
                 _context.Endereco.Remove(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return entity;
             }
 
             return null;
         }
 
-        public IEnumerable<EnderecoEntity> ObterPorCidade(string cidade)
+        // Métodos de consulta específicos (sem paginação)
+        public async Task<PageResultModel<IEnumerable<EnderecoEntity>>> ObterTodasAsync()
         {
-            return _context.Endereco
+            var result = await _context.Endereco
                 .Include(e => e.PatioEndereco)
-                .Where(e => e.Cidade!.ToLower() == cidade.ToLower())
-                .ToList();
+                .OrderBy(e => e.IdEndereco)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<EnderecoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
 
-        public IEnumerable<EnderecoEntity> ObterPorCidadeEEstado(string cidade, string estado)
+        public async Task<PageResultModel<IEnumerable<EnderecoEntity>>> ObterPorCepAsync(string cep)
         {
-            return _context.Endereco
+            var result = await _context.Endereco
                 .Include(e => e.PatioEndereco)
-                .Where(e => e.Cidade!.ToLower() == cidade.ToLower() &&
-                            e.Estado!.ToLower() == estado.ToLower())
-                .ToList();
+                .Where(e => e.CEP.Contains(cep))
+                .OrderBy(e => e.IdEndereco)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<EnderecoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
 
-        public IEnumerable<EnderecoEntity> ObterPorEstado(string estado)
+        public async Task<PageResultModel<IEnumerable<EnderecoEntity>>> ObterPorEstadoAsync(string estado)
         {
-            return _context.Endereco
+            var result = await _context.Endereco
                 .Include(e => e.PatioEndereco)
-                .Where(e => e.Estado!.ToLower() == estado.ToLower())
-                .ToList();
+                .Where(e => e.Estado == estado)
+                .OrderBy(e => e.IdEndereco)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<EnderecoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
 
-        public EnderecoEntity? ObterPorCep(string cep)
+        public async Task<PageResultModel<IEnumerable<EnderecoEntity>>> ObterPorCidadeAsync(string cidade)
         {
-            return _context.Endereco
+            var result = await _context.Endereco
                 .Include(e => e.PatioEndereco)
-                .FirstOrDefault(e => e.CEP == cep);
+                .Where(e => e.Cidade.Contains(cidade))
+                .OrderBy(e => e.IdEndereco)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<EnderecoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
 
-        public IEnumerable<EnderecoEntity> ObterPorBairro(string bairro)
+        public async Task<PageResultModel<IEnumerable<EnderecoEntity>>> ObterPorCidadeEstadoAsync(string cidade, string estado)
         {
-            return _context.Endereco
+            var result = await _context.Endereco
                 .Include(e => e.PatioEndereco)
-                .Where(e => e.Bairro!.ToLower() == bairro.ToLower())
-                .ToList();
+                .Where(e => e.Cidade.Contains(cidade) && e.Estado == estado)
+                .OrderBy(e => e.IdEndereco)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<EnderecoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
 
-        public IEnumerable<EnderecoEntity> ObterPorLogradouroContendo(string logradouro)
+        public async Task<PageResultModel<IEnumerable<EnderecoEntity>>> ObterPorBairroAsync(string bairro)
         {
-            return _context.Endereco
+            var result = await _context.Endereco
                 .Include(e => e.PatioEndereco)
-                .Where(e => EF.Functions.Like(e.Logradouro!, $"%{logradouro}%"))
-                .ToList();
+                .Where(e => e.Bairro.Contains(bairro))
+                .OrderBy(e => e.IdEndereco)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<EnderecoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
 
-        public EnderecoEntity? ObterPorIdPatio(long patioId)
+        public async Task<PageResultModel<IEnumerable<EnderecoEntity>>> ObterPorLogradouroContendoAsync(string logradouro)
         {
-            return _context.Endereco
+            var result = await _context.Endereco
                 .Include(e => e.PatioEndereco)
-                .FirstOrDefault(e => e.PatioEndereco!.IdPatio == patioId);
+                .Where(e => e.Logradouro.Contains(logradouro))
+                .OrderBy(e => e.IdEndereco)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<EnderecoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<EnderecoEntity>>> ObterPorPatioIdAsync(int patioId)
+        {
+            var result = await _context.Endereco
+                .Include(e => e.PatioEndereco)
+                .Where(e => e.PatioEnderecoId == patioId)
+                .OrderBy(e => e.IdEndereco)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<EnderecoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
     }
 }

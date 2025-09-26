@@ -14,71 +14,116 @@ namespace Mottracker.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public IEnumerable<UsuarioPermissaoEntity> ObterTodos()
+        public async Task<PageResultModel<IEnumerable<UsuarioPermissaoEntity>>> ObterTodasAsync(int Deslocamento = 0, int RegistrosRetornado = 3)
         {
-            return _context.UsuarioPermissao
+            var totalRegistros = await _context.UsuarioPermissao.CountAsync();
+
+            var result = await _context.UsuarioPermissao
                 .Include(up => up.Usuario)
                 .Include(up => up.Permissao)
-                .ToList();
+                .OrderBy(up => up.UsuarioId)
+                .Skip(Deslocamento)
+                .Take(RegistrosRetornado)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<UsuarioPermissaoEntity>>
+            {
+                Data = result,
+                Deslocamento = Deslocamento,
+                RegistrosRetornado = RegistrosRetornado,
+                TotalRegistros = totalRegistros
+            };
         }
 
-        public UsuarioPermissaoEntity? ObterPorId(int usuarioId, int permissaoId)
+        public async Task<UsuarioPermissaoEntity?> ObterPorIdAsync(int usuarioId, int permissaoId)
         {
-            return _context.UsuarioPermissao
+            return await _context.UsuarioPermissao
                 .Include(up => up.Usuario)
                 .Include(up => up.Permissao)
-                .FirstOrDefault(up => up.UsuarioId == usuarioId && up.PermissaoId == permissaoId);
+                .FirstOrDefaultAsync(up => up.UsuarioId == usuarioId && up.PermissaoId == permissaoId);
         }
-        
-        public UsuarioPermissaoEntity? Salvar(UsuarioPermissaoEntity entity)
+
+        public async Task<UsuarioPermissaoEntity?> SalvarAsync(UsuarioPermissaoEntity entity)
         {
             _context.UsuarioPermissao.Add(entity);
-            _context.SaveChanges();
-
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public UsuarioPermissaoEntity? Atualizar(UsuarioPermissaoEntity entity)
+        public async Task<UsuarioPermissaoEntity?> AtualizarAsync(UsuarioPermissaoEntity entity)
         {
             _context.UsuarioPermissao.Update(entity);
-            _context.SaveChanges();
-
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public UsuarioPermissaoEntity? Deletar(int usuarioId, int permissaoId)
+        public async Task<UsuarioPermissaoEntity?> DeletarAsync(int usuarioId, int permissaoId)
         {
-            var entity = _context.UsuarioPermissao
-                .FirstOrDefault(up => up.UsuarioId == usuarioId && up.PermissaoId == permissaoId);
-
+            var entity = await _context.UsuarioPermissao
+                .FirstOrDefaultAsync(up => up.UsuarioId == usuarioId && up.PermissaoId == permissaoId);
+            
             if (entity is not null)
             {
                 _context.UsuarioPermissao.Remove(entity);
-                _context.SaveChanges();
-
+                await _context.SaveChangesAsync();
                 return entity;
             }
 
             return null;
         }
 
-        public IEnumerable<UsuarioPermissaoEntity> ObterPorIdUsuario(long usuarioId)
+        // Métodos de consulta específicos (sem paginação)
+        public async Task<PageResultModel<IEnumerable<UsuarioPermissaoEntity>>> ObterTodasAsync()
         {
-            return _context.UsuarioPermissao
+            var result = await _context.UsuarioPermissao
+                .Include(up => up.Usuario)
+                .Include(up => up.Permissao)
+                .OrderBy(up => up.UsuarioId)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<UsuarioPermissaoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
+
+        public async Task<PageResultModel<IEnumerable<UsuarioPermissaoEntity>>> ObterPorUsuarioIdAsync(long usuarioId)
+        {
+            var result = await _context.UsuarioPermissao
                 .Include(up => up.Usuario)
                 .Include(up => up.Permissao)
                 .Where(up => up.UsuarioId == usuarioId)
-                .ToList();
+                .OrderBy(up => up.UsuarioId)
+                .ToListAsync();
+
+            return new PageResultModel<IEnumerable<UsuarioPermissaoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
         }
 
-        public IEnumerable<UsuarioPermissaoEntity> ObterPorIdPermissao(long permissaoId)
+        public async Task<PageResultModel<IEnumerable<UsuarioPermissaoEntity>>> ObterPorPermissaoIdAsync(long permissaoId)
         {
-            return _context.UsuarioPermissao
+            var result = await _context.UsuarioPermissao
                 .Include(up => up.Usuario)
                 .Include(up => up.Permissao)
                 .Where(up => up.PermissaoId == permissaoId)
-                .ToList();
-        }
+                .OrderBy(up => up.UsuarioId)
+                .ToListAsync();
 
+            return new PageResultModel<IEnumerable<UsuarioPermissaoEntity>>
+            {
+                Data = result,
+                Deslocamento = 0,
+                RegistrosRetornado = result.Count,
+                TotalRegistros = result.Count
+            };
+        }
     }
 }

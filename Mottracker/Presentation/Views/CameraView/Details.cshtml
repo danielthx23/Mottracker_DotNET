@@ -1,0 +1,54 @@
+@model Mottracker.Application.Dtos.Camera.CameraResponseDto
+
+@{
+    ViewData["Title"] = "Detalhes da Câmera";
+}
+
+<h1>Detalhes</h1>
+
+<div>
+    <h4>Câmera</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Nome da Câmera
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NomeCamera)
+        </dd>
+        <dt class="col-sm-2">
+            IP da Câmera
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IpCamera)
+        </dd>
+        <dt class="col-sm-2">
+            Status
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt class="col-sm-2">
+            Posição X
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PosX)
+        </dd>
+        <dt class="col-sm-2">
+            Posição Y
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PosY)
+        </dd>
+        <dt class="col-sm-2">
+            Pátio
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Patio.NomePatio)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.IdCamera" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+</div>

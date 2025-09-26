@@ -1,0 +1,36 @@
+@model Mottracker.Application.Dtos.LayoutPatio.LayoutPatioResponseDto
+
+@{
+    ViewData["Title"] = "Detalhes do Layout do Pátio";
+}
+
+<h1>Detalhes</h1>
+
+<div>
+    <h4>Layout do Pátio</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Descrição do Layout
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+        <dt class="col-sm-2">
+            Data de Criação
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DataCriacao)
+        </dd>
+        <dt class="col-sm-2">
+            Pátio
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PatioLayoutPatio.NomePatio)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.IdLayoutPatio" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+</div>
