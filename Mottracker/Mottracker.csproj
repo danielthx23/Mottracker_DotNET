@@ -29,6 +29,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="Presentation\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
