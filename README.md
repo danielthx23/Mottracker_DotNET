@@ -24,6 +24,45 @@ A **API** integra os dados capturados pelos dispositivos IoT com uma estrutura d
 
 Essa integração permite o acompanhamento via aplicativo, promovendo **eficiência, segurança e organização**. O sistema também gerencia cadastro/edição de dados, autenticação/autorizacão, gestão de permissões e dashboards com relatórios para tomada de decisão.
 
+## Justificativa da Arquitetura
+
+O projeto foi desenvolvido seguindo os princípios da **Clean Architecture** (Arquitetura Limpa), que oferece inúmeras vantagens para sistemas corporativos como este:
+
+### **Separação de Responsabilidades**
+- **Domain**: Contém as entidades de negócio, interfaces de repositório e regras de domínio, garantindo que o núcleo do sistema seja independente de tecnologias externas
+- **Application**: Implementa os casos de uso (Use Cases), DTOs e mappers, isolando a lógica de aplicação
+- **Infrastructure**: Gerencia a persistência de dados e integrações externas (Oracle Database)
+- **Presentation**: Interface com o usuário através de Controllers e Views
+
+### **Benefícios da Arquitetura Escolhida**
+
+1. **Testabilidade**: Cada camada pode ser testada independentemente, facilitando a implementação de testes unitários e de integração
+
+2. **Manutenibilidade**: Mudanças em uma camada não afetam as outras, reduzindo o acoplamento e facilitando manutenções futuras
+
+3. **Flexibilidade**: A troca de banco de dados (Oracle → PostgreSQL, por exemplo) requer alterações apenas na camada Infrastructure
+
+4. **Escalabilidade**: Novos casos de uso podem ser adicionados sem impactar o código existente
+
+5. **Inversão de Dependência**: As camadas internas não dependem das externas, seguindo o princípio SOLID
+
+### **Estrutura do Projeto**
+```
+Mottracker/
+├── Domain/           # Entidades, Interfaces, Enums
+├── Application/      # Use Cases, DTOs, Mappers
+├── Infrastructure/   # Repositórios, Context EF
+└── Presentation/     # Controllers, Views
+```
+
+### **Padrões Implementados**
+- **Repository Pattern**: Abstração da camada de dados
+- **Use Case Pattern**: Encapsulamento da lógica de negócio
+- **DTO Pattern**: Transferência de dados entre camadas
+- **Mapper Pattern**: Conversão entre entidades e DTOs
+
+Esta arquitetura garante que o sistema seja **robusto, escalável e fácil de manter**, essencial para um projeto corporativo que pode crescer e evoluir ao longo do tempo.
+
 ## Autores
 
 ### Turma 2TDSR - Análise e Desenvolvimento de Sistemas
@@ -178,10 +217,52 @@ dotnet build
 dotnet run --project Mottracker --urls "http://localhost:5169"
 ```
 
+## Documentação da API
+
+### **Swagger UI**
+A documentação interativa da API está disponível através do Swagger UI:
+- **URL**: http://localhost:5169/swagger
+- **Funcionalidades**:
+  - Visualização de todos os endpoints
+  - Teste direto dos endpoints
+  - Exemplos de request/response
+  - Esquemas de dados detalhados
+
+### **Documentação de Exemplos**
+O projeto inclui exemplos completos para todos os DTOs na pasta `Mottracker/Docs/Samples/`:
+
+#### **Exemplos Disponíveis:**
+- **Camera**: `CameraRequestDtoSample.cs`, `CameraResponseListSample.cs`
+- **Contrato**: `ContratoRequestDtoSample.cs`, `ContratoResponseListSample.cs`
+- **Endereco**: `EnderecoRequestDtoSample.cs`, `EnderecoResponseListSample.cs`
+- **LayoutPatio**: `LayoutPatioRequestDtoSample.cs`, `LayoutPatioResponseListSample.cs`
+- **Moto**: `MotoRequestDtoSample.cs`, `MotoResponseListSample.cs`
+- **Patio**: `PatioRequestDtoSample.cs`, `PatioResponseListSample.cs`
+- **Permissao**: `PermissaoRequestDtoSample.cs`, `PermissaoResponseListSample.cs`
+- **QrCodePonto**: `QrCodePontoRequestDtoSample.cs`, `QrCodePontoResponseListSample.cs`
+- **Telefone**: `TelefoneRequestDtoSample.cs`, `TelefoneResponseListSample.cs`
+- **Usuario**: `UsuarioRequestDtoSample.cs`, `UsuarioResponseListSample.cs`, `UsuarioLoginDtoSample.cs`
+- **UsuarioPermissao**: `UsuarioPermissaoRequestDtoSample.cs`, `UsuarioPermissaoResponseListSample.cs`
+
+#### **Como Usar os Exemplos:**
+1. Os exemplos são automaticamente carregados no Swagger UI
+2. Cada endpoint mostra exemplos de request e response
+3. Os exemplos incluem dados realistas para facilitar os testes
+4. Todos os campos obrigatórios e opcionais estão documentados
+
+### **Documentação Técnica**
+- **Rate Limiting**: 5 requisições por 20 segundos
+- **Compressão**: Brotli e Gzip habilitados
+- **CORS**: Configurado para React App (localhost:5173)
+- **Paginação**: Suporte a paginação em todos os endpoints de listagem
+- **HATEOAS**: Links de navegação incluídos nas respostas
+
 ## Acesso à API
 
-- API: http://localhost:5169  
-- Swagger: http://localhost:5169/swagger
+- **API**: http://localhost:5169  
+- **Swagger**: http://localhost:5169/swagger
+
+- **Render**: https://mottracker-dotnet.onrender.com
 
 ## Rotas da API
 
