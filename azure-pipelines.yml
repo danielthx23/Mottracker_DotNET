@@ -9,49 +9,73 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build image
+  displayName: Build .NET and Docker image
   jobs:
   - job: Build
-    displayName: Build
+    displayName: Build .NET app and Docker image
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: UseDotNet@2
+      displayName: 'Instalar .NET SDK'
+      inputs:
+        packageType: 'sdk'
+        version: '8.0.x' 
+
+    - script: |
+        echo "Restaurando dependências..."
+        dotnet restore
+      displayName: 'Restore dependencies'
+
+    - script: |
+        echo "Compilando aplicação..."
+        dotnet build --configuration Release --no-restore
+      displayName: 'Build .NET project'
+
     - task: Docker@2
-      displayName: Build an image
+      displayName: 'Build Docker image'
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/Mottracker/Dockerfile.Development'
+        repository: '$(Build.Repository.Name)'
         tags: |
           $(tag)
 
 - stage: IntegrationTests
   displayName: Run Integration Tests
   dependsOn: Build
+  condition: succeeded()
   jobs:
   - job: RunTests
     displayName: Run Integration Tests
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: Docker@2
-      displayName: Run Integration Tests using Docker
+    - task: UseDotNet@2
+      displayName: 'Instalar .NET SDK'
       inputs:
-        command: run
-        containerName: mottracker_test_container
-        imageName: $(Build.Repository.Name):$(tag)
-        options: '--rm'
+        packageType: 'sdk'
+        version: '8.0.x'
 
     - script: |
-        # Comando para rodar os testes de integração dentro do container
-        docker exec mottracker_test_container /bin/bash -c "pytest /tests/integration"
-      displayName: 'Run Integration Tests in container'
+        echo "Rodando testes de integração..."
+        dotnet test --configuration Release --no-build --logger "trx;LogFileName=integration_tests.trx"
+      displayName: 'Run .NET Integration Tests'
+
+    - task: PublishTestResults@2
+      displayName: 'Publicar resultados dos testes'
+      inputs:
+        testResultsFiles: '**/integration_tests.trx'
+        testRunTitle: 'Integration Tests'
+        failTaskOnFailedTests: true
 
 - stage: Deploy
-  displayName: Deploy to Web App
+  displayName: Deploy to Azure Web App
   dependsOn: IntegrationTests
+  condition: succeeded()
   jobs:
   - job: Deploy
-    displayName: Deploy
+    displayName: Deploy Container to Azure Web App
     pool:
       vmImage: ubuntu-latest
     steps:
