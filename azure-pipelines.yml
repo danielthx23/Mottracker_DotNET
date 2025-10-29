@@ -23,12 +23,10 @@ stages:
         version: '8.0.x' 
 
     - script: |
-        echo "Restaurando dependências..."
         dotnet restore
       displayName: 'Restore dependencies'
 
     - script: |
-        echo "Compilando aplicação..."
         dotnet build --configuration Release --no-restore
       displayName: 'Build .NET project'
 
@@ -58,7 +56,6 @@ stages:
         version: '8.0.x'
 
     - script: |
-        echo "Publicando aplicação..."
         dotnet publish ./Mottracker/Mottracker.csproj --configuration Release --output $(Build.ArtifactStagingDirectory)/publish
       displayName: 'Dotnet Publish'
 
@@ -86,7 +83,6 @@ stages:
         version: '8.0.x'
 
     - script: |
-        echo "Rodando testes de integração..."
         dotnet test --configuration Release --no-build --logger "trx;LogFileName=integration_tests.trx"
       displayName: 'Run .NET Integration Tests'
 
@@ -107,6 +103,14 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: DownloadBuildArtifacts@0
+      displayName: 'Download Build Artifacts'
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(Pipeline.Workspace)'
+
     - task: AzureWebApp@1
       displayName: 'Deploy artifact to Azure Web App'
       inputs:
