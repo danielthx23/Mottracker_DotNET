@@ -41,9 +41,37 @@ stages:
         tags: |
           $(tag)
 
+- stage: Artifact
+  displayName: 'Gerar e Publicar Artefato'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - job: Publish
+    displayName: 'Publicar artefato do build'
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Instalar .NET SDK'
+      inputs:
+        packageType: 'sdk'
+        version: '8.0.x'
+
+    - script: |
+        echo "Publicando aplicação..."
+        dotnet publish ./Mottracker/Mottracker.csproj --configuration Release --output $(Build.ArtifactStagingDirectory)/publish
+      displayName: 'Dotnet Publish'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publicar artefatos'
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)/publish'
+        artifactName: 'drop'
+        publishLocation: 'Container'
+
 - stage: IntegrationTests
   displayName: Run Integration Tests
-  dependsOn: Build
+  dependsOn: Artifact
   condition: succeeded()
   jobs:
   - job: RunTests
@@ -75,14 +103,14 @@ stages:
   condition: succeeded()
   jobs:
   - job: Deploy
-    displayName: Deploy Container to Azure Web App
+    displayName: Deploy Artifact to Azure Web App
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: AzureWebAppContainer@1
-      displayName: Deploy to Azure Web App
+    - task: AzureWebApp@1
+      displayName: 'Deploy artifact to Azure Web App'
       inputs:
         azureSubscription: '$(azureSubscription)'
         appName: '$(webAppName)'
-        imageName: '$(Build.Repository.Name):$(tag)'
-        containerCommand: ''
+        package: '$(Pipeline.Workspace)/drop'
+        appType: 'webApp'
