@@ -120,11 +120,13 @@ stages:
         appType: 'webAppLinux'
         runtimeStack: 'DOTNETCORE|8.0'
         appSettings: |
-          [
-            {"name": "ORACLE_HOST", "value": "$(ORACLE_HOST)"},
-            {"name": "ORACLE_PORT", "value": "$(ORACLE_PORT)"},
-            {"name": "ORACLE_USER", "value": "$(ORACLE_USER)"},
-            {"name": "ORACLE_PASSWORD", "value": "$(ORACLE_PASSWORD)"},
-            {"name": "ORACLE_SID", "value": "$(ORACLE_SID)"}
-          ]
-
+          - name: "ORACLE_HOST"
+            value: "$(ORACLE_HOST)"
+          - name: "ORACLE_PORT"
+            value: "$(ORACLE_PORT)"
+          - name: "ORACLE_USER"
+            value: "$(ORACLE_USER)"
+          - name: "ORACLE_PASSWORD"
+            value: "$(ORACLE_PASSWORD)"
+          - name: "ORACLE_SID"
+            value: "$(ORACLE_SID)"
