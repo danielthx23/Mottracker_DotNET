@@ -117,4 +117,12 @@ stages:
         azureSubscription: '$(azureSubscription)'
         appName: '$(webAppName)'
         package: '$(Pipeline.Workspace)/drop'
-        appType: 'webApp'
+        appType: 'webAppLinux'
+        runtimeStack: 'DOTNETCORE|8.0'
+        appSettings: |
+          -ORACLE_HOST $(ORACLE_HOST)
+          -ORACLE_PORT $(ORACLE_PORT)
+          -ORACLE_USER $(ORACLE_USER)
+          -ORACLE_PASSWORD $(ORACLE_PASSWORD)
+          -ORACLE_SID $(ORACLE_SID)
+
