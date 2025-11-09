@@ -8,7 +8,7 @@ variables:
   buildConfiguration: 'Release'
   dockerfilePath: 'Dockerfile'
   artifactName: 'drop'
-  webAppName: 'mottracker-webapp'        # 🔹 nome do seu Web App no Azure
+  webAppName: 'app-Mottracker'        # 🔹 nome do seu Web App no Azure
   azureSubscription: 'MyAzureSubscription'    # 🔹 nome da conexão de serviço configurada no Azure DevOps
   acrServiceConnection: 'mottrackeracr'   # 🔹 nome do service connection para o ACR
   acrRepository: 'mottracker'
