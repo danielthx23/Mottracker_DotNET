@@ -7,6 +7,11 @@ pool:
 variables:
   buildConfiguration: 'Release'
   dockerfilePath: 'Dockerfile'
+  artifactName: 'drop'
+  webAppName: 'mottracker-webapp'        # 🔹 nome do seu Web App no Azure
+  azureSubscription: 'MyAzureSubscription'    # 🔹 nome da conexão de serviço configurada no Azure DevOps
+  acrServiceConnection: 'mottrackeracr'   # 🔹 nome do service connection para o ACR
+  acrRepository: 'mottracker'
 
 stages:
 # ========================================
@@ -16,7 +21,7 @@ stages:
   displayName: 'Build and Test'
   jobs:
   - job: Build
-    displayName: 'Build and Test Application'
+    displayName: 'Build, Test and Publish Artifact'
     steps:
     # 1. Instalar .NET SDK
     - task: UseDotNet@2
@@ -78,7 +83,7 @@ stages:
         summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
         failIfCoverageEmpty: false
 
-    # 8. Publicar aplicação
+    # 8. Publicar aplicação (.zip)
     - task: DotNetCoreCLI@2
       displayName: 'Publish Application'
       inputs:
@@ -89,12 +94,12 @@ stages:
         zipAfterPublish: true
         modifyOutputPath: true
 
-    # 9. Publicar artefatos de build
+    # 9. Publicar artefatos do build
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Build Artifacts'
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
+        ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
 
 # ========================================
@@ -112,8 +117,8 @@ stages:
     - task: Docker@2
       displayName: 'Build and Push to ACR'
       inputs:
-        containerRegistry: 'mottrackeracr'
-        repository: 'mottracker'
+        containerRegistry: '$(acrServiceConnection)'
+        repository: '$(acrRepository)'
         command: 'buildAndPush'
         Dockerfile: '$(dockerfilePath)'
         buildContext: '$(Build.SourcesDirectory)'
@@ -121,7 +126,7 @@ stages:
           $(Build.BuildId)
           latest
 
-    # 2. Publicar informações da imagem
+    # 2. Exibir informações da imagem
     - task: Bash@3
       displayName: 'Docker Image Information'
       inputs:
@@ -129,14 +134,41 @@ stages:
         script: |
           echo "=========================================="
           echo "Docker Image Published Successfully!"
-          echo "=========================================="
           echo "Registry: mottrackeracr.azurecr.io"
           echo "Repository: mottracker"
           echo "Tags:"
           echo "  - $(Build.BuildId)"
           echo "  - latest"
-          echo ""
           echo "Full Image Names:"
           echo "  - mottrackeracr.azurecr.io/mottracker:$(Build.BuildId)"
           echo "  - mottrackeracr.azurecr.io/mottracker:latest"
           echo "=========================================="
+
+# ========================================
+# STAGE 3: DEPLOY PARA AZURE WEB APP
+# ========================================
+- stage: Deploy
+  displayName: 'Deploy to Azure Web App'
+  dependsOn: Docker_Build
+  condition: succeeded()
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy Artifact to Azure Web App'
+    steps:
+    # 1. Baixar artefato publicado
+    - task: DownloadBuildArtifacts@0
+      displayName: 'Download Build Artifacts'
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: '$(artifactName)'
+        downloadPath: '$(Pipeline.Workspace)'
+
+    # 2. Fazer o deploy do artefato no Web App
+    - task: AzureWebApp@1
+      displayName: 'Deploy artifact to Azure Web App'
+      inputs:
+        azureSubscription: '$(azureSubscription)'
+        appName: '$(webAppName)'
+        package: '$(Pipeline.Workspace)/$(artifactName)/app.zip'
+        appType: 'webAppLinux'
