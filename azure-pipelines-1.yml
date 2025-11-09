@@ -89,7 +89,7 @@ stages:
             zipAfterPublish: true
             modifyOutputPath: true
 
-        # ✅ 9. Compactar o conteúdo em app.zip (garante que o arquivo exista)
+        # 9. Compactar o conteúdo em app.zip
         - task: ArchiveFiles@2
           displayName: 'Archive App into app.zip'
           inputs:
@@ -99,7 +99,7 @@ stages:
             archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
             replaceExistingArchive: true
 
-        # ✅ 10. Publicar artefatos de build (incluindo o app.zip)
+        # 10. Publicar artefatos de build
         - task: PublishBuildArtifacts@1
           displayName: 'Publish Build Artifacts'
           inputs:
@@ -144,10 +144,10 @@ stages:
               echo "Registry: mottrackeracr.azurecr.io"
               echo "Repository: mottracker"
               echo "Tags:"
-              echo " - $(Build.BuildId)"
-              echo " - latest"
+              echo "  - $(Build.BuildId)"
+              echo "  - latest"
               echo ""
               echo "Full Image Names:"
-              echo " - mottrackeracr.azurecr.io/mottracker:$(Build.BuildId)"
-              echo " - mottrackeracr.azurecr.io/mottracker:latest"
+              echo "  - mottrackeracr.azurecr.io/mottracker:$(Build.BuildId)"
+              echo "  - mottrackeracr.azurecr.io/mottracker:latest"
               echo "=========================================="
