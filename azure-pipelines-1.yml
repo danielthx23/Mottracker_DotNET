@@ -1,5 +1,5 @@
 trigger:
-- main
+  - main
 
 pool:
   vmImage: ubuntu-latest
@@ -7,11 +7,6 @@ pool:
 variables:
   buildConfiguration: 'Release'
   dockerfilePath: 'Dockerfile'
-  artifactName: 'drop'
-  webAppName: 'app-Mottracker'        # 🔹 nome do seu Web App no Azure
-  azureSubscription: 'MyAzureSubscription'    # 🔹 nome da conexão de serviço configurada no Azure DevOps
-  acrServiceConnection: 'mottrackeracr'   # 🔹 nome do service connection para o ACR
-  acrRepository: 'mottracker'
 
 stages:
 # ========================================
@@ -20,87 +15,98 @@ stages:
 - stage: Build_and_Test
   displayName: 'Build and Test'
   jobs:
-  - job: Build
-    displayName: 'Build, Test and Publish Artifact'
-    steps:
-    # 1. Instalar .NET SDK
-    - task: UseDotNet@2
-      displayName: 'Install .NET 8 SDK'
-      inputs:
-        version: '8.x'
+    - job: Build
+      displayName: 'Build and Test Application'
+      steps:
+        # 1. Instalar .NET SDK
+        - task: UseDotNet@2
+          displayName: 'Install .NET 8 SDK'
+          inputs:
+            version: '8.x'
 
-    # 2. Restaurar pacotes
-    - task: DotNetCoreCLI@2
-      displayName: 'Restore NuGet packages'
-      inputs:
-        command: 'restore'
-        projects: '**/*.csproj'
+        # 2. Restaurar pacotes
+        - task: DotNetCoreCLI@2
+          displayName: 'Restore NuGet packages'
+          inputs:
+            command: 'restore'
+            projects: '**/*.csproj'
 
-    # 3. Build da solução
-    - task: DotNetCoreCLI@2
-      displayName: 'Build solution'
-      inputs:
-        command: 'build'
-        projects: '**/*.csproj'
-        arguments: '--configuration $(buildConfiguration) --no-restore'
+        # 3. Build da solução
+        - task: DotNetCoreCLI@2
+          displayName: 'Build solution'
+          inputs:
+            command: 'build'
+            projects: '**/*.csproj'
+            arguments: '--configuration $(buildConfiguration) --no-restore'
 
-    # 4. Executar testes unitários
-    - task: DotNetCoreCLI@2
-      displayName: 'Run Unit Tests'
-      inputs:
-        command: 'test'
-        projects: '**/*Tests.csproj'
-        arguments: '--configuration $(buildConfiguration) --no-build --logger trx --collect:"XPlat Code Coverage" --results-directory $(Agent.TempDirectory)/TestResults --filter "FullyQualifiedName!~IntegrationTests"'
-        publishTestResults: false
+        # 4. Executar testes unitários
+        - task: DotNetCoreCLI@2
+          displayName: 'Run Unit Tests'
+          inputs:
+            command: 'test'
+            projects: '**/*Tests.csproj'
+            arguments: '--configuration $(buildConfiguration) --no-build --logger trx --collect:"XPlat Code Coverage" --results-directory $(Agent.TempDirectory)/TestResults --filter "FullyQualifiedName!~IntegrationTests"'
+            publishTestResults: false
 
-    # 5. Executar testes de integração
-    - task: DotNetCoreCLI@2
-      displayName: 'Run Integration Tests'
-      continueOnError: true
-      inputs:
-        command: 'test'
-        projects: '**/*Tests.csproj'
-        arguments: '--configuration $(buildConfiguration) --no-build --logger trx --collect:"XPlat Code Coverage" --results-directory $(Agent.TempDirectory)/IntegrationTestResults --filter "FullyQualifiedName~IntegrationTests"'
-        publishTestResults: false
+        # 5. Executar testes de integração
+        - task: DotNetCoreCLI@2
+          displayName: 'Run Integration Tests'
+          continueOnError: true
+          inputs:
+            command: 'test'
+            projects: '**/*Tests.csproj'
+            arguments: '--configuration $(buildConfiguration) --no-build --logger trx --collect:"XPlat Code Coverage" --results-directory $(Agent.TempDirectory)/IntegrationTestResults --filter "FullyQualifiedName~IntegrationTests"'
+            publishTestResults: false
 
-    # 6. Publicar resultados dos testes
-    - task: PublishTestResults@2
-      displayName: 'Publish Test Results'
-      condition: always()
-      inputs:
-        testResultsFormat: 'VSTest'
-        testResultsFiles: '**/*.trx'
-        searchFolder: '$(Agent.TempDirectory)'
-        mergeTestResults: true
-        failTaskOnFailedTests: false
-        testRunTitle: 'Mottracker Tests - Build $(Build.BuildNumber)'
+        # 6. Publicar resultados dos testes
+        - task: PublishTestResults@2
+          displayName: 'Publish Test Results'
+          condition: always()
+          inputs:
+            testResultsFormat: 'VSTest'
+            testResultsFiles: '**/*.trx'
+            searchFolder: '$(Agent.TempDirectory)'
+            mergeTestResults: true
+            failTaskOnFailedTests: false
+            testRunTitle: 'Mottracker Tests - Build $(Build.BuildNumber)'
 
-    # 7. Publicar cobertura de código
-    - task: PublishCodeCoverageResults@2
-      displayName: 'Publish Code Coverage'
-      condition: always()
-      inputs:
-        summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
-        failIfCoverageEmpty: false
+        # 7. Publicar cobertura de código
+        - task: PublishCodeCoverageResults@2
+          displayName: 'Publish Code Coverage'
+          condition: always()
+          inputs:
+            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+            failIfCoverageEmpty: false
 
-    # 8. Publicar aplicação (.zip)
-    - task: DotNetCoreCLI@2
-      displayName: 'Publish Application'
-      inputs:
-        command: 'publish'
-        publishWebProjects: false
-        projects: '**/Mottracker.Presentation.csproj'
-        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/app --no-build'
-        zipAfterPublish: true
-        modifyOutputPath: true
+        # 8. Publicar aplicação (gera o ZIP)
+        - task: DotNetCoreCLI@2
+          displayName: 'Publish Application'
+          inputs:
+            command: 'publish'
+            publishWebProjects: false
+            projects: '**/Mottracker.Presentation.csproj'
+            arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/app --no-build'
+            zipAfterPublish: true
+            modifyOutputPath: true
 
-    # 9. Publicar artefatos do build
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Build Artifacts'
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: '$(artifactName)'
-        publishLocation: 'Container'
+        # ✅ 9. Compactar o conteúdo em app.zip (garante que o arquivo exista)
+        - task: ArchiveFiles@2
+          displayName: 'Archive App into app.zip'
+          inputs:
+            rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/app'
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
+            replaceExistingArchive: true
+
+        # ✅ 10. Publicar artefatos de build (incluindo o app.zip)
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Build Artifacts'
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
+
 
 # ========================================
 # STAGE 2: BUILD E PUSH DOCKER
@@ -110,65 +116,38 @@ stages:
   dependsOn: Build_and_Test
   condition: succeeded()
   jobs:
-  - job: DockerBuild
-    displayName: 'Build and Push Docker Image'
-    steps:
-    # 1. Build e Push para ACR
-    - task: Docker@2
-      displayName: 'Build and Push to ACR'
-      inputs:
-        containerRegistry: '$(acrServiceConnection)'
-        repository: '$(acrRepository)'
-        command: 'buildAndPush'
-        Dockerfile: '$(dockerfilePath)'
-        buildContext: '$(Build.SourcesDirectory)'
-        tags: |
-          $(Build.BuildId)
-          latest
+    - job: DockerBuild
+      displayName: 'Build and Push Docker Image'
+      steps:
+        # 1. Build e Push para ACR
+        - task: Docker@2
+          displayName: 'Build and Push to ACR'
+          inputs:
+            containerRegistry: 'mottrackeracr'
+            repository: 'mottracker'
+            command: 'buildAndPush'
+            Dockerfile: '$(dockerfilePath)'
+            buildContext: '$(Build.SourcesDirectory)'
+            tags: |
+              $(Build.BuildId)
+              latest
 
-    # 2. Exibir informações da imagem
-    - task: Bash@3
-      displayName: 'Docker Image Information'
-      inputs:
-        targetType: 'inline'
-        script: |
-          echo "=========================================="
-          echo "Docker Image Published Successfully!"
-          echo "Registry: mottrackeracr.azurecr.io"
-          echo "Repository: mottracker"
-          echo "Tags:"
-          echo "  - $(Build.BuildId)"
-          echo "  - latest"
-          echo "Full Image Names:"
-          echo "  - mottrackeracr.azurecr.io/mottracker:$(Build.BuildId)"
-          echo "  - mottrackeracr.azurecr.io/mottracker:latest"
-          echo "=========================================="
-
-# ========================================
-# STAGE 3: DEPLOY PARA AZURE WEB APP
-# ========================================
-- stage: Deploy
-  displayName: 'Deploy to Azure Web App'
-  dependsOn: Docker_Build
-  condition: succeeded()
-  jobs:
-  - job: Deploy
-    displayName: 'Deploy Artifact to Azure Web App'
-    steps:
-    # 1. Baixar artefato publicado
-    - task: DownloadBuildArtifacts@0
-      displayName: 'Download Build Artifacts'
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: '$(artifactName)'
-        downloadPath: '$(Pipeline.Workspace)'
-
-    # 2. Fazer o deploy do artefato no Web App
-    - task: AzureWebApp@1
-      displayName: 'Deploy artifact to Azure Web App'
-      inputs:
-        azureSubscription: '$(azureSubscription)'
-        appName: '$(webAppName)'
-        package: '$(Pipeline.Workspace)/$(artifactName)/app.zip'
-        appType: 'webAppLinux'
+        # 2. Publicar informações da imagem
+        - task: Bash@3
+          displayName: 'Docker Image Information'
+          inputs:
+            targetType: 'inline'
+            script: |
+              echo "=========================================="
+              echo "Docker Image Published Successfully!"
+              echo "=========================================="
+              echo "Registry: mottrackeracr.azurecr.io"
+              echo "Repository: mottracker"
+              echo "Tags:"
+              echo " - $(Build.BuildId)"
+              echo " - latest"
+              echo ""
+              echo "Full Image Names:"
+              echo " - mottrackeracr.azurecr.io/mottracker:$(Build.BuildId)"
+              echo " - mottrackeracr.azurecr.io/mottracker:latest"
+              echo "=========================================="
