@@ -217,6 +217,35 @@ dotnet build
 dotnet run --project Mottracker --urls "http://localhost:5169"
 ```
 
+## Funcionalidades Implementadas
+
+### ✅ Health Check
+- **Endpoint**: `GET /health`
+- Retorna o status da aplicação e do banco de dados
+- Útil para monitoramento e orquestração de containers
+
+### ✅ Versionamento da API
+- Suporte a versionamento via:
+  - Query string: `?version=1.0`
+  - Header: `X-Version: 1.0`
+  - URL: `/api/v1/...`
+- Versão padrão: v1.0
+
+### ✅ Segurança JWT
+- Autenticação baseada em JWT (JSON Web Token)
+- Endpoint de login: `POST /api/v1/usuario/login`
+- Endpoints protegidos requerem token JWT no header `Authorization: Bearer {token}`
+- Configuração via `appsettings.json` ou variáveis de ambiente:
+  - `Jwt:SecretKey`
+  - `Jwt:Issuer`
+  - `Jwt:Audience`
+
+### ✅ ML.NET - Previsão de Demanda
+- **Endpoint**: `POST /api/v1/ml/prediction/moto-demand`
+- Utiliza ML.NET para prever a quantidade de motos disponíveis em um pátio
+- Considera padrões sazonais e dias da semana
+- Requer autenticação JWT
+
 ## Documentação da API
 
 ### **Swagger UI**
@@ -227,6 +256,7 @@ A documentação interativa da API está disponível através do Swagger UI:
   - Teste direto dos endpoints
   - Exemplos de request/response
   - Esquemas de dados detalhados
+  - Autenticação JWT integrada (botão "Authorize")
 
 ### **Documentação de Exemplos**
 O projeto inclui exemplos completos para todos os DTOs na pasta `Mottracker/Docs/Samples/`:
@@ -256,6 +286,10 @@ O projeto inclui exemplos completos para todos os DTOs na pasta `Mottracker/Docs
 - **CORS**: Configurado para React App (localhost:5173)
 - **Paginação**: Suporte a paginação em todos os endpoints de listagem
 - **HATEOAS**: Links de navegação incluídos nas respostas
+- **Health Check**: Endpoint `/health` para monitoramento
+- **Versionamento**: Suporte a múltiplas versões da API
+- **JWT**: Autenticação e autorização baseada em tokens
+- **ML.NET**: Previsão de demanda usando machine learning
 
 ## Acesso à API
 
@@ -408,4 +442,86 @@ O projeto inclui exemplos completos para todos os DTOs na pasta `Mottracker/Docs
 - `PUT /api/UsuarioPermissao/usuario/{usuarioId}/permissao/{permissaoId}` - Atualiza uma permissão de usuário  
 - `DELETE /api/UsuarioPermissao/usuario/{usuarioId}/permissao/{permissaoId}` - Deleta uma permissão de usuário  
 - `GET /api/UsuarioPermissao/usuario/{usuarioId}` - Lista permissões por ID de usuário  
-- `GET /api/UsuarioPermissao/permissao/{permissaoId}` - Lista usuários por ID de permissão  
+- `GET /api/UsuarioPermissao/permissao/{permissaoId}` - Lista usuários por ID de permissão
+
+---
+
+## ML.NET - Previsão de Demanda
+
+- `POST /api/v1/ml/prediction/moto-demand` - Prevê demanda de motos disponíveis em um pátio (requer JWT)
+
+---
+
+## Health Check
+
+- `GET /health` - Verifica o status da aplicação e do banco de dados
+
+---
+
+## Autenticação
+
+- `POST /api/v1/usuario/login` - Realiza login e retorna token JWT
+- `POST /api/v1/usuario/logout` - Realiza logout (invalida token)
+
+## Executando os Testes
+
+### Requisitos
+- .NET SDK 8.0 instalado
+- Projeto compilado e dependências restauradas
+
+### Executar Todos os Testes
+
+```bash
+# Na raiz do projeto
+dotnet test
+```
+
+### Executar Apenas Testes Unitários
+
+```bash
+dotnet test --filter "FullyQualifiedName~UnitTests"
+```
+
+### Executar Apenas Testes de Integração
+
+```bash
+dotnet test --filter "FullyQualifiedName~IntegrationTests"
+```
+
+### Executar Testes com Cobertura de Código
+
+```bash
+# Instalar coverlet globalmente (se ainda não tiver)
+dotnet tool install -g coverlet.console
+
+# Executar testes com cobertura
+dotnet test /p:CollectCoverage=true /p:Include="[*]*" /p:Exclude="[*.Tests]*"
+```
+
+### Estrutura dos Testes
+
+```
+Mottracker.Tests/
+├── UnitTests/
+│   ├── JwtServiceTests.cs          # Testes do serviço JWT
+│   └── MlPredictionServiceTests.cs  # Testes do serviço ML.NET
+└── IntegrationTests/
+    ├── HealthCheckTests.cs          # Testes do endpoint /health
+    └── MlPredictionControllerTests.cs # Testes do controller ML
+```
+
+### Tipos de Testes Implementados
+
+1. **Testes Unitários**:
+   - `JwtServiceTests`: Validação da geração de tokens JWT
+   - `MlPredictionServiceTests`: Validação das previsões de ML.NET
+
+2. **Testes de Integração**:
+   - `HealthCheckTests`: Testa o endpoint `/health`
+   - `MlPredictionControllerTests`: Testa o controller de previsão ML com autenticação
+
+### Configuração para Testes
+
+Os testes de integração utilizam `WebApplicationFactory` para criar uma instância da aplicação em memória, permitindo testar os endpoints sem necessidade de banco de dados real.
+
+**Nota**: Alguns testes podem requerer configuração adicional de variáveis de ambiente ou mocks para funcionar completamente isolados.  
