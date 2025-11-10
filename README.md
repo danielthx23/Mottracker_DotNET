@@ -1,16 +1,5 @@
 # Mottracker
 
-## Disclaimer
-Na entrega não foi solicitado, mas decidimos criar as relações antecipadamente. Queremos adicionar a opção de que as tabelas pai possam criar as tabelas filhas diretamente a partir de um único JSON.
-
-TODOs:
-
-- Melhorar as requisições, pois estão demorando bastante.
-- Permitir a criação da tabela pai e das tabelas filhas de forma integrada.
-- Adicionar requisições mais precisas, por exemplo, buscando atributos específicos.
-- Implementar segurança e criptografia de senha (incluindo no endpoint de login).
-- Revisar os DTOs e os dados que realmente serão necessários para o Frontend.
-
 ## Descrição do Projeto
 
 Projeto desenvolvido para o **Challenge da empresa Mottu**, FIAP 2025.
@@ -24,142 +13,157 @@ A **API** integra os dados capturados pelos dispositivos IoT com uma estrutura d
 
 Essa integração permite o acompanhamento via aplicativo, promovendo **eficiência, segurança e organização**. O sistema também gerencia cadastro/edição de dados, autenticação/autorizacão, gestão de permissões e dashboards com relatórios para tomada de decisão.
 
-## Justificativa da Arquitetura
+## Estrutura com Solution e Projects
 
-O projeto foi desenvolvido seguindo os princípios da **Clean Architecture** (Arquitetura Limpa), que oferece inúmeras vantagens para sistemas corporativos como este:
+O repositório agora usa uma solution (.sln) com projetos separados por responsabilidade. Isso facilita o trabalho em IDEs (Visual Studio / Rider) e integrações CI/CD.
 
-### **Separação de Responsabilidades**
-- **Domain**: Contém as entidades de negócio, interfaces de repositório e regras de domínio, garantindo que o núcleo do sistema seja independente de tecnologias externas
-- **Application**: Implementa os casos de uso (Use Cases), DTOs e mappers, isolando a lógica de aplicação
-- **Infrastructure**: Gerencia a persistência de dados e integrações externas (Oracle Database)
-- **Presentation**: Interface com o usuário através de Controllers e Views
+Estrutura de arquivos relevante:
 
-### **Benefícios da Arquitetura Escolhida**
-
-1. **Testabilidade**: Cada camada pode ser testada independentemente, facilitando a implementação de testes unitários e de integração
-
-2. **Manutenibilidade**: Mudanças em uma camada não afetam as outras, reduzindo o acoplamento e facilitando manutenções futuras
-
-3. **Flexibilidade**: A troca de banco de dados (Oracle → PostgreSQL, por exemplo) requer alterações apenas na camada Infrastructure
-
-4. **Escalabilidade**: Novos casos de uso podem ser adicionados sem impactar o código existente
-
-5. **Inversão de Dependência**: As camadas internas não dependem das externas, seguindo o princípio SOLID
-
-### **Estrutura do Projeto**
 ```
-Mottracker/
-├── Domain/           # Entidades, Interfaces, Enums
-├── Application/      # Use Cases, DTOs, Mappers
-├── Infrastructure/   # Repositórios, Context EF
-└── Presentation/     # Controllers, Views
+Mottracker.sln # Solution na raiz do repositório
+Mottracker.Presentation/ # Projeto Web (Razor Pages / API)
+Mottracker.Application/ # Caso de uso, serviços de aplicação
+Mottracker.Domain/ # Entidades e contratos de domínio
+Mottracker.Infrastructure/ # Implementações de persistência e integrações
+Mottracker.IoC/ # Injeção de dependências / composition root
+Mottracker.Tests/ # Projetos de testes (unit e integration)
+Dockerfile # Dockerfile usado pela pipeline / deploy
+entrypoint.sh # Script de entrypoint para migrações e start
+azure-pipelines.yml # Pipeline CI/CD em YAML (Azure DevOps)
+README.md # Documentação (este arquivo)
 ```
 
-### **Padrões Implementados**
-- **Repository Pattern**: Abstração da camada de dados
-- **Use Case Pattern**: Encapsulamento da lógica de negócio
-- **DTO Pattern**: Transferência de dados entre camadas
-- **Mapper Pattern**: Conversão entre entidades e DTOs
+Como abrir e rodar na sua máquina (IDE)
 
-Esta arquitetura garante que o sistema seja **robusto, escalável e fácil de manter**, essencial para um projeto corporativo que pode crescer e evoluir ao longo do tempo.
+1. Abra `Mottracker.sln` com Visual Studio ou Rider.
+2. Restaure os pacotes NuGet (IDE faz automaticamente ou `dotnet restore`).
+3. Defina `Mottracker.Presentation` como projeto de inicialização.
+4. Configure `appsettings.Development.json` com sua connection string (ou use variáveis de ambiente).
+5. Execute o projeto (F5 / Run).
+
+Build e testes via CLI
+
+```bash
+# Na raiz do repositório
+dotnet restore
+dotnet build
+dotnet test
+```
+
+Notas sobre CI/CD e Docker
+
+- A pipeline `azure-pipelines.yml` foi atualizada para trabalhar com a solution e os projetos separados. Ela realiza build, publisha artefato, executa testes e faz deploy.
+- O `Dockerfile` na raiz foi ajustado para incluir opção de executar migrações via variável `RUN_MIGRATIONS` ou no pipeline (job de migrations separado).
+
+Variáveis importantes para Azure DevOps (configure na aba Variables no portal):
+
+- `DB_CONNECTION` (secret) — connection string do banco.
+- `runMigrations` — true/false para habilitar o stage de migrações.
+- `containerRegistry`, `containerRegistryServiceConnection`, `azureSubscription`, `webAppName`, `webAppResourceGroup` — para build/push e deploy.
+
+Se precisar que eu gere ou atualize o `Mottracker.sln` (ou mova projetos para `src/` e `tests/`), diga qual opção prefere e eu aplico a mudança.
+
+---
 
 ## Autores
 
-### Turma 2TDSR - Análise e Desenvolvimento de Sistemas
+* Daniel Saburo Akiyama - RM558263
+* Danilo Correia e Silva - RM557540
+* João Pedro Rodrigues da Costa - RM558199
 
-* Daniel Saburo Akiyama - RM 558263
-* Danilo Correia e Silva - RM 557540
-* João Pedro Rodrigues da Costa - RM 558199
+## DevOps / Pipeline e Docker (alterações recentes)
 
-## Azure CLI Scripts para criar a VM que vai hospedar a API
+Resumo das alterações feitas para CI/CD e migrações:
 
-Scripts para criar e rodar a API na Azure
+- O `Dockerfile` foi atualizado para permitir executar migrações condicionalmente.
+ - Adicionado `ARG RUN_MIGRATIONS` e `ENV RUN_MIGRATIONS`.
+ - O `entrypoint.sh` verifica `RUN_MIGRATIONS` e, se `true`, executa o comando EF:
+ `dotnet ef database update --project ./src/Mottracker.Infrastructure/Mottracker.Infrastructure.csproj --startup-project ./src/Mottracker.Presentation/Mottracker.Presentation.csproj`.
+ - O Dockerfile atual copia o código fonte e instala `dotnet-ef` para permitir migrações a partir do container (desenvolvimento). Em produção é recomendável usar `aspnet` image e executar migrações fora do runtime image.
 
-[Azure CLI Scripts](AzureScripts.md) <- Acesse os comandos aqui
+- A pipeline do Azure DevOps (`azure-pipelines.yml`) foi atualizada para suportar:
+ - Build da imagem Docker e push para um registry (opcional).
+ - Stage separado `Migrations` que executa `dotnet-ef` no agente (instala a ferramenta e executa `dotnet ef database update`) quando a variável `runMigrations` = `true`.
+ - Publicação de artefatos e execução de testes (CI).
+ - Deploy para Azure Web App apontando para a imagem Docker gerada (CD).
+
+Variáveis importantes a configurar no Azure DevOps (UI -> Pipelines -> Variables):
+
+- `DB_CONNECTION` (secret) — connection string do banco, usada pelo EF como `ConnectionStrings__Default`.
+- `runMigrations` — true/false para habilitar o stage de migrações.
+- `containerRegistry` — endereço do registry (ex.: `myacr.azurecr.io`).
+- `containerRegistryServiceConnection` — nome do Service Connection configurado no projeto Azure DevOps.
+- `azureSubscription` — nome da Service Connection do Azure (ARM).
+- `webAppName`, `webAppResourceGroup` — para o passo de deploy.
+
+Recomendações para migrações
+
+- Local (Docker):
+ - Build da imagem:
+
+```bash
+# Na raiz do repositório
+docker build -f Dockerfile -t mottracker:local .
+```
+
+ - Rodar container e aplicar migrations (exemplo PowerShell):
+
+```powershell
+docker run --rm `
+ -e RUN_MIGRATIONS=true `
+ -e ConnectionStrings__Default="Server=...;Database=...;User Id=...;Password=...;" `
+ -p5024:5024 `
+ mottracker:local
+```
+
+- Pipeline (sem Docker run):
+ - A pipeline instala `dotnet-ef` no agente e roda `dotnet ef database update` usando `DB_CONNECTION` (mais simples para CI).
+
+Observações
+
+- Garanta que o banco esteja acessível a partir do agente (ou do host onde o container roda) e que as regras de firewall/NSG permitam conexões.
+- Marque `DB_CONNECTION` como variável secreta no Azure DevOps.
+- Em produção, a imagem final idealmente deve ser baseada em `mcr.microsoft.com/dotnet/aspnet:8.0` e não conter o SDK; migrações podem ser rodadas em job separado ou em um container temporário com SDK.
 
 ## Dockerfile
 
-Dockerfile de produção (mais leve):
-[Dockerfile Production](./Mottracker/Dockerfile.Production)
-
-Dockerfile de desenvolvimento (mais pesada):
-[Dockerfile Development](./Mottracker/Dockerfile.Production)
-
-Imagem Docker Hub: [Imagem Docker Hub com as duas Tags](https://hub.docker.com/repository/docker/danielakiyama/mottracker/general)
-
-**Observação**: Em produção, o ideal é usar a imagem aspnet apenas para executar a aplicação, deixando as migrações para serem feitas fora do container ou em um container separado com o SDK. Isso torna a imagem final mais leve e segura. Contudo, optamos por utilizar o SDK na imagem para facilitar o desenvolvimento do projeto.
+Dockerfile de produção (local):
+- `Dockerfile` (raiz do projeto / Mottracker)
 
 ## Instalação do Projeto via Docker (Entrega DevOps)
 
 ### Requisitos
 - Docker instalado e com a engine ligada
 
-### Configuração
+### Comandos de exemplo
 
-1. Rode um container utilizando variaveis de ambiente e a imagem no Docker Hub pelo build
-
-Utilize o comando abaixo, substituindo meuusuario e minhasenha com suas credenciais do Oracle DB:
+Rodar com migrations (exemplo):
 
 ```bash
-  # Esse comando só funciona em bash por conta do \
-  docker run -d \
-  -e ORACLE_USER=seusuario \
-  -e ORACLE_PASSWORD=suasenha \
-  -e ORACLE_HOST=oracle.fiap.com.br \
-  -e ORACLE_PORT=1521 \
-  -e ORACLE_SID=ORCL \
-  -e RUN_MIGRATIONS=true \
-  -e ASPNETCORE_ENVIRONMENT=Development \
-  -p 5169:5169 \
-  danielakiyama/mottracker:development-v1.0.0
+docker build -f Dockerfile -t youruser/mottracker:dev .
+
+docker run -d \
+ -e ConnectionStrings__Default="Server=...;Database=...;User Id=...;Password=...;" \
+ -e RUN_MIGRATIONS=true \
+ -e ASPNETCORE_ENVIRONMENT=Development \
+ -p5169:5169 \
+ youruser/mottracker:dev
 ```
 
-Em uma linha só (recomendado):
-```bash
-  # Funciona no CMD e Bash (recomendado)
-  docker run -d -e ORACLE_USER=seusuario -e ORACLE_PASSWORD=suasenha -e ORACLE_HOST=oracle.fiap.com.br -e ORACLE_PORT=1521 -e ORACLE_SID=ORCL -e RUN_MIGRATIONS=true -e ASPNETCORE_ENVIRONMENT=Development -p 5169:5169 danielakiyama/mottracker:development-v1.0.0
-```
-
-OU, se não quiser rodar as migrations:
-
-```bash
-  # Esse comando só funciona em bash por conta do \
-  docker run -d \
-  -e ORACLE_USER=seusuario \
-  -e ORACLE_PASSWORD=suasenha \
-  -e ORACLE_HOST=oracle.fiap.com.br \
-  -e ORACLE_PORT=1521 \
-  -e ORACLE_SID=ORCL \
-  -e ASPNETCORE_ENVIRONMENT=Development \
-  -p 5169:5169 \
-  danielakiyama/mottracker:production-v1.0.0
-```
-
-Em uma linha só (recomendado):
-```bash
-  # Funciona no CMD e Bash (recomendado)
-  docker run -d -e ORACLE_USER=seusuario -e ORACLE_PASSWORD=suasenha -e ORACLE_HOST=oracle.fiap.com.br -e ORACLE_PORT=1521 -e ORACLE_SID=ORCL -e ASPNETCORE_ENVIRONMENT=Development -p 5169:5169 danielakiyama/mottracker:production-v1.0.0
-```
-
-Legendas:
+Rodar sem migrations:
 
 ```bash
 docker run -d \
-  -e ORACLE_USER=seusuario           # Usuário do banco Oracle
-  -e ORACLE_PASSWORD=suasenha        # Senha do usuário Oracle
-  -e ORACLE_HOST=oracle.fiap.com.br  # Host do banco Oracle
-  -e ORACLE_PORT=1521                # Porta do banco Oracle (geralmente 1521)
-  -e ORACLE_SID=ORCL                 # SID da instância Oracle
-  -e RUN_MIGRATIONS=true             # Controla se as migrações serão executadas na inicialização (true/false)
-  -e ASPNETCORE_ENVIRONMENT=Development  # Define o ambiente da aplicação (Development/Production)
-  -p 5169:5169                      # Mapeia a porta 5169 do container para a mesma porta na máquina host
-  danielakiyama/mottracker:<tags diferentes>  # Nome da imagem e tag Docker a ser executada, lembrando Production (leve) não roda migrations, Development (pesada) roda.
+ -e ConnectionStrings__Default="Server=...;Database=...;User Id=...;Password=...;" \
+ -e ASPNETCORE_ENVIRONMENT=Production \
+ -p5169:5169 \
+ youruser/mottracker:prod
 ```
 
 ## Instalação do Projeto via Host (Entrega DotNET)
 
 ### Requisitos
-- .NET SDK 8.0 instalado
+- .NET SDK8.0 instalado
 - Rider / Visual Studio instalado (opcional)
 
 ### Configuração
@@ -170,40 +174,38 @@ Clone o projeto utilizando git
 
 ```json
 "ConnectionStrings": {
-  "Oracle": "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=seuusuario;Password=suasenha;"
+ "Oracle": "Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=seuusuario;Password=suasenha;"
 }
 ```
 
 2. Execute as migrations para criar as tabelas no banco Oracle:
 
-   (entre no diretório do projeto primeiro)
-
 ```bash
-  dotnet ef database update
+ dotnet ef database update
 ```
 
 Caso não tenha a ferramenta dotnet-ef instalada, instale com:
 
 ```bash
-  dotnet tool install --global dotnet-ef
+ dotnet tool install --global dotnet-ef
 ```
 
 ### Rodar o Projeto Localmente
 
 Após configurar a string de conexão e aplicar as migrations, você pode rodar a API de duas maneiras:
 
-#### 1. Com IDE (Rider ou Visual Studio)
+####1. Com IDE (Rider ou Visual Studio)
 
 1. Abra a solução no Rider ou Visual Studio.
 2. Selecione o projeto da API como *Startup Project*.
 3. Clique em **Run** com o perfil `http`.
 
-#### 2. Sem IDE (usando linha de comando)
+####2. Sem IDE (usando linha de comando)
 
 1. **Restaurar e compilar:**
 
 - Para rodar o backend, entre no diretório `Mottracker_DotNet` antes de executar o comando.
-  
+ 
 - Caso deseje rodar o backend de dentro do diretório do projeto .net, altere o caminho e remova a flag `--project Mottracker` no comando correspondente.
 
 ```bash
@@ -278,7 +280,6 @@ O projeto inclui exemplos completos para todos os DTOs na pasta `Mottracker/Docs
 1. Os exemplos são automaticamente carregados no Swagger UI
 2. Cada endpoint mostra exemplos de request e response
 3. Os exemplos incluem dados realistas para facilitar os testes
-4. Todos os campos obrigatórios e opcionais estão documentados
 
 ### **Documentação Técnica**
 - **Rate Limiting**: 5 requisições por 20 segundos
@@ -466,62 +467,64 @@ O projeto inclui exemplos completos para todos os DTOs na pasta `Mottracker/Docs
 ## Executando os Testes
 
 ### Requisitos
-- .NET SDK 8.0 instalado
+- .NET SDK8.0 instalado
 - Projeto compilado e dependências restauradas
 
 ### Executar Todos os Testes
 
 ```bash
-# Na raiz do projeto
+# Na raiz do repositório
 dotnet test
 ```
 
 ### Executar Apenas Testes Unitários
 
 ```bash
-dotnet test --filter "FullyQualifiedName~UnitTests"
+dotnet test --filter "TestCategory=Unit" # se as categorias estiverem definidas
+# ou executar por projeto de testes
+dotnet test ./Mottracker.Tests/Mottracker.Tests.csproj --filter "FullyQualifiedName~UnitTests"
 ```
 
 ### Executar Apenas Testes de Integração
 
 ```bash
-dotnet test --filter "FullyQualifiedName~IntegrationTests"
+dotnet test --filter "TestCategory=Integration"
+# ou por namespace/nome completo
+dotnet test ./Mottracker.Tests/Mottracker.Tests.csproj --filter "FullyQualifiedName~IntegrationTests"
 ```
 
-### Executar Testes com Cobertura de Código
+### Executar Testes Específicos (exemplos)
 
 ```bash
-# Instalar coverlet globalmente (se ainda não tiver)
-dotnet tool install -g coverlet.console
+# Executar apenas os testes do JwtService (unit)
+dotnet test --filter "FullyQualifiedName~JwtServiceTests"
 
-# Executar testes com cobertura
-dotnet test /p:CollectCoverage=true /p:Include="[*]*" /p:Exclude="[*.Tests]*"
+# Executar apenas os testes do serviço de ML.NET (unit)
+dotnet test --filter "FullyQualifiedName~MlPredictionServiceTests"
+
+# Executar apenas os testes de Health Check (integration)
+dotnet test --filter "FullyQualifiedName~HealthCheckTests"
+
+# Executar apenas os testes do controller de Moto (integration)
+dotnet test --filter "FullyQualifiedName~MotoControllerTests"
+
+# Executar apenas os testes do controller de ML (integration)
+dotnet test --filter "FullyQualifiedName~MlPredictionControllerTests"
 ```
 
-### Estrutura dos Testes
+### Estrutura dos Testes (atualizada)
 
 ```
 Mottracker.Tests/
 ├── UnitTests/
-│   ├── JwtServiceTests.cs          # Testes do serviço JWT
-│   └── MlPredictionServiceTests.cs  # Testes do serviço ML.NET
+│ ├── JwtServiceTests.cs # Testes do serviço JWT
+│ └── MlPredictionServiceTests.cs # Testes do serviço ML.NET
 └── IntegrationTests/
-    ├── HealthCheckTests.cs          # Testes do endpoint /health
-    └── MlPredictionControllerTests.cs # Testes do controller ML
+ ├── HealthCheckTests.cs # Testes do endpoint /health
+ ├── MotoControllerTests.cs # Testes do controller Moto (CRUD/rotas)
+ └── MlPredictionControllerTests.cs # Testes do controller ML (endpoints protegidos)
 ```
 
-### Tipos de Testes Implementados
-
-1. **Testes Unitários**:
-   - `JwtServiceTests`: Validação da geração de tokens JWT
-   - `MlPredictionServiceTests`: Validação das previsões de ML.NET
-
-2. **Testes de Integração**:
-   - `HealthCheckTests`: Testa o endpoint `/health`
-   - `MlPredictionControllerTests`: Testa o controller de previsão ML com autenticação
-
-### Configuração para Testes
-
-Os testes de integração utilizam `WebApplicationFactory` para criar uma instância da aplicação em memória, permitindo testar os endpoints sem necessidade de banco de dados real.
-
-**Nota**: Alguns testes podem requerer configuração adicional de variáveis de ambiente ou mocks para funcionar completamente isolados.  
+### Observações sobre execução
+- Alguns testes de integração podem depender de variáveis de ambiente ou de um banco acessível. Configure `DB_CONNECTION` (ou outras variáveis) antes de executar os testes que precisam de acesso ao banco.
+- Use `dotnet test --list-tests` para listar testes disponíveis e construir filtros.
